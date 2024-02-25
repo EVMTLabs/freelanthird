@@ -19,7 +19,9 @@ export default function RootLayout({
     <html lang="en" data-theme="bumblebee">
       <body className={inter.className}>
         <Navbar />
-        {children}
+        <main className="flex min-h-screen max-w-6xl flex-col container my-10 mx-auto relative">
+          {children}
+        </main>
       </body>
     </html>
   );

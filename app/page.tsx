@@ -1,9 +1,10 @@
-import { JobCard } from "@/components/JobCard/JobCard";
-import Image from "next/image";
+import { JobCard } from '@/components/JobCard/JobCard';
+import Image from 'next/image';
+import Link from 'next/link';
 
-export default function Home() {
+export default function HomePage() {
   return (
-    <main className="flex min-h-screen max-w-6xl flex-col container my-10 mx-auto relative">
+    <>
       <div className="flex gap-12 relative">
         <div>
           <div className="flex gap-6">
@@ -19,9 +20,9 @@ export default function Home() {
                 Find your next freelance project without the fees. We are the
                 largest freelance marketplace without the middleman.
               </p>
-              <button className="btn btn-primary mt-6 w-fit">
+              <Link href="/new-job" className="btn btn-primary mt-6 w-fit">
                 Create a Project - Free
-              </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -42,19 +43,10 @@ export default function Home() {
         <div className="col-start-10 col-span-3">
           <div className="flex flex-col border p-4 rounded-lg">
             <h3 className="text-xl">Specialties</h3>
-            <div className="flex flex-col gap-4 form-control mt-2">
-              <label className="cursor-pointer label justify-start">
-                <input
-                  type="checkbox"
-                  defaultChecked
-                  className="checkbox checkbox-sm checkbox-primary"
-                />
-                <span className="label-text ml-3">Remember me</span>
-              </label>
-            </div>
+            {/* <JobCategory /> */}
           </div>
         </div>
       </div>
-    </main>
+    </>
   );
 }

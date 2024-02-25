@@ -12,10 +12,9 @@ const config: Config = {
       fontFamily: {
         sans: ["Albert Sans", ...defaultTheme.fontFamily.sans],
       },
-      backgroundImage: {
-        "gradient-radial": "radial-gradient(var(--tw-gradient-stops))",
-        "gradient-conic":
-          "conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))",
+      boxShadow: {
+        checkbox: "0 0 0 4px rgba(0, 0, 0, 0.3)",
+        checkboxFocused: "0 0 0 0px rgba(0, 0, 0, 0)",
       },
     },
   },

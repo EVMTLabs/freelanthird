@@ -1,9 +1,9 @@
-import { MapPinIcon } from "@/components/Icons/MapPinIcon";
+import { MapPin } from "lucide-react";
 
 export const JobCard = () => {
   return (
-    <div className="py-8 border-t">
-      <div className="flex justify-between">
+    <div className="border-t hover:shadow-xl cursor-pointer">
+      <div className="flex justify-between py-8 px-4">
         <div className="flex">
           <div className="avatar placeholder">
             <div className="bg-neutral text-neutral-content rounded-full w-10 h-10">
@@ -32,8 +32,8 @@ export const JobCard = () => {
         <div className="flex flex-col">
           <p className="font-extrabold text-end">$50 - 1000</p>
           <div className="flex text-sm items-center text-gray-500 text-end font-bold">
-            <MapPinIcon strokeWidth={2} className="h-4 w-4" />
-            <span>Remote</span>
+            <MapPin size={16} />
+            <span className="ml-1 mt-1">Remote</span>
           </div>
         </div>
       </div>
