@@ -1,9 +1,11 @@
 'use client';
 
-import { MouseEvent, useContext, useState } from 'react';
+import type { MouseEvent } from 'react';
+import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { JobFormContext } from '../context/CreateJobContext';
 import clsx from 'clsx';
+
+import { JobFormContext } from '../context/CreateJobContext';
 
 export const CreateJobThirdStep = () => {
   const { jobValues, setJobValues, goNextStep, goBackStep } =

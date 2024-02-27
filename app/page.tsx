@@ -1,6 +1,7 @@
-import { JobCard } from '@/components/JobCard/JobCard';
 import Image from 'next/image';
 import Link from 'next/link';
+
+import { JobCard } from '@/components/JobCard/JobCard';
 
 export default function HomePage() {
   return (

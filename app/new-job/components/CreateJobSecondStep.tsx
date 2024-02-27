@@ -1,11 +1,13 @@
 'use client';
 
 import { useContext } from 'react';
-import { useForm, Controller } from 'react-hook-form';
-import { JobFormContext } from '../context/CreateJobContext';
-import { RichTextEditor } from '@/components/RichTextEditor/RichTextEditor';
-import { z } from 'zod';
+import { Controller,useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { z } from 'zod';
+
+import { RichTextEditor } from '@/components/RichTextEditor/RichTextEditor';
+
+import { JobFormContext } from '../context/CreateJobContext';
 
 const schema = z.object({
   description: z

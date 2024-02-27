@@ -1,13 +1,14 @@
 "use client";
 
+import { useEffect } from "react";
+import BulletList from "@tiptap/extension-bullet-list";
+import Heading from "@tiptap/extension-heading";
+import Link from "@tiptap/extension-link";
+import OrderedList from "@tiptap/extension-ordered-list";
 import { EditorContent, useEditor } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
+
 import { EditorToolBar } from "./EditorToolBar";
-import { useEffect } from "react";
-import Heading from "@tiptap/extension-heading";
-import BulletList from "@tiptap/extension-bullet-list";
-import OrderedList from "@tiptap/extension-ordered-list";
-import Link from "@tiptap/extension-link";
 
 export const RichTextEditor = ({
   description,

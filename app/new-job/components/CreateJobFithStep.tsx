@@ -2,11 +2,12 @@
 
 import { useContext } from 'react';
 import { useForm } from 'react-hook-form';
-import { JobFormContext } from '../context/CreateJobContext';
-import { z } from 'zod';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { DollarSign } from 'lucide-react';
 import clsx from 'clsx';
+import { DollarSign } from 'lucide-react';
+import { z } from 'zod';
+
+import { JobFormContext } from '../context/CreateJobContext';
 
 const schema = z.object({
   minPrice: z.preprocess(

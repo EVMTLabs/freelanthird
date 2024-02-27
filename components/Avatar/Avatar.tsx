@@ -1,7 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
-import { Types } from 'connectkit';
+import type { Types } from 'connectkit';
 import { UserRound } from 'lucide-react';
 import Image from 'next/image';
 

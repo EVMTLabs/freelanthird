@@ -1,8 +1,10 @@
 import { getIronSession } from 'iron-session';
-import { SiweErrorType, SiweMessage, generateNonce } from 'siwe';
-import { SessionData, sessionOptions } from './session';
 import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
+import { generateNonce,SiweErrorType, SiweMessage } from 'siwe';
+
+import type { SessionData} from './session';
+import { sessionOptions } from './session';
 
 export const GET = async () => {
   console.log('get session');

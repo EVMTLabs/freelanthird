@@ -1,8 +1,7 @@
 'use client';
 
 import { Avatar, ConnectKitButton } from 'connectkit';
-import { HelpCircle, Bell } from 'lucide-react';
-import Image from 'next/image';
+import { Bell,HelpCircle } from 'lucide-react';
 import { useDisconnect } from 'wagmi';
 
 export const AccountMenu = () => {
@@ -12,11 +11,9 @@ export const AccountMenu = () => {
     disconnect();
   };
 
-  // return <ConnectKitButton />;
-
   return (
     <ConnectKitButton.Custom>
-      {({ isConnected, isConnecting, show, hide, address, ensName, chain }) => {
+      {({ isConnected, show }) => {
         if (isConnected) {
           return (
             <>

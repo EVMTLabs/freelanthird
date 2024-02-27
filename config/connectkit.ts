@@ -1,6 +1,6 @@
 import { getDefaultConfig } from 'connectkit';
 import { createConfig } from 'wagmi';
-import { mainnet, polygon, optimism, arbitrum } from 'wagmi/chains';
+import { arbitrum,mainnet, optimism, polygon } from 'wagmi/chains';
 
 export const config = createConfig(
   getDefaultConfig({

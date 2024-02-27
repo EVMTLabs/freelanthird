@@ -1,12 +1,12 @@
 'use client';
 
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { type ReactNode } from 'react';
-import { WagmiProvider } from 'wagmi';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ConnectKitProvider, SIWEProvider } from 'connectkit';
+import { WagmiProvider } from 'wagmi';
 
-import { config } from '@/config/connectkit';
 import { Avatar } from '@/components/Avatar/Avatar';
+import { config } from '@/config/connectkit';
 import { siweConfig } from '@/config/siweConfig';
 
 const queryClient = new QueryClient();

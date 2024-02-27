@@ -1,14 +1,14 @@
 "use client";
 
-import { Editor } from "@tiptap/react";
+import type { Editor } from "@tiptap/react";
 import clsx from "clsx";
 import {
   Bold,
-  Strikethrough,
+  Heading,
   Italic,
   List,
   ListOrdered,
-  Heading,
+  Strikethrough,
 } from "lucide-react";
 
 export const EditorToolBar = ({ editor }: { editor: Editor | null }) => {

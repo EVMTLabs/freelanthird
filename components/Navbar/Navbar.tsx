@@ -1,4 +1,5 @@
 import Image from 'next/image';
+
 import { AccountMenu } from './AccountMenu';
 
 export const Navbar = () => {

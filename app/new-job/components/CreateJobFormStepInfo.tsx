@@ -1,6 +1,7 @@
 "use client";
 
 import { useContext } from "react";
+
 import { JobFormContext } from "../context/CreateJobContext";
 
 export const CreateJobFormStepInfo = () => {
