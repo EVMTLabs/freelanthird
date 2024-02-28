@@ -13,7 +13,7 @@ export const Avatar = ({
   radius,
 }: Types.CustomAvatarProps) => {
   return (
-    <div className={clsx('avatar', !ensImage && 'placeholder')}>
+    <div className={clsx('flex avatar', !ensImage && 'placeholder')}>
       <div
         className="bg-neutral text-neutral-content"
         style={{ width: size, height: size, borderRadius: radius }}

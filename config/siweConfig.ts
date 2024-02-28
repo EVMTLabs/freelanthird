@@ -3,7 +3,7 @@ import { SiweMessage } from 'siwe';
 
 export const siweConfig = {
   getNonce: async () => {
-    const res = await fetch(`/siwe`, { method: 'PUT' });
+    const res = await fetch('/api/session/siwe', { method: 'PUT' });
     if (!res.ok) throw new Error('Failed to fetch SIWE nonce');
 
     return res.text();
@@ -20,18 +20,19 @@ export const siweConfig = {
     }).prepareMessage();
   },
   verifyMessage: ({ message, signature }) => {
-    return fetch(`/siwe`, {
+    return fetch('/api/session/siwe', {
       method: 'POST',
       body: JSON.stringify({ message, signature }),
       headers: { 'Content-Type': 'application/json' },
     }).then((res) => res.ok);
   },
   getSession: async () => {
-    const res = await fetch(`/siwe`);
+    const res = await fetch('/api/session');
     if (!res.ok) throw new Error('Failed to fetch SIWE session');
 
     const { address, chainId } = await res.json();
     return address && chainId ? { address, chainId } : null;
   },
-  signOut: () => fetch(`/siwe`, { method: 'DELETE' }).then((res) => res.ok),
+  signOut: () =>
+    fetch('/api/session', { method: 'DELETE' }).then((res) => res.ok),
 } satisfies SIWEConfig;

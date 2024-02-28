@@ -3,23 +3,12 @@
 import { createContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { createJob } from '../actions';
-
-export interface JobFormValues {
-  title: string;
-  description: string;
-  category: string;
-  skills: string[];
-  size: string;
-  duration: string;
-  experience: string;
-  minPrice?: number;
-  maxPrice?: number;
-}
+import { createJob } from '@/prisma/actions/jobs';
+import type { Job } from '@/types/jobs';
 
 interface JobFormContextProps {
-  jobValues: JobFormValues;
-  setJobValues: (values: JobFormValues) => void;
+  jobValues: Job;
+  setJobValues: (values: Job) => void;
   formStep: number;
   goBackStep: () => void;
   goNextStep: () => void;
@@ -35,7 +24,7 @@ export enum CreateJobFormSteps {
   FIFTH_STEP,
 }
 
-const DEFAULT_JOB_VALUES: JobFormValues = {
+const DEFAULT_JOB_VALUES: Job = {
   title: '',
   category: 'web_development',
   description: '',
@@ -61,11 +50,11 @@ export const JobFormProvider = ({
 }) => {
   const router = useRouter();
 
-  const [jobValues, setJobValues] = useState<JobFormValues>(DEFAULT_JOB_VALUES);
+  const [jobValues, setJobValues] = useState<Job>(DEFAULT_JOB_VALUES);
   const [isLoading, setIsLoading] = useState(false);
   const [formStep, setFormStep] = useState(0);
 
-  const handleJobsValues = (newValues: JobFormValues) => {
+  const handleJobsValues = (newValues: Job) => {
     setJobValues({
       ...jobValues,
       ...newValues,

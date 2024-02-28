@@ -1,10 +1,9 @@
 'use server';
 
 import prisma from '@/prisma/db';
+import type { Job } from '@/types/jobs';
 
-import type { JobFormValues } from '../context/CreateJobContext';
-
-export const createJob = async (jobValues: JobFormValues) => {
+export const createJob = async (jobValues: Job) => {
   return prisma.job.create({
     data: {
       ...jobValues,

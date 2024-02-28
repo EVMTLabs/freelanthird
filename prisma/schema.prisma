@@ -13,6 +13,11 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  USER
+  ADMIN
+}
+
 model Job {
   id          String   @id @default(uuid())
   title       String
@@ -28,4 +33,26 @@ model Job {
   visible     Boolean  @default(true)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model User {
+  id        String       @id @default(uuid())
+  email     String?      @unique
+  name      String?
+  username  String?      @unique
+  role      String       @default("user")
+  visible   Boolean      @default(true)
+  createdAt DateTime     @default(now())
+  updatedAt DateTime     @updatedAt
+  wallets   UserWallet[]
+}
+
+model UserWallet {
+  id        String   @id @default(uuid())
+  userId    String   @unique
+  address   String
+  chainId   Int
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  User      User     @relation(fields: [userId], references: [id])
 }

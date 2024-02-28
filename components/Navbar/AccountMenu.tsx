@@ -1,11 +1,12 @@
 'use client';
 
-import { Avatar, ConnectKitButton } from 'connectkit';
-import { Bell,HelpCircle } from 'lucide-react';
+import { Avatar, ConnectKitButton, useSIWE } from 'connectkit';
+import { Bell, HelpCircle } from 'lucide-react';
 import { useDisconnect } from 'wagmi';
 
 export const AccountMenu = () => {
   const { disconnect } = useDisconnect();
+  const { isSignedIn } = useSIWE();
 
   const handleDisconnect = () => {
     disconnect();
@@ -14,7 +15,7 @@ export const AccountMenu = () => {
   return (
     <ConnectKitButton.Custom>
       {({ isConnected, show }) => {
-        if (isConnected) {
+        if (isConnected && isSignedIn) {
           return (
             <>
               <div className="flex items-center">

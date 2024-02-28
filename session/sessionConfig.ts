@@ -2,10 +2,12 @@ import type { SessionOptions } from 'iron-session';
 
 export interface SessionData {
   username: string;
-  nonce?: string;
+  nonce: string;
   isLoggedIn: boolean;
-  address?: string;
-  chainId?: number;
+  address: string;
+  chainId: number;
+  role: string;
+  userId: string;
 }
 
 export const defaultSession: SessionData = {
@@ -14,6 +16,8 @@ export const defaultSession: SessionData = {
   nonce: '',
   address: '',
   chainId: 0,
+  role: 'user',
+  userId: '',
 };
 
 export const sessionOptions: SessionOptions = {
