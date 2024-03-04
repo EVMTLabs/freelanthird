@@ -1,14 +1,13 @@
+import jwt from 'jsonwebtoken';
 import { NextResponse } from 'next/server';
 import { generateNonce, SiweErrorType, SiweMessage } from 'siwe';
 
-import { createUser } from '@/prisma/actions/users';
+import { createUser, findUserByAddress } from '@/prisma/actions/users';
 import { getServerSession } from '@/session/getServerSession';
 
 export const PUT = async () => {
   try {
     const session = await getServerSession();
-
-    console.log('session', session);
 
     if (!session?.nonce) {
       session.nonce = generateNonce();
@@ -44,14 +43,29 @@ export const POST = async (req: Request) => {
     session.address = fields.address;
     session.chainId = fields.chainId;
 
-    const newUser = await createUser({
-      address: fields.address,
-      chainId: fields.chainId,
-    });
+    let user = await findUserByAddress(fields.address);
 
-    session.userId = newUser.id;
-    session.role = newUser.role;
+    if (!user) {
+      user = await createUser({
+        address: fields.address,
+        chainId: fields.chainId,
+      });
+    }
+
+    session.userId = user.id;
+    session.role = user.role;
+    session.username = user.username;
     session.isLoggedIn = true;
+
+    const token = jwt.sign(
+      { username: user.username, userId: user.id, role: user.role },
+      process.env.JWT_SECRET!,
+      {
+        expiresIn: '2d',
+      },
+    );
+
+    session.token = token;
 
     await session.save();
   } catch (error) {

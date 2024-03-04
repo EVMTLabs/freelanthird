@@ -9,8 +9,8 @@ export const Avatar = ({
   address = '0x',
   ensImage,
   ensName,
-  size,
-  radius,
+  size = 32,
+  radius = 96,
 }: Types.CustomAvatarProps) => {
   return (
     <div className={clsx('flex avatar', !ensImage && 'placeholder')}>

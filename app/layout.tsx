@@ -24,9 +24,7 @@ export default function RootLayout({
       <body className={inter.className}>
         <Providers>
           <Navbar />
-          <main className="flex min-h-screen max-w-6xl flex-col container my-10 mx-auto relative">
-            {children}
-          </main>
+          {children}
         </Providers>
       </body>
     </html>

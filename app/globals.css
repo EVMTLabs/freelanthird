@@ -8,6 +8,14 @@ input::-webkit-inner-spin-button {
   margin: 0;
 }
 
-input[type="number"] {
+input[type='number'] {
   -moz-appearance: textfield;
+}
+
+.tiptap .is-empty::before {
+  @apply text-gray-500;
+  @apply content-[attr(data-placeholder)];
+  @apply float-left;
+  @apply pointer-events-none;
+  @apply h-0;
 }

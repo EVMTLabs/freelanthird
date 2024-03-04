@@ -2,10 +2,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { JobCard } from '@/components/JobCard/JobCard';
+import { MainLayout } from '@/components/Layouts/MainLayout';
 
 export default function HomePage() {
   return (
-    <>
+    <MainLayout>
       <div className="flex gap-12 relative">
         <div>
           <div className="flex gap-6">
@@ -48,6 +49,6 @@ export default function HomePage() {
           </div>
         </div>
       </div>
-    </>
+    </MainLayout>
   );
 }

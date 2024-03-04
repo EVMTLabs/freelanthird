@@ -20,3 +20,15 @@ export const createUser = async ({
     },
   });
 };
+
+export const findUserByAddress = async (address: string) => {
+  return prisma.user.findFirst({
+    where: {
+      wallets: {
+        some: {
+          address,
+        },
+      },
+    },
+  });
+};

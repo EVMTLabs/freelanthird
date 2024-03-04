@@ -12,8 +12,20 @@ const fetchSession = async (): Promise<SessionData> => {
 };
 
 export const useSession = () => {
-  return useSuspenseQuery({
+  const { data, isLoading, isError } = useSuspenseQuery({
     queryKey: ['session'],
     queryFn: fetchSession,
   });
+
+  const { username, isLoggedIn, role, userId, token } = data;
+
+  return {
+    username,
+    isLoggedIn,
+    role,
+    userId,
+    token,
+    isLoading,
+    isError,
+  };
 };
