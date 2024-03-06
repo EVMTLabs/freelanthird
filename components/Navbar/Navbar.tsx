@@ -1,7 +1,9 @@
 import Image from 'next/image';
-import Link from 'next/link';
+
+import { CustomLink } from '../CustomLink/CustomLink';
 
 import { AccountMenu } from './AccountMenu';
+import { CustomMessageLink } from './CustomMessageLink';
 
 export const Navbar = () => {
   return (
@@ -16,25 +18,12 @@ export const Navbar = () => {
               height={50}
             />
           </a>
-          <div className="flex items-center gap-6">
-            <Link href="/" className="text-md font-semibold hover:underline">
-              Projects
-            </Link>
-            <Link href="/" className="text-md font-semibold hover:underline">
-              Freelancers
-            </Link>
-            <Link href="/" className="text-md font-semibold hover:underline">
-              Proposals
-            </Link>
-            <Link href="/" className="text-md font-semibold hover:underline">
-              My Jobs
-            </Link>
-            <Link
-              href="/messages"
-              className="text-md font-semibold hover:underline"
-            >
-              Messages
-            </Link>
+          <div className="flex items-center gap-6 mt-1">
+            <CustomLink href="/">Find Work</CustomLink>
+            <CustomLink href="/freelancers">Freelancers</CustomLink>
+            <CustomLink href="/freelancers">Proposals</CustomLink>
+            <CustomLink href="/freelancers">My jobs</CustomLink>
+            <CustomMessageLink />
           </div>
         </div>
       </div>

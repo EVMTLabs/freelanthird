@@ -1,38 +1,24 @@
 'use client';
 
 import type { MouseEvent } from 'react';
-import { useContext, useEffect } from 'react';
 import clsx from 'clsx';
 
-import type { ChatHistory as ChatHistoryInterface } from '@/types/messages';
+import { useChatRooms } from '@/hooks/messages/useChatRooms';
 import { formatDate } from '@/utils/formatDate';
-
-import { MessagesContext } from '../context/MessagesContext';
 
 import { ChatAvatar } from './ChatAvatar';
 
-interface ChatHistoryProps {
-  chatHistory: ChatHistoryInterface[];
-}
-
-export const ChatHistory = ({ chatHistory }: ChatHistoryProps) => {
-  const { rooms, setRooms, selectedRoomId, setSelectedRoomId } =
-    useContext(MessagesContext);
+export const ChatHistory = () => {
+  const { chatRooms, roomId, setSelectedRoomId } = useChatRooms();
 
   const handleSelectRoom = (event: MouseEvent<HTMLDivElement>) => {
     const id = event?.currentTarget?.dataset?.roomId;
     if (id) setSelectedRoomId?.(id);
   };
 
-  useEffect(() => {
-    if (chatHistory.length) {
-      setRooms(chatHistory);
-    }
-  }, [chatHistory]);
+  if (!chatRooms?.length || !chatRooms[0].messages.length) return null;
 
-  if (!rooms.length || !rooms[0].messages.length) return null;
-
-  return rooms.map((chat) => (
+  return chatRooms.map((chat) => (
     <div key={chat.id} className="flex flex-col mt-4 border-b">
       <div
         role="button"
@@ -40,7 +26,7 @@ export const ChatHistory = ({ chatHistory }: ChatHistoryProps) => {
         data-room-id={chat.id}
         className={clsx(
           'flex flex-row px-6 cursor-pointer hover:bg-base-200/50',
-          selectedRoomId === chat.id && 'bg-base-200/50',
+          roomId === chat.id && 'bg-base-200/50',
         )}
       >
         <div className="flex items-center justify-center py-2">

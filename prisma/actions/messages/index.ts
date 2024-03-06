@@ -1,3 +1,5 @@
+'use server';
+
 import { MessageStatus } from '@prisma/client';
 
 import prisma from '@/prisma/db';
@@ -19,7 +21,7 @@ export const findChatHistory = async (id: string) => {
             createdAt: 'asc',
           },
           include: {
-            user: {
+            sender: {
               select: {
                 id: true,
                 username: true,
@@ -83,11 +85,26 @@ export const findChatMessages = async (chatRoomId: string) => {
       createdAt: 'desc',
     },
     include: {
-      user: {
+      sender: {
         select: {
           id: true,
           username: true,
           avatar: true,
+        },
+      },
+    },
+  });
+};
+
+export const findFirstUnreadMessage = async (userId: string) => {
+  return prisma.chatMessage.findFirst({
+    where: {
+      status: MessageStatus.SENT,
+      chatRoom: {
+        users: {
+          some: {
+            id: userId,
+          },
         },
       },
     },
@@ -101,8 +118,14 @@ export const updateMessagesToSeen = async (
   const updatedMessages = await prisma.chatMessage.updateMany({
     where: {
       chatRoomId: chatRoomId,
-      userId: userId,
       status: MessageStatus.SENT,
+      chatRoom: {
+        users: {
+          some: {
+            id: userId,
+          },
+        },
+      },
     },
     data: {
       status: MessageStatus.SEEN,

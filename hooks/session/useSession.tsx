@@ -17,10 +17,11 @@ export const useSession = () => {
     queryFn: fetchSession,
   });
 
-  const { username, isLoggedIn, role, userId, token } = data;
+  const { username, isLoggedIn, role, userId, token, avatar } = data;
 
   return {
     username,
+    avatar,
     isLoggedIn,
     role,
     userId,

@@ -33,6 +33,5 @@ export const siweConfig = {
     const { address, chainId } = await res.json();
     return address && chainId ? { address, chainId } : null;
   },
-  signOut: () =>
-    fetch('/api/session', { method: 'DELETE' }).then((res) => res.ok),
+  signOut: () => fetch('/api/session/delete').then((res) => res.ok),
 } satisfies SIWEConfig;

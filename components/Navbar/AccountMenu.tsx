@@ -31,7 +31,7 @@ export const AccountMenu = () => {
                 <button className="btn btn-ghost btn-circle hover:bg-transparent">
                   <div className="indicator">
                     <Bell size={21} />
-                    <span className="badge badge-xs badge-primary indicator-item"></span>
+                    <span className="badge badge-xs badge-primary indicator-item" />
                   </div>
                 </button>
               </div>

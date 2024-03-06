@@ -1,17 +1,15 @@
 'use client';
 
-import { useContext, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useInView } from 'react-intersection-observer';
 import clsx from 'clsx';
 
 import { ChatBubble } from '@/components/ChatBubble/ChatBubble';
 import { useWindowVisibility } from '@/hooks/common/useWindowVisibility';
-
-import { MessagesContext } from '../context/MessagesContext';
+import { useChatRooms } from '@/hooks/messages/useChatRooms';
 
 export const ChatMessages = () => {
-  const { currentRoomMessages, setRooms, selectedRoomId } =
-    useContext(MessagesContext);
+  const { currentRoomMessages, updateUnreadCounter } = useChatRooms();
   const [showMessages, setShowMessages] = useState(false);
   const lastMessageRef = useRef<HTMLDivElement | null>(null);
   const { ref, inView } = useInView({
@@ -26,25 +24,8 @@ export const ChatMessages = () => {
     }
   }, [currentRoomMessages]);
 
-  const updateUnreadCounter = async () => {
-    await fetch(`/api/messages/status?chatRoomId=${selectedRoomId}`);
-  };
-
   useEffect(() => {
-    if (inView && isActiveTab) {
-      setRooms((prev) => {
-        return prev.map((room) => {
-          if (room.id === selectedRoomId) {
-            return {
-              ...room,
-              unreadCounter: 0,
-            };
-          }
-          return room;
-        });
-      });
-      updateUnreadCounter();
-    }
+    updateUnreadCounter();
   }, [inView, isActiveTab]);
 
   return (
@@ -58,12 +39,12 @@ export const ChatMessages = () => {
           showMessages && 'opacity-100',
         )}
       >
-        {currentRoomMessages?.map(({ id, createdAt, content, user }) => (
+        {currentRoomMessages?.map(({ id, createdAt, content, sender }) => (
           <ChatBubble
             key={id}
             content={content}
-            avatar={user.avatar}
-            username={user.username}
+            avatar={sender?.avatar}
+            username={sender?.username}
             createdAt={createdAt}
           />
         ))}

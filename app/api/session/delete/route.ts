@@ -6,14 +6,19 @@ export const GET = async () => {
   try {
     const session = await getServerSession();
 
-    if (!session.isLoggedIn) {
+    if (!session) {
       return NextResponse.json({
         message: 'No session found',
         status: 404,
       });
     }
 
-    return NextResponse.json(session);
+    session.destroy();
+
+    return NextResponse.json({
+      message: 'Session destroyed',
+      status: 200,
+    });
   } catch (error) {
     console.error(error);
     return NextResponse.json({

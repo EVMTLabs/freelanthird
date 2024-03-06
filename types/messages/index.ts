@@ -1,32 +1,47 @@
 import type { MessageStatus } from '@prisma/client';
 
-export interface ChatRoomMessages {
+type User = {
+  id: string;
+  username: string | null;
+  avatar: string | null;
+};
+export interface ChatRoomMessage {
   id: string;
   content: string;
   type: string;
   createdAt: Date;
-  userId: string;
   chatRoomId: string;
+  senderId: string;
   status: MessageStatus;
-  user: {
-    id: string;
-    username: string | null;
-    avatar: string | null;
-  };
+  sender: User;
 }
 
 export interface ChatHistory {
   id: string;
-  users: {
-    id: string;
-    username: string | null;
-    avatar: string | null;
-  }[];
-  messages: ChatRoomMessages[];
+  users: User[];
+  messages: ChatRoomMessage[];
   unreadCounter: number;
 }
 
+type WSEvents = 'new_message' | 'unread_messages';
+
 export interface WSChatMessageResponse {
-  data: ChatRoomMessages;
-  event: 'new_message';
+  data: {
+    id: string;
+    content: string;
+    type: string;
+    createdAt: string;
+    chatRoomId: string;
+    senderId: string;
+    status: MessageStatus;
+    sender: User;
+    isNewRoom?: boolean;
+    newRoomUsers?: User[];
+  };
+  event: WSEvents;
+}
+
+export interface WSChatUnreadMessagesResponse {
+  data: ChatRoomMessage | string[];
+  event: WSEvents;
 }

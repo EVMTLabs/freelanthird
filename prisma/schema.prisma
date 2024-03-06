@@ -87,10 +87,10 @@ model ChatMessage {
   content    String
   type       String        @default("text")
   createdAt  DateTime      @default(now())
-  userId     String
+  senderId   String
   chatRoomId String
   status     MessageStatus @default(SENT)
-  user       User          @relation(fields: [userId], references: [id])
+  sender     User          @relation(fields: [senderId], references: [id])
   chatRoom   ChatRoom      @relation(fields: [chatRoomId], references: [id])
 
   @@map("chat_messages")

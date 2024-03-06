@@ -9,6 +9,7 @@ export interface SessionData {
   role: string;
   userId: string;
   token: string;
+  avatar: string | null;
 }
 
 export const defaultSession: SessionData = {
@@ -20,6 +21,7 @@ export const defaultSession: SessionData = {
   userId: '',
   token: '',
   username: null,
+  avatar: null,
 };
 
 export const sessionOptions: SessionOptions = {

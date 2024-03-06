@@ -1,36 +1,49 @@
 'use client';
 
-import { useCallback, useContext, useState } from 'react';
+import { useCallback, useState } from 'react';
 import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
-import { EditorContent, useEditor } from '@tiptap/react';
+import { EditorContent, Extension, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import { ArrowUp, Paperclip, ReceiptText } from 'lucide-react';
 
-import { useChatHistory } from '@/hooks/messages/useChatHistory';
-import { useSession } from '@/hooks/session/useSession';
+import { useChatRooms } from '@/hooks/messages/useChatRooms';
 
-import { MessagesContext } from '../context/MessagesContext';
-
-export const SendMessage = () => {
-  const { selectedRoomId } = useContext(MessagesContext);
-  const { userId, username } = useSession();
-  const { sendJsonMessage } = useChatHistory();
+export const SendMessageInput = () => {
+  const { sendMessage } = useChatRooms();
 
   const [message, setMessage] = useState('');
 
-  const handleClickSendMessage = useCallback(
-    () =>
-      sendJsonMessage({
-        type: 'text',
-        content: message,
-        chatRoomId: selectedRoomId,
-        receiverId: userId,
-        userId,
-        username,
-      }),
-    [selectedRoomId, message],
-  );
+  const sendWSMessage = useCallback(() => {
+    if (!message) return;
+
+    sendMessage({
+      type: 'text',
+      content: message,
+    });
+
+    setMessage('');
+  }, [message]);
+
+  const ClearInputOnEnterExtension = Extension.create({
+    name: 'clearInputOnEnter',
+
+    addKeyboardShortcuts() {
+      return {
+        Enter: ({ editor }) => {
+          // Clear input when Enter is pressed without Shift
+          sendWSMessage();
+          editor.commands.clearContent();
+          return true; // Return true to indicate that the command has been handled
+        },
+        'Shift-Enter': ({ editor }) => {
+          // Insert an empty line when Shift+Enter is pressed
+          editor.chain().focus().setHardBreak().run();
+          return true; // Return true to indicate that the command has been handled
+        },
+      };
+    },
+  });
 
   const editor = useEditor({
     content: message,
@@ -47,6 +60,7 @@ export const SendMessage = () => {
       Placeholder.configure({
         placeholder: 'Send message…',
       }),
+      ClearInputOnEnterExtension,
     ],
     editorProps: {
       attributes: {
@@ -59,6 +73,11 @@ export const SendMessage = () => {
       setMessage(editor.getHTML());
     },
   });
+
+  const handleClickSendMessage = useCallback(() => {
+    sendWSMessage();
+    editor?.commands.clearContent();
+  }, [sendWSMessage, editor]);
 
   return (
     <div className="flex place-items-end w-full p-2 max-w-4xl border rounded-lg">
