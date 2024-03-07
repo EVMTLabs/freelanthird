@@ -1,5 +1,7 @@
 import type { MessageStatus } from '@prisma/client';
 
+import type { NotificationEvent } from '../notifications';
+
 type User = {
   id: string;
   username: string | null;
@@ -23,8 +25,6 @@ export interface ChatHistory {
   unreadCounter: number;
 }
 
-type WSEvents = 'new_message' | 'unread_messages';
-
 export interface WSChatMessageResponse {
   data: {
     id: string;
@@ -38,10 +38,10 @@ export interface WSChatMessageResponse {
     isNewRoom?: boolean;
     newRoomUsers?: User[];
   };
-  event: WSEvents;
+  event: NotificationEvent.NEW_MESSAGE;
 }
 
 export interface WSChatUnreadMessagesResponse {
   data: ChatRoomMessage | string[];
-  event: WSEvents;
+  event: NotificationEvent.NEW_MESSAGE;
 }

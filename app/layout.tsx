@@ -2,6 +2,8 @@ import type { Metadata } from 'next';
 import { Albert_Sans } from 'next/font/google';
 
 import { Navbar } from '@/components/Navbar/Navbar';
+import { findFirstUnreadMessage } from '@/prisma/actions/messages';
+import { getServerSession } from '@/session/getServerSession';
 
 import { Providers } from './providers';
 
@@ -19,11 +21,14 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const { userId } = await getServerSession();
+  const hasUnreadMessages = await findFirstUnreadMessage(userId);
+
   return (
     <html lang="en" data-theme="bumblebee">
       <body className={inter.className}>
         <Providers>
-          <Navbar />
+          <Navbar hasUnreadMessages={!!hasUnreadMessages} />
           {children}
         </Providers>
       </body>

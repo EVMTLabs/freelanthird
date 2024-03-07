@@ -5,7 +5,11 @@ import { CustomLink } from '../CustomLink/CustomLink';
 import { AccountMenu } from './AccountMenu';
 import { CustomMessageLink } from './CustomMessageLink';
 
-export const Navbar = () => {
+export const Navbar = ({
+  hasUnreadMessages,
+}: {
+  hasUnreadMessages: boolean;
+}) => {
   return (
     <div className="navbar sticky top-0 bg-base-100 z-10 border-b py-4 px-6">
       <div className="navbar-start">
@@ -23,7 +27,7 @@ export const Navbar = () => {
             <CustomLink href="/freelancers">Freelancers</CustomLink>
             <CustomLink href="/freelancers">Proposals</CustomLink>
             <CustomLink href="/freelancers">My jobs</CustomLink>
-            <CustomMessageLink />
+            <CustomMessageLink hasUnreadMessages={hasUnreadMessages} />
           </div>
         </div>
       </div>
