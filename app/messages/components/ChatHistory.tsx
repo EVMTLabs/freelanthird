@@ -2,21 +2,47 @@
 
 import type { MouseEvent } from 'react';
 import clsx from 'clsx';
+import { useModal } from 'connectkit';
 
+import { useSession } from '@/context/SessionContext';
 import { useChatRooms } from '@/hooks/messages/useChatRooms';
 import { formatDate } from '@/utils/formatDate';
 
 import { ChatAvatar } from './ChatAvatar';
 
 export const ChatHistory = () => {
+  const { isLoggedIn } = useSession();
   const { chatRooms, roomId, setSelectedRoomId } = useChatRooms();
+  const { setOpen } = useModal();
 
   const handleSelectRoom = (event: MouseEvent<HTMLDivElement>) => {
     const id = event?.currentTarget?.dataset?.roomId;
     if (id) setSelectedRoomId?.(id);
   };
 
-  if (!chatRooms?.length || !chatRooms[0].messages.length) return null;
+  const handleOpenConnectModal = () => {
+    setOpen(true);
+  };
+
+  if (!chatRooms?.length || !chatRooms[0].messages.length || !isLoggedIn)
+    return (
+      <div className="flex flex-col h-full place-content-center">
+        <div className="flex flex-col items-center justify-center w-full">
+          <h2 className="text-2xl font-extrabold text-center">
+            Connect Wallet
+          </h2>
+          <p className="text-center mx-4">
+            Your messages will appear here once you connect your wallet
+          </p>
+          <button
+            className="btn btn-primary mt-4 w-fit"
+            onClick={handleOpenConnectModal}
+          >
+            Connect Wallet
+          </button>
+        </div>
+      </div>
+    );
 
   return chatRooms.map((chat) => (
     <div key={chat.id} className="flex flex-col mt-4 border-b">

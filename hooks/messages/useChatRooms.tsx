@@ -6,9 +6,8 @@ import {
   messagesQueryKey,
   useMessagesContext,
 } from '@/app/messages/context/MessagesContext';
+import { useSession } from '@/context/SessionContext';
 import type { ChatHistory } from '@/types/messages';
-
-import { useSession } from '../session/useSession';
 
 export const useChatRooms = () => {
   const { userId, username, avatar } = useSession();

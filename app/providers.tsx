@@ -8,6 +8,7 @@ import { WagmiProvider } from 'wagmi';
 import { Avatar } from '@/components/Avatar/Avatar';
 import { config } from '@/config/connectkit';
 import { siweConfig } from '@/config/siweConfig';
+import { SessionProvider } from '@/context/SessionContext';
 
 const queryClient = new QueryClient();
 
@@ -25,7 +26,7 @@ export function Providers(props: { children: ReactNode }) {
               '--ck-font-family': '"Albert Sans", sans-serif',
             }}
           >
-            {props.children}
+            <SessionProvider>{props.children}</SessionProvider>
           </ConnectKitProvider>
         </SIWEProvider>
       </WagmiProvider>
