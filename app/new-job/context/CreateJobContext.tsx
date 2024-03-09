@@ -4,10 +4,11 @@ import { createContext, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { createJob } from '@/prisma/actions/jobs';
-import type { Job } from '@/types/jobs';
+import type { Job, JobCategory } from '@/types/jobs';
 
 interface JobFormContextProps {
   jobValues: Job;
+  categories: JobCategory[];
   setJobValues: (values: Job) => void;
   formStep: number;
   goBackStep: () => void;
@@ -26,7 +27,7 @@ export enum CreateJobFormSteps {
 
 const DEFAULT_JOB_VALUES: Job = {
   title: '',
-  category: 'web_development',
+  category: '',
   description: '',
   skills: [],
   size: 'medium',
@@ -36,6 +37,7 @@ const DEFAULT_JOB_VALUES: Job = {
 
 export const JobFormContext = createContext<JobFormContextProps>({
   jobValues: DEFAULT_JOB_VALUES,
+  categories: [],
   setJobValues: () => {},
   formStep: CreateJobFormSteps.FIRST_STEP,
   goBackStep: () => {},
@@ -45,12 +47,17 @@ export const JobFormContext = createContext<JobFormContextProps>({
 
 export const JobFormProvider = ({
   children,
+  categories,
 }: {
   children: React.ReactNode;
+  categories: JobCategory[];
 }) => {
   const router = useRouter();
 
-  const [jobValues, setJobValues] = useState<Job>(DEFAULT_JOB_VALUES);
+  const [jobValues, setJobValues] = useState<Job>({
+    ...DEFAULT_JOB_VALUES,
+    category: categories[0].id,
+  });
   const [isLoading, setIsLoading] = useState(false);
   const [formStep, setFormStep] = useState(0);
 
@@ -76,10 +83,10 @@ export const JobFormProvider = ({
     try {
       setIsLoading(true);
       await createJob(jobValues);
+      router.replace('/');
     } catch (error) {
       console.error('Error creating job', error);
     } finally {
-      router.replace('/');
       setIsLoading(false);
     }
   };
@@ -88,6 +95,7 @@ export const JobFormProvider = ({
     <JobFormContext.Provider
       value={{
         jobValues,
+        categories,
         setJobValues: handleJobsValues,
         formStep,
         goBackStep,

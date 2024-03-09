@@ -3,6 +3,7 @@
 import type { MouseEvent } from 'react';
 import clsx from 'clsx';
 import { useModal } from 'connectkit';
+import Link from 'next/link';
 
 import { useSession } from '@/context/SessionContext';
 import { useChatRooms } from '@/hooks/messages/useChatRooms';
@@ -24,7 +25,7 @@ export const ChatHistory = () => {
     setOpen(true);
   };
 
-  if (!chatRooms?.length || !chatRooms[0].messages.length || !isLoggedIn)
+  if (!isLoggedIn)
     return (
       <div className="flex flex-col h-full place-content-center">
         <div className="flex flex-col items-center justify-center w-full">
@@ -43,6 +44,25 @@ export const ChatHistory = () => {
         </div>
       </div>
     );
+
+  if (!chatRooms?.length || !chatRooms[0].messages.length) {
+    return (
+      <div className="flex flex-col h-full place-content-center">
+        <div className="flex flex-col items-center justify-center w-full">
+          <h2 className="text-2xl font-extrabold text-center">
+            Message Anyone
+          </h2>
+          <p className="text-center m-4">
+            You can message anyone in the network and your chat history will
+            apear here
+          </p>
+          <Link href="/freelancers" className="btn my-2">
+            Find People
+          </Link>
+        </div>
+      </div>
+    );
+  }
 
   return chatRooms.map((chat) => (
     <div key={chat.id} className="flex flex-col mt-4 border-b">

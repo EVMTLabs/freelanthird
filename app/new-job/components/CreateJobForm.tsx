@@ -1,17 +1,17 @@
-"use client";
+'use client';
 
-import { useContext } from "react";
+import { useContext } from 'react';
 
 import {
   CreateJobFormSteps,
   JobFormContext,
-} from "../context/CreateJobContext";
+} from '../context/CreateJobContext';
 
-import { CreateJobFirstStep } from "./CreateJobFirstStep";
-import { CreateJobFifthStep } from "./CreateJobFithStep";
-import { CreateJobFourthStep } from "./CreateJobFourthStep";
-import { CreateJobSecondStep } from "./CreateJobSecondStep";
-import { CreateJobThirdStep } from "./CreateJobThirdStep";
+import { CreateJobFirstStep } from './CreateJobFirstStep';
+import { CreateJobFifthStep } from './CreateJobFithStep';
+import { CreateJobFourthStep } from './CreateJobFourthStep';
+import { CreateJobSecondStep } from './CreateJobSecondStep';
+import { CreateJobThirdStep } from './CreateJobThirdStep';
 
 export const CreateJobForm = () => {
   const { formStep } = useContext(JobFormContext);

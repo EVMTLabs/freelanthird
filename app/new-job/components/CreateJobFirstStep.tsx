@@ -6,8 +6,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import clsx from 'clsx';
 import { z } from 'zod';
 
-import { JOBS_CATEGORIES } from '@/constants/jobCategories';
-
 import { JobFormContext } from '../context/CreateJobContext';
 
 const schema = z.object({
@@ -22,7 +20,7 @@ const schema = z.object({
 });
 
 export const CreateJobFirstStep = () => {
-  const { jobValues, setJobValues, goNextStep, goBackStep } =
+  const { jobValues, categories, setJobValues, goNextStep, goBackStep } =
     useContext(JobFormContext);
 
   const methods = useForm({
@@ -70,16 +68,16 @@ export const CreateJobFirstStep = () => {
       </p>
       <p className="text-lg mb-2 mt-4 font-extrabold">Job Category</p>
       <div className="flex flex-col gap-2 form-control mt-2">
-        {JOBS_CATEGORIES.map(({ value, label }) => (
-          <label key={value} className="label justify-start" htmlFor={value}>
+        {categories.map(({ id, name }) => (
+          <label key={id} className="label justify-start" htmlFor={id}>
             <input
               type="radio"
-              id={value}
-              value={value}
+              id={id}
+              value={id}
               className="radio radio-neutral border-neutral"
               {...register('category')}
             />
-            <span className="label-text ml-3">{label}</span>
+            <span className="label-text ml-3">{name}</span>
           </label>
         ))}
       </div>

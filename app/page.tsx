@@ -1,8 +1,8 @@
 import Image from 'next/image';
-import Link from 'next/link';
 
 import { JobCard } from '@/components/JobCard/JobCard';
 import { MainLayout } from '@/components/Layouts/MainLayout';
+import { LoggedLink } from '@/components/LoggedLink/LoggedLink';
 
 export default function HomePage() {
   return (
@@ -22,9 +22,11 @@ export default function HomePage() {
                 Find your next freelance project without the fees. We are the
                 largest freelance marketplace without the middleman.
               </p>
-              <Link href="/new-job" className="btn btn-primary mt-6 w-fit">
-                Create a Project - Free
-              </Link>
+              <LoggedLink
+                href="/new-job"
+                className="btn btn-primary mt-6 w-fit"
+                text="Create a Project - Free"
+              />
             </div>
           </div>
         </div>

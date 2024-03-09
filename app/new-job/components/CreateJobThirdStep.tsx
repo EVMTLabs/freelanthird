@@ -1,14 +1,14 @@
 'use client';
 
 import type { MouseEvent } from 'react';
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import clsx from 'clsx';
 
 import { JobFormContext } from '../context/CreateJobContext';
 
 export const CreateJobThirdStep = () => {
-  const { jobValues, setJobValues, goNextStep, goBackStep } =
+  const { jobValues, categories, setJobValues, goNextStep, goBackStep } =
     useContext(JobFormContext);
 
   const { handleSubmit, register, setValue, watch } = useForm<{
@@ -29,21 +29,6 @@ export const CreateJobThirdStep = () => {
     return goNextStep();
   });
 
-  const skills = [
-    'Python',
-    'Java',
-    'C++',
-    'C#',
-    'Ruby',
-    'Swift',
-    'Kotlin',
-    'SQL',
-    'JavaScript',
-    'TypeScript',
-    'PHP',
-    'Go',
-  ];
-
   const handleSkillClick = (e: MouseEvent<HTMLLabelElement>) => {
     e.preventDefault();
     const skill = e.currentTarget.id;
@@ -56,19 +41,24 @@ export const CreateJobThirdStep = () => {
     }
   };
 
+  const skills = useMemo(
+    () => categories.find((c) => c.id === jobValues.category)?.skills || [],
+    [],
+  );
+
   return (
     <form onSubmit={onSubmit} className="flex flex-col w-full">
       <p className="text-lg mb-2 font-extrabold">
         Select the skills required for this job
       </p>
       <div className="flex gap-2 flex-wrap">
-        {skills.map((skill, index) => (
+        {skills.map((skill) => (
           <label
-            key={skill + index}
-            id={skill}
+            key={skill.id}
+            id={skill.id}
             className={clsx(
               'btn btn-neutral btn-sm w-fit',
-              !selectedSkills.includes(skill) && 'btn-outline',
+              !selectedSkills.includes(skill.id) && 'btn-outline',
             )}
             onClick={handleSkillClick}
           >
@@ -76,10 +66,10 @@ export const CreateJobThirdStep = () => {
               {...register('skills')}
               type="checkbox"
               className="hidden"
-              value={skill}
-              checked={selectedSkills.includes(skill)}
+              value={skill.id}
+              checked={selectedSkills.includes(skill.id)}
             />
-            {skill}
+            {skill.name}
           </label>
         ))}
       </div>

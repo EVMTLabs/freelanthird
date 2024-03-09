@@ -3,6 +3,7 @@
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useSIWE } from 'connectkit';
+import { useAccount } from 'wagmi';
 
 import type { SessionData } from '@/session/sessionConfig';
 import { getBaseURL } from '@/utils/getBaseUrl';
@@ -41,28 +42,23 @@ export const SessionProvider = ({
   children: React.ReactNode;
 }) => {
   const { isSignedIn } = useSIWE();
+  const { isConnected } = useAccount();
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const { data, isLoading, isError } = useSuspenseQuery({
+  const { data } = useSuspenseQuery({
     queryKey: ['session'],
     queryFn: fetchSession,
   });
 
   const { username, role, userId, token, avatar } = data;
 
-  const signOut = async () => {
-    const host = getBaseURL();
-    await fetch(`${host}/api/session/delete`);
-  };
-
   useEffect(() => {
-    if (isSignedIn && data.isLoggedIn && !isLoading && !isError) {
+    if (isSignedIn && isConnected) {
       setIsLoggedIn(true);
-    } else if (!isLoading && !isError && !data.isLoggedIn) {
-      signOut();
+    } else {
       setIsLoggedIn(false);
     }
-  }, [isSignedIn, data, isLoading, isError]);
+  }, [isSignedIn, isConnected]);
 
   return (
     <SessionContext.Provider
