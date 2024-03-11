@@ -1,29 +1,32 @@
 'use client';
 
-import { createContext, useContext, useEffect, useState } from 'react';
+import { createContext, useContext, useEffect, useMemo, useState } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
 import { useSIWE } from 'connectkit';
+import { useRouter } from 'next/navigation';
 import { useAccount } from 'wagmi';
 
 import type { SessionData } from '@/session/sessionConfig';
 import { getBaseURL } from '@/utils/getBaseUrl';
 
-interface SessionContextProps {
-  isLoggedIn: boolean;
-  username: string | null;
-  role: string;
-  userId: string;
-  token: string;
-  avatar: string | null;
+interface SessionContextProps extends SessionData {
+  isLoading: boolean;
+  isProfileCompleted: boolean;
+  refetchSession: () => void;
 }
 
 export const SessionContext = createContext<SessionContextProps>({
   isLoggedIn: false,
-  username: null,
   role: 'user',
   userId: '',
   token: '',
-  avatar: null,
+  isLoading: true,
+  isProfileCompleted: false,
+  isFreelancer: false,
+  nonce: '',
+  address: '',
+  chainId: 0,
+  refetchSession: () => {},
 });
 
 const fetchSession = async (): Promise<SessionData> => {
@@ -41,34 +44,62 @@ export const SessionProvider = ({
 }: {
   children: React.ReactNode;
 }) => {
-  const { isSignedIn } = useSIWE();
+  const { isSignedIn, signOut } = useSIWE();
   const { isConnected } = useAccount();
+  const router = useRouter();
+
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const { data } = useSuspenseQuery({
+  const {
+    data: userSession,
+    isLoading,
+    refetch,
+  } = useSuspenseQuery({
     queryKey: ['session'],
     queryFn: fetchSession,
   });
 
-  const { username, role, userId, token, avatar } = data;
+  const handleSignOut = async () => {
+    await signOut();
+  };
 
   useEffect(() => {
     if (isSignedIn && isConnected) {
       setIsLoggedIn(true);
+    } else if (isSignedIn && !isConnected) {
+      setIsLoggedIn(false);
+      handleSignOut();
     } else {
       setIsLoggedIn(false);
     }
   }, [isSignedIn, isConnected]);
 
+  const isProfileCompleted = useMemo(() => {
+    return !isLoading && !!userSession.username;
+  }, [isLoading, userSession.username]);
+
+  useEffect(() => {
+    if (!isProfileCompleted && isLoggedIn) {
+      router.push('/onboarding');
+    }
+  }, [isProfileCompleted, isLoggedIn]);
+
+  const refetchSession = async () => {
+    try {
+      await refetch();
+    } catch (error) {
+      console.error('Error refetching session', error);
+    }
+  };
+
   return (
     <SessionContext.Provider
       value={{
+        ...userSession,
+        isLoading,
+        isProfileCompleted,
+        refetchSession,
         isLoggedIn,
-        username,
-        role,
-        userId,
-        token,
-        avatar,
       }}
     >
       {children}

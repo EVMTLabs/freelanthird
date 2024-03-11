@@ -1,8 +1,7 @@
 import jwt from 'jsonwebtoken';
-import { NextResponse } from 'next/server';
 import { generateNonce, SiweErrorType, SiweMessage } from 'siwe';
 
-import { createUser, findUserByAddress } from '@/prisma/actions/users';
+import { createUser, findUserByAddress } from '@/actions/users';
 import { getServerSession } from '@/session/getServerSession';
 
 export const PUT = async () => {
@@ -15,10 +14,10 @@ export const PUT = async () => {
 
     await session.save();
 
-    return new NextResponse(session.nonce);
+    return new Response(session.nonce);
   } catch (error) {
     console.error(error);
-    return NextResponse.json({
+    return Response.json({
       message: 'Internal server error',
       status: 500,
     });
@@ -52,13 +51,19 @@ export const POST = async (req: Request) => {
       });
     }
 
-    session.userId = user.id;
-    session.role = user.role;
-    session.username = user.username;
+    const { id, role, username, avatar, isFreelancer, email, name } = user;
+
+    session.userId = id;
+    session.role = role;
+    session.isFreelancer = isFreelancer;
+    session.username = username ?? undefined;
+    session.avatar = avatar ?? undefined;
+    session.email = email ?? undefined;
+    session.name = name ?? undefined;
     session.isLoggedIn = true;
 
     const token = jwt.sign(
-      { username: user.username, userId: user.id, role: user.role },
+      { username: username, userId: id, role: role },
       process.env.JWT_SECRET!,
       {
         expiresIn: '2d',
@@ -72,18 +77,18 @@ export const POST = async (req: Request) => {
     console.error(error);
     switch (error) {
       case SiweErrorType.INVALID_NONCE:
-        return NextResponse.json({
+        return Response.json({
           message: 'Invalid nonce',
           status: 422,
         });
       case SiweErrorType.INVALID_SIGNATURE:
-        return NextResponse.json({
+        return Response.json({
           message: 'Invalid signature',
           status: 401,
         });
 
       default:
-        return NextResponse.json({
+        return Response.json({
           message: 'Internal server error',
           status: 500,
         });

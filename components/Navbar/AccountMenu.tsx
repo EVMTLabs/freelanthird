@@ -1,8 +1,10 @@
 'use client';
 
-import { Avatar, ConnectKitButton, useSIWE } from 'connectkit';
+import { ConnectKitButton, useSIWE } from 'connectkit';
 import { Bell, HelpCircle } from 'lucide-react';
 import { useDisconnect } from 'wagmi';
+
+import { Avatar } from '../Avatar/Avatar';
 
 export const AccountMenu = () => {
   const { disconnect } = useDisconnect();
@@ -37,7 +39,7 @@ export const AccountMenu = () => {
               </div>
               <div className="dropdown dropdown-end ml-2">
                 <div tabIndex={0} role="button">
-                  <Avatar size={32} />
+                  <Avatar />
                 </div>
                 <ul
                   tabIndex={0}

@@ -1,9 +1,4 @@
-import { NextResponse } from 'next/server';
-
-import {
-  findChatMessages,
-  findUserInChatRoom,
-} from '@/prisma/actions/messages';
+import { findChatMessages, findUserInChatRoom } from '@/actions/messages';
 import { getServerSession } from '@/session/getServerSession';
 
 export const GET = async (request: Request) => {
@@ -12,7 +7,7 @@ export const GET = async (request: Request) => {
     const chatRoomId = searchParams.get('chatRoomId');
 
     if (!chatRoomId) {
-      return NextResponse.json({
+      return Response.json({
         message: 'Bad request',
         status: 400,
       });
@@ -21,7 +16,7 @@ export const GET = async (request: Request) => {
     const session = await getServerSession();
 
     if (!session || !session.isLoggedIn) {
-      return NextResponse.json({
+      return Response.json({
         message: 'Unauthorized',
         status: 401,
       });
@@ -33,7 +28,7 @@ export const GET = async (request: Request) => {
     );
 
     if (!isUserInChatRoom) {
-      return NextResponse.json({
+      return Response.json({
         message: 'Unauthorized',
         status: 401,
       });
@@ -41,10 +36,10 @@ export const GET = async (request: Request) => {
 
     const messages = await findChatMessages(chatRoomId);
 
-    return NextResponse.json(messages);
+    return Response.json(messages);
   } catch (error) {
     console.error(error);
-    return NextResponse.json({
+    return Response.json({
       message: 'Internal server error',
       status: 500,
     });

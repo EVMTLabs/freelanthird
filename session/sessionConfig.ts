@@ -1,7 +1,6 @@
 import type { SessionOptions } from 'iron-session';
 
 export interface SessionData {
-  username: string | null;
   nonce: string;
   isLoggedIn: boolean;
   address: string;
@@ -9,7 +8,11 @@ export interface SessionData {
   role: string;
   userId: string;
   token: string;
-  avatar: string | null;
+  username?: string;
+  name?: string;
+  email?: string;
+  isFreelancer: boolean;
+  avatar?: string;
 }
 
 export const defaultSession: SessionData = {
@@ -20,8 +23,7 @@ export const defaultSession: SessionData = {
   role: 'user',
   userId: '',
   token: '',
-  username: null,
-  avatar: null,
+  isFreelancer: false,
 };
 
 export const sessionOptions: SessionOptions = {

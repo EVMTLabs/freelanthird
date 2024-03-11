@@ -1,5 +1,3 @@
-import { NextResponse } from 'next/server';
-
 import { getServerSession } from '@/session/getServerSession';
 
 export const GET = async () => {
@@ -7,16 +5,16 @@ export const GET = async () => {
     const session = await getServerSession();
 
     if (!session.isLoggedIn) {
-      return NextResponse.json({
+      return Response.json({
         message: 'No session found',
         status: 404,
       });
     }
 
-    return NextResponse.json(session);
+    return Response.json(session);
   } catch (error) {
     console.error(error);
-    return NextResponse.json({
+    return Response.json({
       message: 'Internal server error',
       status: 500,
     });

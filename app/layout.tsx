@@ -1,8 +1,8 @@
 import type { Metadata } from 'next';
 import { Albert_Sans } from 'next/font/google';
 
+import { findFirstUnreadMessage } from '@/actions/messages';
 import { Navbar } from '@/components/Navbar/Navbar';
-import { findFirstUnreadMessage } from '@/prisma/actions/messages';
 import { getServerSession } from '@/session/getServerSession';
 
 import { Providers } from './providers';

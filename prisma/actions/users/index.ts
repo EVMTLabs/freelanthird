@@ -32,3 +32,37 @@ export const findUserByAddress = async (address: string) => {
     },
   });
 };
+
+export const updateUserInfo = async ({
+  userId,
+  email,
+  name,
+  username,
+}: {
+  userId: string;
+  email?: string;
+  name: string;
+  username: string;
+}) => {
+  return prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      email,
+      name,
+      username,
+    },
+  });
+};
+
+export const findUserByUsername = async (username: string) => {
+  return prisma.user.findFirst({
+    where: {
+      username: {
+        equals: username,
+        mode: 'insensitive',
+      },
+    },
+  });
+};

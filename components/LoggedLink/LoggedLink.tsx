@@ -24,8 +24,6 @@ export const LoggedLink = ({ text, ...rest }: LoggedLinkProps) => {
     onClick: openConnectModal,
   };
 
-  console.log(isLoggedIn);
-
   return isLoggedIn ? (
     <Link {...rest}>{text}</Link>
   ) : (

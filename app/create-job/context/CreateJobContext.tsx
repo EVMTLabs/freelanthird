@@ -1,9 +1,10 @@
 'use client';
 
-import { createContext, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { createJob } from '@/prisma/actions/jobs';
+import { createJob } from '@/actions/jobs';
+import { useSession } from '@/context/SessionContext';
 import type { Job, JobCategory } from '@/types/jobs';
 
 interface JobFormContextProps {
@@ -53,6 +54,11 @@ export const JobFormProvider = ({
   categories: JobCategory[];
 }) => {
   const router = useRouter();
+  const {
+    isLoggedIn,
+    isProfileCompleted,
+    isLoading: isLoadingSession,
+  } = useSession();
 
   const [jobValues, setJobValues] = useState<Job>({
     ...DEFAULT_JOB_VALUES,
@@ -60,6 +66,14 @@ export const JobFormProvider = ({
   });
   const [isLoading, setIsLoading] = useState(false);
   const [formStep, setFormStep] = useState(0);
+
+  useEffect(() => {
+    if (!isLoadingSession && !isLoggedIn) {
+      router.replace('/');
+    } else if (!isLoadingSession && isProfileCompleted) {
+      router.replace('/onboarding');
+    }
+  }, [isLoggedIn, isProfileCompleted, isLoadingSession]);
 
   const handleJobsValues = (newValues: Job) => {
     setJobValues({

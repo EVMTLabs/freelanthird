@@ -18,3 +18,11 @@ export interface UserWallet {
   createdAt: Date;
   updatedAt: Date;
 }
+
+export interface BasicUserInfo {
+  email?: string;
+  name: string;
+  username: string;
+  avatar?: string;
+  isFreelancer: boolean;
+}

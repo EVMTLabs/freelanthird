@@ -1,9 +1,9 @@
 import { MainLayout } from '@/components/Layouts/MainLayout';
-import { findJobCategories } from '@/prisma/actions/jobs';
+import { findJobCategories } from '@/actions/jobs';
 
 import { JobFormProvider } from './context/CreateJobContext';
 
-export default async function RootLayout({
+export default async function NewJobLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
