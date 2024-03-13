@@ -1,11 +1,14 @@
 'use client';
 
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import clsx from 'clsx';
 import { DollarSign } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 import { z } from 'zod';
+
+import { createJob } from '@/actions/jobs';
 
 import { JobFormContext } from '../context/CreateJobContext';
 
@@ -29,8 +32,11 @@ const schema = z.object({
 });
 
 export const CreateJobFifthStep = () => {
-  const { jobValues, setJobValues, goBackStep, submitJob, isLoading } =
-    useContext(JobFormContext);
+  const { jobValues, goBackStep } = useContext(JobFormContext);
+
+  const router = useRouter();
+
+  const [isLoading, setIsLoading] = useState(false);
 
   const {
     register,
@@ -45,7 +51,7 @@ export const CreateJobFifthStep = () => {
     },
   });
 
-  const onSubmit = handleSubmit((data) => {
+  const onSubmit = handleSubmit(async (data) => {
     const minPrice = Number(data.minPrice);
     const maxPrice = Number(data.maxPrice);
 
@@ -56,11 +62,15 @@ export const CreateJobFifthStep = () => {
       });
     }
 
-    setJobValues({
-      ...jobValues,
-      ...data,
-    });
-    return submitJob();
+    try {
+      setIsLoading(true);
+      await createJob({ ...jobValues, minPrice, maxPrice });
+      router.replace('/');
+    } catch (error) {
+      console.error('Error creating job', error);
+    } finally {
+      setIsLoading(false);
+    }
   });
 
   return (

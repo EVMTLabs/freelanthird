@@ -1,7 +1,7 @@
 'use client';
 
 import { useContext } from 'react';
-import { Controller,useForm } from 'react-hook-form';
+import { Controller, useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
@@ -33,6 +33,7 @@ export const CreateJobSecondStep = () => {
     handleSubmit,
     control,
     formState: { errors },
+    setValue,
   } = useForm<{
     description: string;
   }>({
@@ -50,15 +51,24 @@ export const CreateJobSecondStep = () => {
     return goNextStep();
   });
 
+  const handleEditorChange = (value: string) => {
+    setJobValues({
+      ...jobValues,
+      description: value,
+    });
+
+    setValue('description', value);
+  };
+
   return (
     <form onSubmit={onSubmit} className="flex flex-col w-full">
       <p className="text-lg mb-2 font-extrabold">Detailed job description</p>
       <Controller
         name="description"
         control={control}
-        render={({ field }) => (
+        render={() => (
           <RichTextEditor
-            onChange={(value) => field.onChange(value)}
+            onChange={handleEditorChange}
             description={jobValues.description}
           />
         )}

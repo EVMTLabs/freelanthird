@@ -1,5 +1,5 @@
 {
-  "name": "freelanthirds",
+  "name": "freelanthird",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -29,7 +29,9 @@
     "@tiptap/starter-kit": "2.2.4",
     "clsx": "2.1.0",
     "connectkit": "1.7.1",
+    "date-fns": "^3.4.0",
     "dotenv-cli": "7.3.0",
+    "html-to-text": "^9.0.5",
     "iron-session": "8.0.1",
     "jsonwebtoken": "9.0.2",
     "lucide-react": "0.340.0",
@@ -47,6 +49,7 @@
     "zustand": "^4.5.2"
   },
   "devDependencies": {
+    "@types/html-to-text": "^9.0.4",
     "@types/jsonwebtoken": "9.0.6",
     "@types/node": "20",
     "@types/react": "18",

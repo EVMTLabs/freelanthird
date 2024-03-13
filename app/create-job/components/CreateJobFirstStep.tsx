@@ -1,6 +1,6 @@
 'use client';
 
-import { useContext } from 'react';
+import { useContext, useMemo } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import clsx from 'clsx';
@@ -15,7 +15,10 @@ const schema = z.object({
       invalid_type_error: 'Invalid job title type',
     })
     .min(6, { message: 'Please provide a more descriptive job title.' })
-    .max(50, { message: 'Job title is too long' }),
+    .max(80, { message: 'Job title is too long' })
+    .refine((value) => /^[a-zA-Z0-9 ]*$/.test(value), {
+      message: 'Job title should not contain symbols',
+    }),
   category: z.string(),
 });
 
@@ -35,6 +38,7 @@ export const CreateJobFirstStep = () => {
     register,
     handleSubmit,
     formState: { errors },
+    watch,
   } = methods;
 
   const onSubmit = handleSubmit((data) => {
@@ -45,6 +49,12 @@ export const CreateJobFirstStep = () => {
 
     return goNextStep();
   });
+
+  const selectedCategory = watch('category');
+  const selectedCategoryName = useMemo(
+    () => categories.find((c) => selectedCategory === c.id)?.name,
+    [selectedCategory, categories],
+  );
 
   return (
     <form onSubmit={onSubmit} className="flex flex-col w-full">
@@ -64,7 +74,7 @@ export const CreateJobFirstStep = () => {
         <p className="text-error mt-2">{errors.title.message}</p>
       )}
       <p className="text-gray-500 my-4">
-        This job will appear in Web Development category
+        {`This job will appear in ${selectedCategoryName} category`}
       </p>
       <p className="text-lg mb-2 mt-4 font-extrabold">Job Category</p>
       <div className="flex flex-col gap-2 form-control mt-2">

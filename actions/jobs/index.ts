@@ -31,8 +31,33 @@ export const createJob = async (jobValues: Job) => {
 
 export const findJobCategories = async () => {
   return prisma.category.findMany({
+    orderBy: {
+      priority: 'asc',
+    },
+  });
+};
+
+export const findJobCategoriesWithSkills = async () => {
+  return prisma.category.findMany({
+    orderBy: {
+      priority: 'asc',
+    },
     include: {
       skills: true,
+    },
+  });
+};
+
+export const findJobs = async () => {
+  return prisma.job.findMany({
+    take: 100,
+    orderBy: {
+      createdAt: 'desc',
+    },
+    include: {
+      user: true,
+      skills: true,
+      category: true,
     },
   });
 };

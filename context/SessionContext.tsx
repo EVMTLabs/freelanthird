@@ -60,17 +60,20 @@ export const SessionProvider = ({
   });
 
   const handleSignOut = async () => {
-    await signOut();
+    try {
+      await signOut();
+      await refetch();
+      setIsLoggedIn(false);
+    } catch (error) {
+      console.error('Error signing out', error);
+    }
   };
 
   useEffect(() => {
     if (isSignedIn && isConnected) {
       setIsLoggedIn(true);
     } else if (isSignedIn && !isConnected) {
-      setIsLoggedIn(false);
       handleSignOut();
-    } else {
-      setIsLoggedIn(false);
     }
   }, [isSignedIn, isConnected]);
 

@@ -23,8 +23,6 @@ export const Avatar = ({
 }: AvatarProps) => {
   const { avatar, username } = useSession();
 
-  console.log(username);
-
   const imageUrl = ensImage || avatar;
 
   return (

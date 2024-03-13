@@ -22,6 +22,7 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const { userId } = await getServerSession();
+
   const hasUnreadMessages = await findFirstUnreadMessage(userId);
 
   return (

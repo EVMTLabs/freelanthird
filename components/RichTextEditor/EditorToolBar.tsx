@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import type { Editor } from "@tiptap/react";
-import clsx from "clsx";
+import type { Editor } from '@tiptap/react';
+import clsx from 'clsx';
 import {
   Bold,
   Heading,
@@ -9,19 +9,19 @@ import {
   List,
   ListOrdered,
   Strikethrough,
-} from "lucide-react";
+} from 'lucide-react';
 
 export const EditorToolBar = ({ editor }: { editor: Editor | null }) => {
   if (!editor) return null;
 
   return (
-    <div className="absolute top-0 left-0 right-0 z-10 border-b flex gap-4 bg-transparent px-4 py-2">
+    <div className="flex gap-4 px-4 py-2 bg-base-100 border-b">
       <div className="flex gap-4 p-2">
         <button
           type="button"
           className={clsx(
-            "btn btn-sm w-fit",
-            !editor.isActive("heading") && "btn-ghost"
+            'btn btn-sm w-fit',
+            !editor.isActive('heading') && 'btn-ghost',
           )}
           onClick={() =>
             editor.chain().focus().toggleHeading({ level: 2 }).run()
@@ -32,8 +32,8 @@ export const EditorToolBar = ({ editor }: { editor: Editor | null }) => {
         <button
           type="button"
           className={clsx(
-            "btn btn-sm w-fit",
-            !editor.isActive("bold") && "btn-ghost"
+            'btn btn-sm w-fit',
+            !editor.isActive('bold') && 'btn-ghost',
           )}
           onClick={() => editor.chain().focus().toggleBold().run()}
         >
@@ -42,8 +42,8 @@ export const EditorToolBar = ({ editor }: { editor: Editor | null }) => {
         <button
           type="button"
           className={clsx(
-            "btn btn-sm w-fit",
-            !editor.isActive("italic") && "btn-ghost"
+            'btn btn-sm w-fit',
+            !editor.isActive('italic') && 'btn-ghost',
           )}
           onClick={() => editor.chain().focus().toggleItalic().run()}
         >
@@ -52,8 +52,8 @@ export const EditorToolBar = ({ editor }: { editor: Editor | null }) => {
         <button
           type="button"
           className={clsx(
-            "btn btn-sm w-fit",
-            !editor.isActive("strike") && "btn-ghost"
+            'btn btn-sm w-fit',
+            !editor.isActive('strike') && 'btn-ghost',
           )}
           onClick={() => editor.chain().focus().toggleStrike().run()}
         >
@@ -62,8 +62,8 @@ export const EditorToolBar = ({ editor }: { editor: Editor | null }) => {
         <button
           type="button"
           className={clsx(
-            "btn btn-sm w-fit",
-            !editor.isActive("bulletList") && "btn-ghost"
+            'btn btn-sm w-fit',
+            !editor.isActive('bulletList') && 'btn-ghost',
           )}
           onClick={() => editor.chain().focus().toggleBulletList().run()}
         >
@@ -72,8 +72,8 @@ export const EditorToolBar = ({ editor }: { editor: Editor | null }) => {
         <button
           type="button"
           className={clsx(
-            "btn btn-sm w-fit",
-            !editor.isActive("orderedList") && "btn-ghost"
+            'btn btn-sm w-fit',
+            !editor.isActive('orderedList') && 'btn-ghost',
           )}
           onClick={() => editor.chain().focus().toggleOrderedList().run()}
         >

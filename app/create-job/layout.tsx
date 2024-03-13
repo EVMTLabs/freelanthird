@@ -1,5 +1,5 @@
+import { findJobCategoriesWithSkills } from '@/actions/jobs';
 import { MainLayout } from '@/components/Layouts/MainLayout';
-import { findJobCategories } from '@/actions/jobs';
 
 import { JobFormProvider } from './context/CreateJobContext';
 
@@ -8,7 +8,7 @@ export default async function NewJobLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const jobCategories = await findJobCategories();
+  const jobCategories = await findJobCategoriesWithSkills();
 
   return (
     <MainLayout>

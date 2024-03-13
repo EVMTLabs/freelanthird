@@ -7,7 +7,7 @@ interface CustomLinkProps extends LinkProps {
 export const CustomLink = ({ children, ...rest }: CustomLinkProps) => {
   return (
     <Link
-      className="text-md font-semibold group transition duration-300"
+      className="text-md font-semibold group transition duration-300 whitespace-nowrap"
       {...rest}
     >
       {children}

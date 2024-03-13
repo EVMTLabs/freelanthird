@@ -3,7 +3,6 @@
 import { createContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { createJob } from '@/actions/jobs';
 import { useSession } from '@/context/SessionContext';
 import type { Job, JobCategory } from '@/types/jobs';
 
@@ -14,8 +13,6 @@ interface JobFormContextProps {
   formStep: number;
   goBackStep: () => void;
   goNextStep: () => void;
-  submitJob: () => void;
-  isLoading?: boolean;
 }
 
 export enum CreateJobFormSteps {
@@ -43,7 +40,6 @@ export const JobFormContext = createContext<JobFormContextProps>({
   formStep: CreateJobFormSteps.FIRST_STEP,
   goBackStep: () => {},
   goNextStep: () => {},
-  submitJob: () => {},
 });
 
 export const JobFormProvider = ({
@@ -54,26 +50,19 @@ export const JobFormProvider = ({
   categories: JobCategory[];
 }) => {
   const router = useRouter();
-  const {
-    isLoggedIn,
-    isProfileCompleted,
-    isLoading: isLoadingSession,
-  } = useSession();
+  const { isLoggedIn, isLoading: isLoadingSession, token } = useSession();
 
   const [jobValues, setJobValues] = useState<Job>({
     ...DEFAULT_JOB_VALUES,
     category: categories[0].id,
   });
-  const [isLoading, setIsLoading] = useState(false);
   const [formStep, setFormStep] = useState(0);
 
   useEffect(() => {
-    if (!isLoadingSession && !isLoggedIn) {
+    if (!isLoadingSession && !isLoggedIn && !token) {
       router.replace('/');
-    } else if (!isLoadingSession && isProfileCompleted) {
-      router.replace('/onboarding');
     }
-  }, [isLoggedIn, isProfileCompleted, isLoadingSession]);
+  }, [isLoggedIn, isLoadingSession, token]);
 
   const handleJobsValues = (newValues: Job) => {
     setJobValues({
@@ -93,18 +82,6 @@ export const JobFormProvider = ({
     setFormStep((prev) => prev + 1);
   };
 
-  const submitJob = async () => {
-    try {
-      setIsLoading(true);
-      await createJob(jobValues);
-      router.replace('/');
-    } catch (error) {
-      console.error('Error creating job', error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
   return (
     <JobFormContext.Provider
       value={{
@@ -114,8 +91,6 @@ export const JobFormProvider = ({
         formStep,
         goBackStep,
         goNextStep,
-        submitJob,
-        isLoading,
       }}
     >
       {children}
