@@ -76,6 +76,7 @@ export const findJobById = async (id: string) => {
       user: {
         select: {
           username: true,
+          name: true,
           avatar: true,
           createdAt: true,
         },

@@ -37,6 +37,66 @@ export const findUserByAddress = async (address: string) => {
   });
 };
 
+export const findUserByUsername = async (username: string) => {
+  return prisma.user.findFirst({
+    where: {
+      username: {
+        equals: username,
+      },
+      visible: true,
+    },
+    select: {
+      username: true,
+      avatar: true,
+      createdAt: true,
+      name: true,
+      isFreelancer: true,
+      freelancer: {
+        select: {
+          category: true,
+          description: true,
+          skills: {
+            select: {
+              name: true,
+            },
+          },
+        },
+      },
+      jobs: {
+        take: 50,
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          minPrice: true,
+          maxPrice: true,
+          createdAt: true,
+          skills: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
+        },
+      },
+    },
+  });
+};
+
+export const checkIfUsernameExists = async (username: string) => {
+  return !!prisma.user.findFirst({
+    where: {
+      username: {
+        equals: username,
+        mode: 'insensitive',
+      },
+    },
+    select: {
+      username: true,
+    },
+  });
+};
+
 export const updateUserInfo = async ({
   email,
   name,
@@ -80,17 +140,6 @@ export const updateUserInfo = async ({
   } catch (error) {
     console.error('Error updating user info', error);
   }
-};
-
-export const findUserByUsername = async (username: string) => {
-  return prisma.user.findFirst({
-    where: {
-      username: {
-        equals: username,
-        mode: 'insensitive',
-      },
-    },
-  });
 };
 
 export const createS3ProfileImage = async ({

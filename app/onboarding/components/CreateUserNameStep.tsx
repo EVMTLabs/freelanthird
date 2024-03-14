@@ -5,7 +5,7 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import clsx from 'clsx';
 import { z } from 'zod';
 
-import { findUserByUsername } from '@/actions/users';
+import { checkIfUsernameExists } from '@/actions/users';
 
 import { useNewUserFormContext } from '../context/NewUserContext';
 
@@ -40,7 +40,7 @@ export const CreateUserNameStep = () => {
   } = methods;
 
   const onSubmit = handleSubmit(async (data) => {
-    const userNameExists = await findUserByUsername(data.username);
+    const userNameExists = await checkIfUsernameExists(data.username);
 
     if (userNameExists) {
       setError('username', {

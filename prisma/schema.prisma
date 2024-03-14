@@ -81,13 +81,13 @@ model User {
   visible      Boolean       @default(true)
   avatar       String?
   ip           String?
+  isFreelancer Boolean       @default(false)
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
   wallets      UserWallet[]
   chats        ChatRoom[]    @relation("user_chats")
   messages     ChatMessage[]
   freelancer   Freelancer?
-  isFreelancer Boolean       @default(false)
   jobs         Job[]
 
   @@map("users")
