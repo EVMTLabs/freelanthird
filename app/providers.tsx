@@ -5,7 +5,7 @@ import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ConnectKitProvider, SIWEProvider } from 'connectkit';
 import { WagmiProvider } from 'wagmi';
 
-import { Avatar } from '@/components/Avatar/Avatar';
+import { WalletAvatar } from '@/components/Avatars/WalletAvatar/WalletAvatar';
 import { config } from '@/config/connectkit';
 import { siweConfig } from '@/config/siweConfig';
 import { SessionProvider } from '@/context/SessionContext';
@@ -20,7 +20,7 @@ export function Providers(props: { children: ReactNode }) {
           <ConnectKitProvider
             theme="soft"
             options={{
-              customAvatar: Avatar,
+              customAvatar: WalletAvatar,
             }}
             customTheme={{
               '--ck-font-family': '"Albert Sans", sans-serif',

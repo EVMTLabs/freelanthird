@@ -25,8 +25,7 @@ export const Navbar = ({
           <div className="flex items-center gap-6 mt-1">
             <CustomLink href="/">Find Work</CustomLink>
             <CustomLink href="/freelancers">Freelancers</CustomLink>
-            <CustomLink href="/freelancers">Proposals</CustomLink>
-            <CustomLink href="/freelancers">My jobs</CustomLink>
+            <CustomLink href="/proposals">Proposals</CustomLink>
             <CustomMessageLink hasUnreadMessages={hasUnreadMessages} />
           </div>
         </div>

@@ -1,7 +1,6 @@
 'use server';
 
 import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
-import { v4 as uuidv4 } from 'uuid';
 
 import { s3Client } from '@/config/aws';
 import prisma from '@/prisma/db';
@@ -111,7 +110,9 @@ export const createS3ProfileImage = async ({
     throw new Error('Bad request');
   }
 
-  const imagePath = `users/profiles/avatars/${uuidv4()}`;
+  const imageId = btoa(userId + process.env.BASE64_SECRET);
+
+  const imagePath = `users/profiles/avatars/${imageId}`;
 
   const { url, fields } = await createPresignedPost(s3Client, {
     Bucket: process.env.AWS_BUCKET_NAME!,

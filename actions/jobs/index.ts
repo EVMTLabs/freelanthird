@@ -55,9 +55,31 @@ export const findJobs = async () => {
       createdAt: 'desc',
     },
     include: {
-      user: true,
+      user: {
+        select: {
+          username: true,
+          avatar: true,
+        },
+      },
       skills: true,
       category: true,
+    },
+  });
+};
+
+export const findJobById = async (id: string) => {
+  return prisma.job.findFirst({
+    where: {
+      id,
+    },
+    include: {
+      user: {
+        select: {
+          username: true,
+          avatar: true,
+          createdAt: true,
+        },
+      },
     },
   });
 };

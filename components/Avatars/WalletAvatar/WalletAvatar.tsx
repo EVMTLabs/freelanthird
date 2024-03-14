@@ -14,7 +14,7 @@ interface AvatarProps {
   radius?: number;
 }
 
-export const Avatar = ({
+export const WalletAvatar = ({
   address = '0x',
   ensImage,
   ensName,

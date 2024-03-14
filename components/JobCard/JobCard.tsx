@@ -1,50 +1,26 @@
-import clsx from 'clsx';
 import { MapPin } from 'lucide-react';
-import Image from 'next/image';
 import Link from 'next/link';
 
 import type { DetailedJob } from '@/types/jobs';
 import { htmlToText } from '@/utils/htmlToText';
 
-import { PostedAt } from './PostedAt';
+import { DefaultAvatar } from '../Avatars/DefaultAvatar/DefaultAvatar';
+import { PublishedAt } from '../PublishedAt/PublishedAt';
 
 export const JobCard = ({ job }: { job: DetailedJob }) => {
   const { avatar, username } = job.user;
-  const shortName = username?.slice(0, 2);
 
   const description = `${htmlToText(job.description.slice(0, 200))}${job.description.length > 200 ? '...' : ''}`;
+  const jobLink = `/jobs/${job.title.replace(/ /g, '-').toLowerCase()}/${job.id}`;
 
   return (
-    <Link
-      href={`/jobs/${job.id}`}
-      className="border-t hover:shadow-xl cursor-pointer"
-    >
+    <Link href={jobLink} className="border-t hover:shadow-xl cursor-pointer">
       <div className="flex justify-between py-8 px-4">
         <div className="flex">
-          <div className={clsx('flex avatar', !avatar && 'placeholder')}>
-            <div
-              className={clsx(
-                avatar
-                  ? 'bg-transparent rounded-full w-10 h-10'
-                  : 'bg-neutral text-neutral-content',
-              )}
-            >
-              {avatar ? (
-                <Image
-                  alt={username ?? 'user avatar'}
-                  src={avatar}
-                  width={40}
-                  height={40}
-                  className="rounded-full"
-                />
-              ) : (
-                <span>{shortName}</span>
-              )}
-            </div>
-          </div>
+          <DefaultAvatar avatar={avatar} username={username} />
           <div className="flex flex-col max-w-xl justify-start px-4">
             <p className="text-sm font-bold">
-              {username} <PostedAt date={job.createdAt} />
+              {username} <PublishedAt date={job.createdAt} showDivider />
             </p>
             <h3 className="text-2xl font-extrabold mt-1">{job.title}</h3>
             <p className="font-medium mt-4">{description}</p>

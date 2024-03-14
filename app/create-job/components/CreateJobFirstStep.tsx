@@ -16,8 +16,8 @@ const schema = z.object({
     })
     .min(6, { message: 'Please provide a more descriptive job title.' })
     .max(80, { message: 'Job title is too long' })
-    .refine((value) => /^[a-zA-Z0-9 ]*$/.test(value), {
-      message: 'Job title should not contain symbols',
+    .refine((value) => /^[a-zA-Z0-9 @.-]*$/.test(value), {
+      message: 'Only letters, numbers, and @.- are allowed',
     }),
   category: z.string(),
 });
