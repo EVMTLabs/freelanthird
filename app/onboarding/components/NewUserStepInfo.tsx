@@ -17,10 +17,10 @@ export const NewUserStepInfo = () => {
   const steps = useMemo(
     () => [
       {
-        title: 'A username to rule them all',
+        title: 'New beginnings are always exciting!',
         subTitle: 'Username',
         description: isMounted
-          ? `Let's be honest, it's dificult to recognize you by your address ${truncateEthAddress(address)}. With a username other users will be able to find you easily.`
+          ? `Let's be honest, it's dificult to recognize you by your wallet address ${truncateEthAddress(address)}. With a username other users will be able to find you easily.`
           : '',
       },
       {

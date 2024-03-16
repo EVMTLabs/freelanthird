@@ -1,6 +1,8 @@
 import type { SIWEConfig } from 'connectkit';
 import { SiweMessage } from 'siwe';
 
+import { useSessionStore } from '@/stores/useSessionStore';
+
 export const siweConfig = {
   getNonce: async () => {
     const res = await fetch('/api/session/siwe', { method: 'PUT' });
@@ -30,8 +32,13 @@ export const siweConfig = {
     const res = await fetch('/api/session');
     if (!res.ok) throw new Error('Failed to fetch SIWE session');
 
-    const { address, chainId } = await res.json();
-    return address && chainId ? { address, chainId } : null;
+    const session = await res.json();
+
+    useSessionStore.setState({ session, isLoading: false });
+
+    return session.address && session.chainId
+      ? { address: session.address, chainId: session.chainId }
+      : null;
   },
   signOut: () => fetch('/api/session/delete').then((res) => res.ok),
 } satisfies SIWEConfig;

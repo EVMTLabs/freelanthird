@@ -1,4 +1,4 @@
-import type { Category, Job as PrismaJob, Skill, User } from '@prisma/client';
+import type { Category, Job as PrismaJob, Skill } from '@prisma/client';
 
 export interface Job {
   title: string;
@@ -17,7 +17,10 @@ export interface JobCategory extends Category {
 }
 
 export interface DetailedJob extends PrismaJob {
-  user: User;
+  user: {
+    username: string | null;
+    avatar: string | null;
+  };
   category: JobCategory;
   skills: Skill[];
 }

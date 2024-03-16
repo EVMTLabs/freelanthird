@@ -2,13 +2,17 @@
 
 import { ConnectKitButton, useSIWE } from 'connectkit';
 import { Bell, HelpCircle } from 'lucide-react';
+import Link from 'next/link';
 import { useDisconnect } from 'wagmi';
 
 import { WalletAvatar } from '@/components/Avatars/WalletAvatar/WalletAvatar';
+import { useSessionStore } from '@/stores/useSessionStore';
 
 export const AccountMenu = () => {
   const { disconnect } = useDisconnect();
   const { isSignedIn } = useSIWE();
+
+  const { isLoading } = useSessionStore();
 
   const handleDisconnect = () => {
     disconnect();
@@ -21,15 +25,12 @@ export const AccountMenu = () => {
           return (
             <>
               <div className="flex items-center">
-                <a href="/" className="btn btn-sm btn-outline mr-2">
-                  Hire Teams
-                </a>
-                <a
-                  href="/"
+                <Link
+                  href="/help"
                   className="btn btn-ghost btn-circle hover:bg-transparent"
                 >
                   <HelpCircle size={21} />
-                </a>
+                </Link>
                 <button className="btn btn-ghost btn-circle hover:bg-transparent">
                   <div className="indicator">
                     <Bell size={21} />
@@ -43,19 +44,23 @@ export const AccountMenu = () => {
                 </div>
                 <ul
                   tabIndex={0}
-                  className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 rounded-box w-52"
+                  className="mt-3 z-[1] p-2 shadow menu menu-sm dropdown-content bg-base-100 border w-44"
                 >
                   <li>
-                    <a className="justify-between">
+                    <Link className="text-lg font-medium" href="/profile">
                       Profile
-                      <span className="badge">New</span>
-                    </a>
+                    </Link>
                   </li>
                   <li>
-                    <a>Settings</a>
+                    <Link className="text-lg font-medium" href="/settings">
+                      Settings
+                    </Link>
                   </li>
                   <li>
-                    <button className="" onClick={handleDisconnect}>
+                    <button
+                      className="text-lg font-medium"
+                      onClick={handleDisconnect}
+                    >
                       Logout
                     </button>
                   </li>
@@ -65,7 +70,11 @@ export const AccountMenu = () => {
           );
         }
         return (
-          <button onClick={show} className="btn btn-neutral text-base-100">
+          <button
+            onClick={show}
+            disabled={isLoading}
+            className="btn btn-neutral text-base-100"
+          >
             Connect Wallet
           </button>
         );

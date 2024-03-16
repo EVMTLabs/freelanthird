@@ -4,7 +4,9 @@ import useWebSocket, { ReadyState } from 'react-use-websocket';
 import { useSession } from '@/context/SessionContext';
 
 export const useWebsocket = <T,>() => {
-  const { token } = useSession();
+  const { session } = useSession();
+
+  const token = session?.token || '';
 
   const {
     lastJsonMessage: lastMessage,

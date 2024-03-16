@@ -10,7 +10,9 @@ import { useSession } from '@/context/SessionContext';
 import type { ChatHistory } from '@/types/messages';
 
 export const useChatRooms = () => {
-  const { userId, username, avatar } = useSession();
+  const { session } = useSession();
+
+  const { userId, username, avatar = '' } = session || {};
 
   const {
     sendMessage: sendMessageToWS,
@@ -48,7 +50,7 @@ export const useChatRooms = () => {
     content: string;
     type: string;
   }) => {
-    if (!selectedRoomId || userId || !currentRoom) return;
+    if (!selectedRoomId || !userId || !currentRoom || !username) return;
 
     const receiverId = chatRooms
       ?.find((room) => room.id === selectedRoomId)

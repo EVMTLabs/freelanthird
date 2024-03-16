@@ -21,7 +21,9 @@ export const WalletAvatar = ({
   size = 32,
   radius = 96,
 }: AvatarProps) => {
-  const { avatar, username } = useSession();
+  const { session } = useSession();
+
+  const { avatar, username } = session || {};
 
   const imageUrl = ensImage || avatar;
 

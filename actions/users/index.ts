@@ -9,12 +9,24 @@ import { getServerSession } from '@/session/getServerSession';
 export const createUser = async ({
   address,
   chainId,
+  country,
+  ip,
+  region,
+  city,
 }: {
   address: string;
   chainId: number;
+  country?: string;
+  ip?: string;
+  region?: string;
+  city?: string;
 }) => {
   return prisma.user.create({
     data: {
+      country,
+      ip,
+      region,
+      city,
       wallets: {
         create: {
           address,
@@ -83,8 +95,23 @@ export const findUserByUsername = async (username: string) => {
   });
 };
 
+export const findFreelancerProfile = async (userId: string) => {
+  return prisma.freelancer.findFirst({
+    where: {
+      userId,
+    },
+    select: {
+      isComplete: true,
+      description: true,
+      category: true,
+      skills: true,
+      visible: true,
+    },
+  });
+};
+
 export const checkIfUsernameExists = async (username: string) => {
-  return !!prisma.user.findFirst({
+  const result = await prisma.user.findFirst({
     where: {
       username: {
         equals: username,
@@ -95,6 +122,8 @@ export const checkIfUsernameExists = async (username: string) => {
       username: true,
     },
   });
+
+  return Boolean(result);
 };
 
 export const updateUserInfo = async ({
@@ -137,8 +166,11 @@ export const updateUserInfo = async ({
     });
 
     await session.save();
+
+    return session;
   } catch (error) {
     console.error('Error updating user info', error);
+    throw new Error('Error updating user info');
   }
 };
 
@@ -178,4 +210,84 @@ export const createS3ProfileImage = async ({
   });
 
   return { url, fields, imagePath };
+};
+
+export const updateFreelancerProfile = async ({
+  description,
+  category,
+  skills,
+}: {
+  description: string;
+  category: string;
+  skills: string[];
+}) => {
+  const session = await getServerSession();
+
+  if (!session.userId) {
+    throw new Error('Unauthorized');
+  }
+
+  try {
+    return prisma.user.update({
+      where: {
+        id: session.userId,
+      },
+      data: {
+        freelancer: {
+          connectOrCreate: {
+            where: {
+              userId: session.userId,
+            },
+            create: {
+              isComplete: true,
+              description,
+              category: {
+                connect: {
+                  id: category,
+                },
+              },
+              skills: {
+                connect: skills.map((skill) => ({
+                  id: skill,
+                })),
+              },
+            },
+          },
+        },
+      },
+      select: {
+        freelancer: {
+          select: {
+            isComplete: true,
+            visible: true,
+          },
+        },
+      },
+    });
+  } catch (error) {
+    console.error('Error updating user info', error);
+    throw new Error('Error updating user info');
+  }
+};
+
+export const updateFreelancerVisibility = async (visible: boolean) => {
+  const session = await getServerSession();
+
+  if (!session.userId) {
+    throw new Error('Unauthorized');
+  }
+
+  try {
+    await prisma.freelancer.update({
+      where: {
+        userId: session.userId,
+      },
+      data: {
+        visible,
+      },
+    });
+  } catch (error) {
+    console.error('Error updating user info', error);
+    throw new Error('Error updating user info');
+  }
 };

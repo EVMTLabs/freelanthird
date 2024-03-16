@@ -32,6 +32,7 @@
     "date-fns": "^3.4.0",
     "html-to-text": "^9.0.5",
     "iron-session": "8.0.1",
+    "iso-3166-2": "^1.0.0",
     "jsonwebtoken": "9.0.2",
     "lucide-react": "0.340.0",
     "nanoid": "^5.0.6",
@@ -39,6 +40,7 @@
     "react": "18",
     "react-dom": "18",
     "react-hook-form": "7.50.1",
+    "react-hot-toast": "^2.4.1",
     "react-intersection-observer": "^9.8.1",
     "react-use-websocket": "4.8.1",
     "siwe": "2.1.4",
@@ -49,6 +51,7 @@
   },
   "devDependencies": {
     "@types/html-to-text": "^9.0.4",
+    "@types/iso-3166-2": "^1.0.3",
     "@types/jsonwebtoken": "9.0.6",
     "@types/node": "20",
     "@types/react": "18",

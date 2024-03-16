@@ -5,6 +5,7 @@ import BulletList from '@tiptap/extension-bullet-list';
 import Heading from '@tiptap/extension-heading';
 import Link from '@tiptap/extension-link';
 import OrderedList from '@tiptap/extension-ordered-list';
+import Placeholder from '@tiptap/extension-placeholder';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 
@@ -13,9 +14,11 @@ import { EditorToolBar } from './EditorToolBar';
 export const RichTextEditor = ({
   description,
   onChange,
+  placeholder,
 }: {
-  description: string;
+  description?: string;
   onChange: (richText: string) => void;
+  placeholder?: string;
 }) => {
   const editor = useEditor({
     content: description,
@@ -45,6 +48,7 @@ export const RichTextEditor = ({
           target: '_blank',
         },
       }),
+      ...(placeholder ? [Placeholder.configure({ placeholder })] : []),
     ],
     editorProps: {
       attributes: {

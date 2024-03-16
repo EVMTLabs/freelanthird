@@ -47,12 +47,7 @@ export const NewUserFormProvider = ({
   children: React.ReactNode;
 }) => {
   const router = useRouter();
-  const {
-    isProfileCompleted,
-    isLoading: isLoadingSession,
-    refetchSession,
-    isLoggedIn,
-  } = useSession();
+  const { isProfileCompleted, session, setSession } = useSession();
 
   const [newUserValues, setNewUserValues] = useState<BasicUserInfo>({
     ...DEFAULT_NEW_USER_VALUES,
@@ -61,10 +56,10 @@ export const NewUserFormProvider = ({
   const [formStep, setFormStep] = useState(0);
 
   useEffect(() => {
-    if (!isLoadingSession && (!isLoggedIn || isProfileCompleted)) {
+    if (!session?.isLoggedIn || isProfileCompleted) {
       router.replace('/');
     }
-  }, [isProfileCompleted, isLoadingSession]);
+  }, [isProfileCompleted, session?.isLoggedIn]);
 
   const goBackStep = () => {
     if (formStep === CreateNewUserFormSteps.FIRST_STEP) {
@@ -80,10 +75,10 @@ export const NewUserFormProvider = ({
   const submitNewUser = async () => {
     try {
       setIsLoading(true);
-      await updateUserInfo({
+      const newSession = await updateUserInfo({
         ...newUserValues,
       });
-      refetchSession();
+      setSession(newSession);
       router.replace('/');
     } catch (error) {
       console.error('Error creating job', error);

@@ -3,7 +3,7 @@
 import { useState } from 'react';
 
 import { createS3ProfileImage } from '@/actions/users';
-import { AvatarInput } from '@/components/AvatarInput/AvatarInput';
+import { AvatarInput } from '@/components/Avatars/AvatarInput/AvatarInput';
 
 import { useNewUserFormContext } from '../context/NewUserContext';
 

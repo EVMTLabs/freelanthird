@@ -13,6 +13,7 @@ export interface SessionData {
   email?: string;
   isFreelancer: boolean;
   avatar?: string;
+  createdAt: Date;
 }
 
 export const defaultSession: SessionData = {
@@ -24,6 +25,7 @@ export const defaultSession: SessionData = {
   userId: '',
   token: '',
   isFreelancer: false,
+  createdAt: new Date(),
 };
 
 export const sessionOptions: SessionOptions = {

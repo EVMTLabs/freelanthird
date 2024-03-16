@@ -12,10 +12,10 @@ import { ChatMessages } from './ChatMessages';
 import { SendMessageInput } from './SendMessageInput';
 
 export const ChatContainer = () => {
-  const { isLoggedIn } = useSession();
+  const { session } = useSession();
   const { chatRooms } = useChatRooms();
 
-  if (!isLoggedIn || !chatRooms?.length) {
+  if (!session?.isLoggedIn || !chatRooms?.length) {
     return (
       <div className="flex flex-col h-full w-full items-center justify-center min-h-screen">
         <div className="flex items-center justify-center w-full">

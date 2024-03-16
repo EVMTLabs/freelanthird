@@ -1,3 +1,5 @@
+'use client';
+
 import type { ChangeEventHandler } from 'react';
 import { useState } from 'react';
 import clsx from 'clsx';
@@ -8,12 +10,14 @@ interface AvatarInputProps {
   defaultAvatar?: string;
   onChange: (file: File, contentType: string) => void;
   isLoading?: boolean;
+  showDisclaimer?: boolean;
 }
 
 export const AvatarInput = ({
   defaultAvatar = '',
   onChange,
   isLoading,
+  showDisclaimer = true,
 }: AvatarInputProps) => {
   const [avatar, setAvatar] = useState(defaultAvatar);
   const [error, setError] = useState('');
@@ -38,14 +42,26 @@ export const AvatarInput = ({
         <div className={clsx('avatar', !avatar && 'placeholder')}>
           <div
             className={clsx(
-              'rounded-full w-24',
+              'rounded-full w-32 relative',
               avatar
                 ? 'bg-transparent ring ring-primary ring-offset-base-100 ring-offset-2'
                 : 'bg-neutral text-neutral-content',
             )}
           >
             {avatar ? (
-              <Image src={avatar} height={96} width={96} alt="user avatar" />
+              <>
+                <div className="absolute inset-0 bg-neutral flex items-center justify-center transition-opacity duration-200 hover:opacity-70 opacity-0">
+                  <span className="text-3xl text-neutral-content">
+                    <ImagePlus />
+                  </span>
+                </div>
+                <Image
+                  src={avatar}
+                  height={128}
+                  width={128}
+                  alt="user avatar"
+                />
+              </>
             ) : (
               <span className="text-3xl">
                 <ImagePlus />
@@ -67,9 +83,11 @@ export const AvatarInput = ({
         className="hidden"
       />
       {error && <p className="text-red-500 text-xs mt-2">{error}</p>}
-      <p className="text-sm mt-4 text-gray-500 w-64">
-        We recommend using images at least 250x250 pixels and less than 1MB
-      </p>
+      {showDisclaimer && (
+        <p className="text-sm mt-4 text-gray-500 w-64">
+          We recommend using images at least 250x250 pixels and less than 1MB
+        </p>
+      )}
     </div>
   );
 };

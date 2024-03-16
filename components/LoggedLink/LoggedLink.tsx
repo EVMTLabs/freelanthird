@@ -12,7 +12,7 @@ interface LoggedLinkProps extends LinkProps {
 }
 
 export const LoggedLink = ({ text, ...rest }: LoggedLinkProps) => {
-  const { isLoggedIn } = useSession();
+  const { session } = useSession();
   const { setOpen } = useModal();
 
   const openConnectModal = () => {
@@ -24,7 +24,7 @@ export const LoggedLink = ({ text, ...rest }: LoggedLinkProps) => {
     onClick: openConnectModal,
   };
 
-  return isLoggedIn ? (
+  return session?.isLoggedIn ? (
     <Link {...rest}>{text}</Link>
   ) : (
     <button {...buttonProps}>{text}</button>

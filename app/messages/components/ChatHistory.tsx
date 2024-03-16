@@ -12,7 +12,7 @@ import { formatDate } from '@/utils/formatDate';
 import { ChatAvatar } from './ChatAvatar';
 
 export const ChatHistory = () => {
-  const { isLoggedIn } = useSession();
+  const { session } = useSession();
   const { chatRooms, roomId, setSelectedRoomId } = useChatRooms();
   const { setOpen } = useModal();
 
@@ -25,7 +25,7 @@ export const ChatHistory = () => {
     setOpen(true);
   };
 
-  if (!isLoggedIn)
+  if (!session?.isLoggedIn)
     return (
       <div className="flex flex-col h-full place-content-center">
         <div className="flex flex-col items-center justify-center w-full">

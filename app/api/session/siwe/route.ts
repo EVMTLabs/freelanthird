@@ -3,7 +3,6 @@ import { generateNonce, SiweErrorType, SiweMessage } from 'siwe';
 
 import { createUser, findUserByAddress } from '@/actions/users';
 import { getServerSession } from '@/session/getServerSession';
-
 export const PUT = async () => {
   try {
     const session = await getServerSession();
@@ -28,6 +27,11 @@ export const POST = async (req: Request) => {
   const { message, signature } = await req.json();
   const session = await getServerSession();
 
+  const countryIso = req.headers.get('x-vercel-ip-country') ?? undefined;
+  const region = req.headers.get('x-vercel-ip-country-region') ?? undefined;
+  const city = req.headers.get('x-vercel-ip-city') ?? undefined;
+  const ip = req.headers.get('x-forwarded-for') ?? undefined;
+
   try {
     const siweMessage = new SiweMessage(message);
     const { data: fields } = await siweMessage.verify({
@@ -46,12 +50,17 @@ export const POST = async (req: Request) => {
 
     if (!user) {
       user = await createUser({
+        ip,
+        region,
+        city,
         address: fields.address,
         chainId: fields.chainId,
+        country: countryIso,
       });
     }
 
-    const { id, role, username, avatar, isFreelancer, email, name } = user;
+    const { id, role, username, avatar, isFreelancer, email, name, createdAt } =
+      user;
 
     session.userId = id;
     session.role = role;
@@ -61,6 +70,7 @@ export const POST = async (req: Request) => {
     session.email = email ?? undefined;
     session.name = name ?? undefined;
     session.isLoggedIn = true;
+    session.createdAt = createdAt;
 
     const token = jwt.sign(
       { username: username, userId: id, role: role },

@@ -50,7 +50,7 @@ export const JobFormProvider = ({
   categories: JobCategory[];
 }) => {
   const router = useRouter();
-  const { isLoggedIn, isLoading: isLoadingSession, token } = useSession();
+  const { session } = useSession();
 
   const [jobValues, setJobValues] = useState<Job>({
     ...DEFAULT_JOB_VALUES,
@@ -59,10 +59,10 @@ export const JobFormProvider = ({
   const [formStep, setFormStep] = useState(0);
 
   useEffect(() => {
-    if (!isLoadingSession && !isLoggedIn && !token) {
+    if (!session?.isLoggedIn && !session?.token) {
       router.replace('/');
     }
-  }, [isLoggedIn, isLoadingSession, token]);
+  }, [session?.isLoggedIn, session?.token]);
 
   const handleJobsValues = (newValues: Job) => {
     setJobValues({

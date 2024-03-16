@@ -12,7 +12,7 @@ input[type='number'] {
   -moz-appearance: textfield;
 }
 
-.tiptap .is-empty::before {
+.tiptap p.is-editor-empty:first-child::before {
   @apply text-gray-500;
   @apply content-[attr(data-placeholder)];
   @apply float-left;

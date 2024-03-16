@@ -1,3 +1,5 @@
+import type { Category, Skill } from '@prisma/client';
+
 export interface User {
   id: string;
   email: string;
@@ -25,4 +27,12 @@ export interface BasicUserInfo {
   username: string;
   avatar?: string;
   isFreelancer: boolean;
+}
+
+export interface FreelancerProfile {
+  category: Category | null;
+  description: string | null;
+  skills: Skill[] | null;
+  isComplete: boolean;
+  visible: boolean;
 }

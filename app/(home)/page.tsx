@@ -1,11 +1,11 @@
 import Image from 'next/image';
 
 import { findJobCategories, findJobs } from '@/actions/jobs';
-import { JobCard } from '@/components/JobCard/JobCard';
 import { MainLayout } from '@/components/Layouts/MainLayout';
 import { LoggedLink } from '@/components/LoggedLink/LoggedLink';
 
 import { JobCategories } from './components/JobCategories';
+import { JobsList } from './components/JobsList';
 
 export default async function HomePage() {
   const categories = await findJobCategories();
@@ -25,8 +25,11 @@ export default async function HomePage() {
                 Freelance Projects Without Fees
               </h1>
               <p className="text-lg font-medium mt-4">
-                Find your next freelance project without the fees. We are the
-                largest freelance marketplace without the middleman.
+                Imagine a place where your skills are rewarded fairly, your
+                connections are direct, and your transactions are transparent.
+                <br />
+                That&apos;s Freelanthird. Where every payment is seamless,
+                secure, and entirely yours.
               </p>
               <LoggedLink
                 href="/create-job"
@@ -51,9 +54,7 @@ export default async function HomePage() {
       </div>
       <div className="grid grid-cols-12 gap-5">
         <div className="flex flex-col col-span-8">
-          {jobs.map((job) => (
-            <JobCard key={job.id} job={job} />
-          ))}
+          <JobsList jobs={jobs} />
         </div>
         <div className="col-start-10 col-span-3">
           <div className="flex flex-col border p-4 rounded-lg">
