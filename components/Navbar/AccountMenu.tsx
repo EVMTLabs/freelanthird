@@ -1,7 +1,7 @@
 'use client';
 
 import { ConnectKitButton, useSIWE } from 'connectkit';
-import { Bell, HelpCircle } from 'lucide-react';
+import { Bell, HelpCircle, LogOut, Settings, User } from 'lucide-react';
 import Link from 'next/link';
 import { useDisconnect } from 'wagmi';
 
@@ -48,12 +48,12 @@ export const AccountMenu = () => {
                 >
                   <li>
                     <Link className="text-lg font-medium" href="/profile">
-                      Profile
+                      <User size={18} /> Profile
                     </Link>
                   </li>
                   <li>
                     <Link className="text-lg font-medium" href="/settings">
-                      Settings
+                      <Settings size={18} /> Settings
                     </Link>
                   </li>
                   <li>
@@ -61,6 +61,7 @@ export const AccountMenu = () => {
                       className="text-lg font-medium"
                       onClick={handleDisconnect}
                     >
+                      <LogOut size={18} />
                       Logout
                     </button>
                   </li>

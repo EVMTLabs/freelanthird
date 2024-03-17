@@ -5,12 +5,12 @@ import { useFormContext } from 'react-hook-form';
 import toast, { Toaster } from 'react-hot-toast';
 import { Eye } from 'lucide-react';
 
-import { updateFreelancerVisibility } from '@/actions/users';
+import { updateUserVisibility } from '@/actions/users';
 
 import type { ProfileFormValues } from './ProfileFormProvider';
 
 export const ToggleVisibility = () => {
-  const { getValues } = useFormContext<ProfileFormValues>();
+  const { getValues, setValue } = useFormContext<ProfileFormValues>();
   const { isComplete, visible } = getValues();
 
   const [isVisible, setIsVisible] = useState(visible);
@@ -23,7 +23,8 @@ export const ToggleVisibility = () => {
 
     try {
       setIsVisible(!isVisible);
-      await updateFreelancerVisibility(!isVisible);
+      await updateUserVisibility(!isVisible);
+      setValue('visible', !isVisible);
       toast.success('Profile updated');
     } catch (error) {
       setIsVisible(!isVisible);
@@ -41,7 +42,7 @@ export const ToggleVisibility = () => {
       !isComplete
         ? 'Complete your profile to make it visible'
         : isVisible
-          ? 'Your profile is visible to others'
+          ? 'Your profile is visible'
           : 'Your profile is hidden',
     [isComplete, isVisible],
   );

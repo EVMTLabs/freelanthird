@@ -6,7 +6,10 @@ import toast, { Toaster } from 'react-hot-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
-import { updateFreelancerProfile } from '@/actions/users';
+import {
+  updateFreelancerProfile,
+  updateUserDescription,
+} from '@/actions/users';
 import type { FreelancerProfile } from '@/types/users';
 
 export type ProfileFormValues = {
@@ -14,10 +17,11 @@ export type ProfileFormValues = {
   skills: string[];
   description: string;
   isComplete?: boolean;
-  visible?: boolean;
+  visible: boolean;
+  isFreelancer: boolean;
 };
 
-const schema = z.object({
+const freelancerSchema = z.object({
   description: z
     .string()
     .max(5000, 'Your profile description is too long')
@@ -26,40 +30,69 @@ const schema = z.object({
   skills: z.array(z.string().max(50).min(10)).optional(),
 });
 
+const userSchema = z.object({
+  description: z
+    .string()
+    .max(1000, 'Your profile description is too long')
+    .optional(),
+});
+
 export const ProfileFormProvider = ({
   children,
   freelancerProfile,
+  isFreelancer,
+  isVisible,
+  userDescription,
 }: {
   children: React.ReactNode;
   freelancerProfile: FreelancerProfile | null;
+  isFreelancer: boolean;
+  isVisible: boolean;
+  userDescription: string;
 }) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const methods = useForm<ProfileFormValues>({
-    resolver: zodResolver(schema),
+    resolver: zodResolver(isFreelancer ? freelancerSchema : userSchema),
     defaultValues: {
       category: freelancerProfile?.category?.id || '',
-      description: freelancerProfile?.description || '',
+      description: isFreelancer
+        ? freelancerProfile?.description || ''
+        : userDescription,
       skills: freelancerProfile?.skills?.map((skill) => skill.id) || [],
-      isComplete: freelancerProfile?.isComplete || false,
-      visible: freelancerProfile?.visible || false,
+      isComplete: !isFreelancer ? true : freelancerProfile?.isComplete || false,
+      visible: isVisible,
+      isFreelancer,
     },
   });
 
-  const onSubmit = methods.handleSubmit(async (data) => {
-    if (isLoading) return;
+  const saveProfile = async (data: ProfileFormValues) => {
     try {
-      setIsLoading(true);
-      const result = await updateFreelancerProfile(data);
-      methods.setValue('isComplete', !!result.freelancer?.isComplete);
-      methods.setValue('visible', !!result.freelancer?.visible);
-      toast.success('Profile updated');
+      if (isFreelancer) {
+        const result = await updateFreelancerProfile(data);
+        methods.setValue('isComplete', !!result.freelancer?.isComplete);
+        methods.setValue('visible', !!result.visible);
+      } else {
+        await updateUserDescription(data.description);
+      }
     } catch (error) {
       console.error(error);
-      toast.error('Failed to update profile');
+      throw new Error('Error updating profile');
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const onSubmit = methods.handleSubmit((data) => {
+    if (isLoading) return;
+
+    setIsLoading(true);
+
+    return toast.promise(saveProfile(data), {
+      loading: 'Saving profile...',
+      success: 'Profile updated',
+      error: 'Failed to update profile',
+    });
   });
 
   return (

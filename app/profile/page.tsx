@@ -1,4 +1,5 @@
 import { Calendar } from 'lucide-react';
+import { redirect } from 'next/navigation';
 
 import { findJobCategoriesWithSkills } from '@/actions/jobs';
 import { findFreelancerProfile } from '@/actions/users';
@@ -6,21 +7,24 @@ import { MainLayout } from '@/components/Layouts/MainLayout';
 import { getServerSession } from '@/session/getServerSession';
 
 import { CategorySelector } from './components/CategorySelector';
-import { EditProfile } from './components/EditProfile';
+import { EditFreelancerProfile } from './components/EditFreelancerProfile';
 import { ProfileAlert } from './components/ProfileAlert';
 import { ProfileFormProvider } from './components/ProfileFormProvider';
 import { ProfilePickInput } from './components/ProfilePickInput';
+import { ProfileUserDescription } from './components/ProfileUserDescription';
 import { SkillsSelector } from './components/SkillsSelector';
 import { ToggleVisibility } from './components/ToggleVisibility';
 
-export default async function FreelancersPage() {
+export default async function ProfilePage() {
   const session = await getServerSession();
 
   if (!session.isLoggedIn) {
-    //return redirect('/');
+    return redirect('/');
   }
 
-  const freelancerProfile = await findFreelancerProfile(session.userId);
+  const userProfile = await findFreelancerProfile(session.userId);
+  const freelancerProfile = userProfile?.freelancer ?? null;
+
   const categories = await findJobCategoriesWithSkills();
 
   const joinedDate = new Date(session.createdAt).toLocaleString('default', {
@@ -30,7 +34,12 @@ export default async function FreelancersPage() {
 
   return (
     <MainLayout>
-      <ProfileFormProvider freelancerProfile={freelancerProfile}>
+      <ProfileFormProvider
+        freelancerProfile={freelancerProfile}
+        isFreelancer={!!userProfile?.isFreelancer}
+        isVisible={!!userProfile?.visible}
+        userDescription={userProfile?.description || ''}
+      >
         <div className="grid grid-cols-12 gap-5">
           <div className="flex flex-col col-span-4 gap-8">
             <div className="shadow border py-8 px-6">
@@ -50,18 +59,33 @@ export default async function FreelancersPage() {
                 <ToggleVisibility />
               </div>
             </div>
-            <div className="shadow border col-span-8 py-8 px-6">
-              <p className="text-xl font-extrabold mb-6">Category and skills</p>
-              <CategorySelector categories={categories} />
-              <SkillsSelector categories={categories} />
-            </div>
+            {userProfile?.isFreelancer && (
+              <div className="shadow border col-span-8 py-8 px-6">
+                <p className="text-xl font-extrabold mb-6">
+                  Category and skills
+                </p>
+                <CategorySelector categories={categories} />
+                <SkillsSelector categories={categories} />
+              </div>
+            )}
           </div>
           <div className="shadow border col-span-8 py-8 px-6">
-            <p className="text-xl font-extrabold mb-6">Freelancer profile</p>
-            <ProfileAlert isComplete={!!freelancerProfile?.isComplete} />
-            <EditProfile
-              defaultDescription={freelancerProfile?.description || ''}
-            />
+            <p className="text-xl font-extrabold mb-6">
+              {userProfile?.isFreelancer
+                ? 'Freelancer profile'
+                : 'Profile description'}
+            </p>
+            {userProfile?.isFreelancer ? (
+              <>
+                <ProfileAlert isComplete={!!freelancerProfile?.isComplete} />
+                <EditFreelancerProfile
+                  defaultDescription={freelancerProfile?.description || ''}
+                />
+              </>
+            ) : (
+              <ProfileUserDescription />
+            )}
+
             <div className="flex justify-end mt-6">
               <button type="submit" className="btn btn-primary w-32">
                 Save profile

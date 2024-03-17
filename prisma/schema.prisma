@@ -77,6 +77,7 @@ model User {
   email        String?       @unique
   name         String?
   username     String?       @unique
+  description  String?
   role         Role          @default(USER)
   visible      Boolean       @default(true)
   avatar       String?
@@ -116,13 +117,11 @@ model Freelancer {
   skills      Skill[]
   category    Category? @relation(fields: [categoryId], references: [id])
   isComplete  Boolean   @default(false)
-  visible     Boolean   @default(true)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   categoryId  String?
 
   @@index([userId])
-  @@index([visible, createdAt(sort: Desc)])
   @@map("freelancers")
 }
 

@@ -34,5 +34,4 @@ export interface FreelancerProfile {
   description: string | null;
   skills: Skill[] | null;
   isComplete: boolean;
-  visible: boolean;
 }

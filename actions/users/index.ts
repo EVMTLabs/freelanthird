@@ -96,16 +96,22 @@ export const findUserByUsername = async (username: string) => {
 };
 
 export const findFreelancerProfile = async (userId: string) => {
-  return prisma.freelancer.findFirst({
+  return prisma.user.findFirst({
     where: {
-      userId,
+      id: userId,
     },
     select: {
-      isComplete: true,
-      description: true,
-      category: true,
-      skills: true,
+      isFreelancer: true,
       visible: true,
+      description: true,
+      freelancer: {
+        select: {
+          isComplete: true,
+          description: true,
+          category: true,
+          skills: true,
+        },
+      },
     },
   });
 };
@@ -216,10 +222,12 @@ export const updateFreelancerProfile = async ({
   description,
   category,
   skills,
+  visible,
 }: {
   description: string;
   category: string;
   skills: string[];
+  visible: boolean;
 }) => {
   const session = await getServerSession();
 
@@ -233,6 +241,7 @@ export const updateFreelancerProfile = async ({
         id: session.userId,
       },
       data: {
+        visible,
         freelancer: {
           connectOrCreate: {
             where: {
@@ -256,10 +265,10 @@ export const updateFreelancerProfile = async ({
         },
       },
       select: {
+        visible: true,
         freelancer: {
           select: {
             isComplete: true,
-            visible: true,
           },
         },
       },
@@ -270,7 +279,7 @@ export const updateFreelancerProfile = async ({
   }
 };
 
-export const updateFreelancerVisibility = async (visible: boolean) => {
+export const updateUserDescription = async (description: string) => {
   const session = await getServerSession();
 
   if (!session.userId) {
@@ -278,12 +287,63 @@ export const updateFreelancerVisibility = async (visible: boolean) => {
   }
 
   try {
-    await prisma.freelancer.update({
+    return prisma.user.update({
       where: {
-        userId: session.userId,
+        id: session.userId,
+      },
+      data: {
+        description,
+      },
+    });
+  } catch (error) {
+    console.error('Error updating user info', error);
+    throw new Error('Error updating user info');
+  }
+};
+
+export const updateUserVisibility = async (visible: boolean) => {
+  const session = await getServerSession();
+
+  if (!session.userId) {
+    throw new Error('Unauthorized');
+  }
+
+  try {
+    await prisma.user.update({
+      where: {
+        id: session.userId,
       },
       data: {
         visible,
+      },
+    });
+  } catch (error) {
+    console.error('Error updating user info', error);
+    throw new Error('Error updating user info');
+  }
+};
+
+export const updateUserSettings = async ({
+  name,
+  email,
+}: {
+  name: string;
+  email: string;
+}) => {
+  const session = await getServerSession();
+
+  if (!session.userId) {
+    throw new Error('Unauthorized');
+  }
+
+  try {
+    await prisma.user.update({
+      where: {
+        id: session.userId,
+      },
+      data: {
+        name,
+        email,
       },
     });
   } catch (error) {

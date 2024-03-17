@@ -6,7 +6,7 @@ import { RichTextEditor } from '@/components/RichTextEditor/RichTextEditor';
 
 import type { ProfileFormValues } from './ProfileFormProvider';
 
-export const EditProfile = ({
+export const EditFreelancerProfile = ({
   defaultDescription,
 }: {
   defaultDescription: string;
