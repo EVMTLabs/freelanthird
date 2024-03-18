@@ -113,6 +113,7 @@ model Freelancer {
   id          String    @id @default(uuid())
   userId      String    @unique
   user        User      @relation(fields: [userId], references: [id])
+  title       String?
   description String?
   skills      Skill[]
   category    Category? @relation(fields: [categoryId], references: [id])

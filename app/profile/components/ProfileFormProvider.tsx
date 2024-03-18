@@ -6,15 +6,14 @@ import toast, { Toaster } from 'react-hot-toast';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { z } from 'zod';
 
-import {
-  updateFreelancerProfile,
-  updateUserDescription,
-} from '@/actions/users';
+import { updateFreelancerProfile } from '@/actions/freelancers';
+import { updateUserDescription } from '@/actions/users';
 import type { FreelancerProfile } from '@/types/users';
 
 export type ProfileFormValues = {
   category: string;
   skills: string[];
+  title: string;
   description: string;
   isComplete?: boolean;
   visible: boolean;
@@ -22,6 +21,10 @@ export type ProfileFormValues = {
 };
 
 const freelancerSchema = z.object({
+  title: z
+    .string()
+    .max(80, 'Ensure your title does not exceed 80 characters')
+    .min(10, 'Your title is too short'),
   description: z
     .string()
     .max(5000, 'Your profile description is too long')
@@ -56,6 +59,7 @@ export const ProfileFormProvider = ({
     resolver: zodResolver(isFreelancer ? freelancerSchema : userSchema),
     defaultValues: {
       category: freelancerProfile?.category?.id || '',
+      title: freelancerProfile?.title || '',
       description: isFreelancer
         ? freelancerProfile?.description || ''
         : userDescription,

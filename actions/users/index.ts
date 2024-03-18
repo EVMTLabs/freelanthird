@@ -65,10 +65,16 @@ export const findUserByUsername = async (username: string) => {
       isFreelancer: true,
       freelancer: {
         select: {
-          category: true,
+          category: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
           description: true,
           skills: {
             select: {
+              id: true,
               name: true,
             },
           },
@@ -89,27 +95,6 @@ export const findUserByUsername = async (username: string) => {
               name: true,
             },
           },
-        },
-      },
-    },
-  });
-};
-
-export const findFreelancerProfile = async (userId: string) => {
-  return prisma.user.findFirst({
-    where: {
-      id: userId,
-    },
-    select: {
-      isFreelancer: true,
-      visible: true,
-      description: true,
-      freelancer: {
-        select: {
-          isComplete: true,
-          description: true,
-          category: true,
-          skills: true,
         },
       },
     },
@@ -216,67 +201,6 @@ export const createS3ProfileImage = async ({
   });
 
   return { url, fields, imagePath };
-};
-
-export const updateFreelancerProfile = async ({
-  description,
-  category,
-  skills,
-  visible,
-}: {
-  description: string;
-  category: string;
-  skills: string[];
-  visible: boolean;
-}) => {
-  const session = await getServerSession();
-
-  if (!session.userId) {
-    throw new Error('Unauthorized');
-  }
-
-  try {
-    return prisma.user.update({
-      where: {
-        id: session.userId,
-      },
-      data: {
-        visible,
-        freelancer: {
-          connectOrCreate: {
-            where: {
-              userId: session.userId,
-            },
-            create: {
-              isComplete: true,
-              description,
-              category: {
-                connect: {
-                  id: category,
-                },
-              },
-              skills: {
-                connect: skills.map((skill) => ({
-                  id: skill,
-                })),
-              },
-            },
-          },
-        },
-      },
-      select: {
-        visible: true,
-        freelancer: {
-          select: {
-            isComplete: true,
-          },
-        },
-      },
-    });
-  } catch (error) {
-    console.error('Error updating user info', error);
-    throw new Error('Error updating user info');
-  }
 };
 
 export const updateUserDescription = async (description: string) => {

@@ -6,7 +6,8 @@ import { findUserByUsername } from '@/actions/users';
 import { DefaultAvatar } from '@/components/Avatars/DefaultAvatar/DefaultAvatar';
 import { MainLayout } from '@/components/Layouts/MainLayout';
 
-import { UserJobCard } from './components/UserJobCard';
+import { FreelancerProfile } from './components/FreelancerProfile';
+import { JobPosterProfile } from './components/JobPosterProfile';
 
 export default async function UserPage({
   params,
@@ -32,13 +33,12 @@ export default async function UserPage({
 
   return (
     <MainLayout>
-      <div className="flex w-full justify-between items-center border-b py-10">
+      <div className="flex w-full justify-between items-center border-b pt-10 pb-5">
         <div className="flex">
           <DefaultAvatar
             avatar={user.avatar}
             username={user.username}
             size="large"
-            showRing
           />
           <div className="ml-4 mb-4">
             <p className="text-xl font-bold">{user.name}</p>
@@ -53,18 +53,15 @@ export default async function UserPage({
           Send message <Send size={24} />
         </Link>
       </div>
-      <div className="flex flex-col gap-4 mt-10 w-full">
-        <h2 className="text-xl font-bold">Posted Jobs</h2>
-        {user.jobs.length > 0 ? (
-          <>
-            {user.jobs.map((job) => (
-              <UserJobCard key={job.id} job={job} />
-            ))}
-          </>
-        ) : (
-          <p>This user has not posted any jobs yet.</p>
-        )}
-      </div>
+      {user.isFreelancer ? (
+        <FreelancerProfile
+          category={user.freelancer?.category}
+          description={user.freelancer?.description}
+          skills={user.freelancer?.skills ?? []}
+        />
+      ) : (
+        <JobPosterProfile jobs={user.jobs} />
+      )}
     </MainLayout>
   );
 }

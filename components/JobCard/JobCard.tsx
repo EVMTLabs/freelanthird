@@ -10,7 +10,7 @@ import { PublishedAt } from '../PublishedAt/PublishedAt';
 export const JobCard = ({ job }: { job: DetailedJob }) => {
   const { avatar, username } = job.user;
 
-  const description = `${htmlToText(job.description.slice(0, 200))}${job.description.length > 200 ? '...' : ''}`;
+  const description = `${htmlToText(job.description)}`;
   const jobLink = `/jobs/${job.title.replace(/ /g, '-').toLowerCase()}/${job.id}`;
 
   return (
@@ -23,7 +23,7 @@ export const JobCard = ({ job }: { job: DetailedJob }) => {
               {username} <PublishedAt date={job.createdAt} showDivider />
             </p>
             <h3 className="text-2xl font-extrabold mt-1">{job.title}</h3>
-            <p className="font-medium mt-4">{description}</p>
+            <p className="font-medium mt-4 line-clamp-2">{description}</p>
             <div className="flex flex-wrap gap-2 mt-4">
               {job.skills.map((skill) => (
                 <span key={skill.id} className="badge">

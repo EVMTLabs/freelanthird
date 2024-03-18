@@ -2,22 +2,15 @@ import { MapPin } from 'lucide-react';
 import Link from 'next/link';
 
 import { PublishedAt } from '@/components/PublishedAt/PublishedAt';
+import type { JobCard } from '@/types/jobs';
 import { htmlToText } from '@/utils/htmlToText';
 
-interface UserJobCardProps {
-  job: {
-    id: string;
-    title: string;
-    description: string;
-    createdAt: Date;
-    minPrice: number;
-    maxPrice: number;
-    skills: { id: string; name: string }[];
-  };
+export interface UserJobCardProps {
+  job: JobCard;
 }
 
 export const UserJobCard = ({ job }: UserJobCardProps) => {
-  const description = `${htmlToText(job.description.slice(0, 200))}${job.description.length > 200 ? '...' : ''}`;
+  const description = `${htmlToText(job.description)}`;
   const jobLink = `/jobs/${job.title.replace(/ /g, '-').toLowerCase()}/${job.id}`;
 
   return (
@@ -29,7 +22,7 @@ export const UserJobCard = ({ job }: UserJobCardProps) => {
               <PublishedAt date={job.createdAt} />
             </p>
             <h3 className="text-2xl font-extrabold mt-1">{job.title}</h3>
-            <p className="font-medium mt-4">{description}</p>
+            <p className="font-medium mt-4 line-clamp-2">{description}</p>
             <div className="flex flex-wrap gap-2 mt-4">
               {job.skills.map((skill) => (
                 <span key={skill.id} className="badge">

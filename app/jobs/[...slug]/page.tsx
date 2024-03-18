@@ -5,8 +5,8 @@ import { findJobById } from '@/actions/jobs';
 import { DefaultAvatar } from '@/components/Avatars/DefaultAvatar/DefaultAvatar';
 import { MainLayout } from '@/components/Layouts/MainLayout';
 import { PublishedAt } from '@/components/PublishedAt/PublishedAt';
+import { EditorContentView } from '@/components/RichTextEditor/EditorContentView';
 
-import { JobDescription } from './components/JobDescription';
 import { JobStats } from './components/JobStats';
 
 export default async function JobPage({
@@ -34,14 +34,14 @@ export default async function JobPage({
           <div className="flex gap-2 mt-2">
             <PublishedAt date={job.createdAt} />
           </div>
-          <div>
+          <div className="max-w-2xl">
             <JobStats
               duration={job.duration}
               size={job.size}
               experience={job.experience}
               location={job.location}
             />
-            <JobDescription description={job.description} />
+            <EditorContentView description={job.description} />
           </div>
         </div>
         <div className="flex flex-col px-8 col-span-3">

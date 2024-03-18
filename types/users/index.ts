@@ -31,7 +31,28 @@ export interface BasicUserInfo {
 
 export interface FreelancerProfile {
   category: Category | null;
+  title: string | null;
   description: string | null;
   skills: Skill[] | null;
   isComplete: boolean;
+}
+
+export interface Freelancer {
+  freelancer: {
+    category: {
+      id: string;
+      name: string;
+    } | null;
+    id: string;
+    description: string | null;
+    skills: {
+      id: string;
+      name: string;
+    }[];
+  } | null;
+  email: string | null;
+  name: string | null;
+  username: string | null;
+  avatar: string | null;
+  country: string | null;
 }

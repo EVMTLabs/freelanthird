@@ -12,6 +12,16 @@ export interface Job {
   maxPrice?: number;
 }
 
+export interface JobCard {
+  id: string;
+  title: string;
+  description: string;
+  createdAt: Date;
+  minPrice: number;
+  maxPrice: number;
+  skills: { id: string; name: string }[];
+}
+
 export interface JobCategory extends Category {
   skills?: Skill[];
 }

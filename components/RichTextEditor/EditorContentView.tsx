@@ -7,7 +7,7 @@ import OrderedList from '@tiptap/extension-ordered-list';
 import { EditorContent, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 
-export const JobDescription = ({ description }: { description: string }) => {
+export const EditorContentView = ({ description }: { description: string }) => {
   const editor = useEditor({
     editable: false,
     content: description,
@@ -40,7 +40,7 @@ export const JobDescription = ({ description }: { description: string }) => {
     ],
     editorProps: {
       attributes: {
-        class: 'text-lg max-w-2xl',
+        class: 'text-lg',
       },
     },
   });

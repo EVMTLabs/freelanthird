@@ -1,8 +1,8 @@
 import { Calendar } from 'lucide-react';
 import { redirect } from 'next/navigation';
 
+import { findFreelancerProfile } from '@/actions/freelancers';
 import { findJobCategoriesWithSkills } from '@/actions/jobs';
-import { findFreelancerProfile } from '@/actions/users';
 import { MainLayout } from '@/components/Layouts/MainLayout';
 import { getServerSession } from '@/session/getServerSession';
 
@@ -70,7 +70,7 @@ export default async function ProfilePage() {
             )}
           </div>
           <div className="shadow border col-span-8 py-8 px-6">
-            <p className="text-xl font-extrabold mb-6">
+            <p className="text-xl font-extrabold pb-6 border-b">
               {userProfile?.isFreelancer
                 ? 'Freelancer profile'
                 : 'Profile description'}

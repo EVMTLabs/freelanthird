@@ -50,7 +50,10 @@ export const useChatRooms = () => {
     content: string;
     type: string;
   }) => {
+    console.log('first');
     if (!selectedRoomId || !userId || !currentRoom || !username) return;
+
+    console.log('second');
 
     const receiverId = chatRooms
       ?.find((room) => room.id === selectedRoomId)
