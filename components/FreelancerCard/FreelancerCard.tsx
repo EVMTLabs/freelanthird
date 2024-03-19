@@ -1,8 +1,9 @@
-import Image from 'next/image';
 import Link from 'next/link';
 
 import type { Freelancer } from '@/types/users';
 import { htmlToText } from '@/utils/htmlToText';
+
+import { DefaultAvatar } from '../Avatars/DefaultAvatar/DefaultAvatar';
 
 export const FreelancerCard = ({ freelancer }: { freelancer: Freelancer }) => {
   return (
@@ -12,16 +13,11 @@ export const FreelancerCard = ({ freelancer }: { freelancer: Freelancer }) => {
       href={`/users/${freelancer.username}`}
     >
       <div className="flex items-center">
-        <div className="avatar">
-          <div className="w-20 h-20 rounded-full">
-            <Image
-              alt={freelancer.name ?? 'user avatar'}
-              src={freelancer.avatar ?? ''}
-              width={80}
-              height={80}
-            />
-          </div>
-        </div>
+        <DefaultAvatar
+          avatar={freelancer.avatar}
+          username={freelancer.username}
+          size="large"
+        />
         <div className="ml-5">
           <p className="text-md font-semibold">
             {freelancer.name}{' '}
@@ -30,8 +26,7 @@ export const FreelancerCard = ({ freelancer }: { freelancer: Freelancer }) => {
             </span>
           </p>
           <h2 className="text-2xl font-bold line-clamp-1">
-            Software Engenieer | Web Development | +8 years of experience
-            Software Engenieer | Web Development | +8 years of experience
+            {freelancer.freelancer?.title}
           </h2>
         </div>
       </div>

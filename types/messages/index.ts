@@ -6,6 +6,7 @@ type User = {
   id: string;
   username: string | null;
   avatar: string | null;
+  name: string | null;
 };
 export interface ChatRoomMessage {
   id: string;
@@ -32,9 +33,9 @@ export interface WSChatMessageResponse {
     type: string;
     createdAt: string;
     chatRoomId: string;
-    senderId: string;
     status: MessageStatus;
     sender: User;
+    receiver: User;
     isNewRoom?: boolean;
     newRoomUsers?: User[];
   };

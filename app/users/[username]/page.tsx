@@ -49,12 +49,16 @@ export default async function UserPage({
             </div>
           </div>
         </div>
-        <Link className="btn btn-outline" href={`/messages/${user.username}`}>
+        <Link
+          className="btn btn-outline"
+          href={`/messages?username=${user.username}&name=${user.name}`}
+        >
           Send message <Send size={24} />
         </Link>
       </div>
       {user.isFreelancer ? (
         <FreelancerProfile
+          title={user.freelancer?.title}
           category={user.freelancer?.category}
           description={user.freelancer?.description}
           skills={user.freelancer?.skills ?? []}

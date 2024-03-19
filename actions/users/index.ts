@@ -65,6 +65,7 @@ export const findUserByUsername = async (username: string) => {
       isFreelancer: true,
       freelancer: {
         select: {
+          title: true,
           category: {
             select: {
               id: true,

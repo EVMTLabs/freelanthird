@@ -39,6 +39,7 @@ export interface FreelancerProfile {
 
 export interface Freelancer {
   freelancer: {
+    title: string | null;
     category: {
       id: string;
       name: string;

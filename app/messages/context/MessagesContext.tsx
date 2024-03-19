@@ -2,7 +2,9 @@
 
 import { createContext, useContext, useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
+import { useSearchParams } from 'next/navigation';
 
+import { useSession } from '@/context/SessionContext';
 import { useWebsocket } from '@/hooks/common/useWebsocket';
 import type { ChatHistory, WSChatMessageResponse } from '@/types/messages';
 
@@ -29,11 +31,15 @@ export const MessagesProvider = ({
   children: React.ReactNode;
   chatHistory: ChatHistory[];
 }) => {
-  const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
-
+  const params = useSearchParams();
   const queryClient = useQueryClient();
+  const { session } = useSession();
 
   const { lastMessage, sendMessage } = useWebsocket<WSChatMessageResponse>();
+
+  const [selectedRoomId, setSelectedRoomId] = useState<string | null>(null);
+
+  const receiverUsername = params.get('username');
 
   useEffect(() => {
     if (chatHistory) {
@@ -42,11 +48,22 @@ export const MessagesProvider = ({
   }, [chatHistory]);
 
   useEffect(() => {
+    if (receiverUsername) {
+      const room = chatHistory.find((room) =>
+        room.users.some((user) => user.username === receiverUsername),
+      );
+
+      if (room) {
+        setSelectedRoomId(room.id);
+      }
+    }
+  }, [receiverUsername]);
+
+  useEffect(() => {
     if (lastMessage !== null && lastMessage.event === 'new_message') {
       queryClient.setQueryData(messagesQueryKey, (prevRooms: ChatHistory[]) => {
         if (lastMessage.data.isNewRoom) {
           return [
-            ...prevRooms,
             {
               id: lastMessage.data.chatRoomId,
               messages: [
@@ -56,13 +73,19 @@ export const MessagesProvider = ({
                   type: lastMessage.data.type,
                   createdAt: lastMessage.data.createdAt,
                   chatRoomId: lastMessage.data.chatRoomId,
-                  senderId: lastMessage.data.senderId,
                   status: lastMessage.data.status,
+                  sender: lastMessage.data.sender,
                 },
               ],
-              users: lastMessage.data.newRoomUsers,
+              sender: lastMessage.data.sender,
+              receiver: lastMessage.data.receiver,
+              users:
+                session?.userId === lastMessage.data.sender.id
+                  ? [lastMessage.data.receiver]
+                  : [lastMessage.data.sender],
               unreadCounter: 1,
             },
+            ...prevRooms,
           ];
         }
 
@@ -76,6 +99,13 @@ export const MessagesProvider = ({
           return room;
         });
       });
+
+      if (
+        lastMessage.data.isNewRoom &&
+        session?.userId === lastMessage.data.sender.id
+      ) {
+        setSelectedRoomId(lastMessage.data.chatRoomId);
+      }
     }
   }, [lastMessage]);
 

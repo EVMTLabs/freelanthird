@@ -1,5 +1,6 @@
-import { ChatAvatar } from '@/app/messages/components/ChatAvatar';
 import { formatDate } from '@/utils/formatDate';
+
+import { DefaultAvatar } from '../Avatars/DefaultAvatar/DefaultAvatar';
 
 interface ChatBubbleProps {
   username: string | null;
@@ -19,7 +20,7 @@ export const ChatBubble = ({
   return (
     <div className="flex px-6 mt-6">
       <div className="flex flex-start">
-        <ChatAvatar username={username} avatar={avatar} />
+        <DefaultAvatar size="small" username={username} avatar={avatar} />
       </div>
       <div className="flex flex-col ml-4">
         <div className="flex gap-2 items-center">

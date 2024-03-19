@@ -1,5 +1,5 @@
-import { ChatContainer } from '../components/ChatContainer';
-import { ChatHistory } from '../components/ChatHistory';
+import { ChatContainer } from './components/ChatContainer';
+import { ChatHistory } from './components/ChatHistory';
 
 export default async function MessagesPage() {
   return (

@@ -4,21 +4,26 @@ import type { MouseEvent } from 'react';
 import clsx from 'clsx';
 import { useModal } from 'connectkit';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 import { useSession } from '@/context/SessionContext';
 import { useChatRooms } from '@/hooks/messages/useChatRooms';
 import { formatDate } from '@/utils/formatDate';
+import { htmlToText } from '@/utils/htmlToText';
 
 import { ChatAvatar } from './ChatAvatar';
 
 export const ChatHistory = () => {
   const { session } = useSession();
-  const { chatRooms, roomId, setSelectedRoomId } = useChatRooms();
+  const { chatRooms, roomId } = useChatRooms();
   const { setOpen } = useModal();
+  const router = useRouter();
 
   const handleSelectRoom = (event: MouseEvent<HTMLDivElement>) => {
-    const id = event?.currentTarget?.dataset?.roomId;
-    if (id) setSelectedRoomId?.(id);
+    const username = event?.currentTarget?.dataset?.username;
+    if (username) {
+      router.push(`/messages?username=${username}`);
+    }
   };
 
   const handleOpenConnectModal = () => {
@@ -65,11 +70,11 @@ export const ChatHistory = () => {
   }
 
   return chatRooms.map((chat) => (
-    <div key={chat.id} className="flex flex-col mt-4 border-b">
+    <div key={chat.id} className="flex flex-col border-b">
       <div
         role="button"
         onClick={handleSelectRoom}
-        data-room-id={chat.id}
+        data-username={chat.users[0].username}
         className={clsx(
           'flex flex-row px-6 cursor-pointer hover:bg-base-200/50',
           roomId === chat.id && 'bg-base-200/50',
@@ -85,15 +90,15 @@ export const ChatHistory = () => {
         <div className="flex flex-col w-full py-2 ml-4 overflow-hidden">
           <div className="flex items-center justify-between">
             <h4 className="text-lg font-semibold truncate">
-              {chat.users[0].username}
+              {chat.users[0].name}
             </h4>
-            <span className="text-xs text-gray-500 whitespace-nowrap">
-              {formatDate(chat.messages[0].createdAt)}
+            <span className="text-xs ml-1 text-gray-500 whitespace-nowrap">
+              {formatDate(chat.messages[chat.messages.length - 1].createdAt)}
             </span>
           </div>
           <div className="flex items-center justify-between">
-            <p className="text-sm truncate text-gray-500">
-              {chat.messages[0].content}
+            <p className="text-sm text-gray-500 truncate">
+              {htmlToText(chat.messages[chat.messages.length - 1].content)}
             </p>
             {chat.unreadCounter > 0 && (
               <div className="bg-primary rounded-full ml-2">

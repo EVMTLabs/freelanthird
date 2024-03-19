@@ -1,6 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { MessageStatus } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
+import { useSearchParams } from 'next/navigation';
 
 import {
   messagesQueryKey,
@@ -11,8 +12,9 @@ import type { ChatHistory } from '@/types/messages';
 
 export const useChatRooms = () => {
   const { session } = useSession();
+  const params = useSearchParams();
 
-  const { userId, username, avatar = '' } = session || {};
+  const { userId, username, avatar = '', name } = session || {};
 
   const {
     sendMessage: sendMessageToWS,
@@ -29,9 +31,9 @@ export const useChatRooms = () => {
 
   useEffect(() => {
     if (!selectedRoomId && chatRooms?.length) {
-      setSelectedRoomId(chatRooms[0]?.id);
+      setSelectedRoomId(chatRooms[0].id);
     }
-  }, [chatRooms]);
+  }, [selectedRoomId]);
 
   const currentRoomMessages = useMemo(
     () => chatRooms?.find((room) => room.id === selectedRoomId)?.messages,
@@ -50,29 +52,31 @@ export const useChatRooms = () => {
     content: string;
     type: string;
   }) => {
-    console.log('first');
-    if (!selectedRoomId || !userId || !currentRoom || !username) return;
+    if (!userId || !username || !name) return;
 
-    console.log('second');
-
-    const receiverId = chatRooms
+    const receiver = chatRooms
       ?.find((room) => room.id === selectedRoomId)
-      ?.users.find((user) => user.id !== userId)?.id;
-
-    if (!receiverId) return;
+      ?.users.find((user) => user.id !== userId);
 
     sendMessageToWS({
       id: '',
       content,
       type,
-      chatRoomId: selectedRoomId,
-      senderId: userId,
+      chatRoomId: selectedRoomId || '',
+      isNewRoom: !selectedRoomId,
       createdAt: new Date().toUTCString(),
       status: MessageStatus.SENT,
       sender: {
         id: userId,
         username,
         avatar,
+        name,
+      },
+      receiver: {
+        id: receiver?.id || '',
+        username: receiver?.username || params.get('username') || '',
+        avatar: receiver?.avatar || '',
+        name: receiver?.name || params.get('name') || '',
       },
     });
   };

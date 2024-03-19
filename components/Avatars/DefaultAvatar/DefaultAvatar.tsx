@@ -38,9 +38,8 @@ export const DefaultAvatar = ({
     <div className={clsx('flex avatar', !avatar && 'placeholder')}>
       <div
         className={clsx(
-          avatar
-            ? 'bg-transparent rounded-full'
-            : 'bg-neutral text-neutral-content',
+          'rounded-full',
+          avatar ? 'bg-transparent' : 'bg-neutral text-neutral-content',
           sizeProps[size].className,
           showRing && 'ring ring-primary ring-offset-base-100 ring-offset-2',
         )}
@@ -54,7 +53,7 @@ export const DefaultAvatar = ({
             className="rounded-full"
           />
         ) : (
-          <span>{shortName}</span>
+          <span className="uppercase">{shortName}</span>
         )}
       </div>
     </div>

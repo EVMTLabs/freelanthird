@@ -21,6 +21,7 @@ export const findFreelancers = async () => {
       freelancer: {
         select: {
           id: true,
+          title: true,
           description: true,
           category: {
             select: {

@@ -8,6 +8,9 @@ export const findChatHistory = async (id: string) => {
   try {
     const chatHistory = await prisma.chatRoom.findMany({
       take: 100,
+      orderBy: {
+        updatedAt: 'desc',
+      },
       where: {
         users: {
           some: {
@@ -26,6 +29,7 @@ export const findChatHistory = async (id: string) => {
                 id: true,
                 username: true,
                 avatar: true,
+                name: true,
               },
             },
           },
@@ -41,6 +45,7 @@ export const findChatHistory = async (id: string) => {
             id: true,
             username: true,
             avatar: true,
+            name: true,
           },
         },
       },

@@ -1,6 +1,7 @@
 import { EditorContentView } from '@/components/RichTextEditor/EditorContentView';
 
 interface FreelancerProfileProps {
+  title?: string | null;
   description?: string | null;
   category?: {
     id: string;
@@ -13,15 +14,14 @@ interface FreelancerProfileProps {
 }
 
 export const FreelancerProfile = ({
+  title,
   category,
   description,
   skills,
 }: FreelancerProfileProps) => {
   return (
     <div className="flex flex-col gap-4 mt-10 w-full">
-      <h2 className="text-3xl font-bold line-clamp-2">
-        Software Engenieer | Web Development | +8 years of experience
-      </h2>
+      <h2 className="text-3xl font-bold line-clamp-2">{title}</h2>
       <EditorContentView description={description ?? ''} />
       <h2 className="text-xl font-bold mt-4">Category</h2>
       <span className="badge badge-ghost">{category?.name}</span>

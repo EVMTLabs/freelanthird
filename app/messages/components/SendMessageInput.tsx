@@ -5,7 +5,7 @@ import Link from '@tiptap/extension-link';
 import Placeholder from '@tiptap/extension-placeholder';
 import { EditorContent, Extension, useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { ArrowUp, Paperclip, ReceiptText } from 'lucide-react';
+import { ArrowUp, ReceiptText } from 'lucide-react';
 
 import { useChatRooms } from '@/hooks/messages/useChatRooms';
 
@@ -30,12 +30,6 @@ export const SendMessageInput = () => {
 
     addKeyboardShortcuts() {
       return {
-        Enter: ({ editor }) => {
-          // Clear input when Enter is pressed without Shift
-          sendWSMessage();
-          editor.commands.clearContent();
-          return true; // Return true to indicate that the command has been handled
-        },
         'Shift-Enter': ({ editor }) => {
           // Insert an empty line when Shift+Enter is pressed
           editor.chain().focus().setHardBreak().run();
@@ -74,27 +68,39 @@ export const SendMessageInput = () => {
     },
   });
 
+  const handleKeyboardEnter = useCallback(
+    (event: React.KeyboardEvent<HTMLDivElement>) => {
+      if (event.key === 'Enter' && !event.shiftKey) {
+        event.preventDefault();
+        sendWSMessage();
+        editor?.commands.clearContent();
+      }
+    },
+    [sendWSMessage, editor],
+  );
+
   const handleClickSendMessage = useCallback(() => {
     sendWSMessage();
     editor?.commands.clearContent();
   }, [sendWSMessage, editor]);
 
   return (
-    <div className="flex place-items-end w-full p-2 max-w-4xl border rounded-lg">
+    <div className="flex place-items-end w-full p-2 mx-8 max-w-4xl border rounded-lg">
       <div className="flex gap-1">
         <div className="tooltip" data-tip="Create offer">
           <button className="btn btn-square btn-ghost btn-primary">
             <ReceiptText size={24} />
           </button>
         </div>
-        <div className="tooltip" data-tip="Attach file">
+        {/* TODO: IMPLEMENT ATTACH FILE LOGIC */}
+        {/* <div className="tooltip" data-tip="Attach file">
           <button className="btn btn-ghost btn-square">
             <Paperclip size={24} />
           </button>
-        </div>
+        </div> */}
       </div>
       <div className="flex flex-col w-full relative">
-        <EditorContent editor={editor} />
+        <EditorContent editor={editor} onKeyDown={handleKeyboardEnter} />
       </div>
       <div className="tooltip" data-tip="Send message">
         <button
