@@ -3,6 +3,7 @@ import { redirect } from 'next/navigation';
 
 import { findJobById } from '@/actions/jobs';
 import { DefaultAvatar } from '@/components/Avatars/DefaultAvatar/DefaultAvatar';
+import { CreateProposal } from '@/components/CreateProposal/CreateProposal';
 import { MainLayout } from '@/components/Layouts/MainLayout';
 import { PublishedAt } from '@/components/PublishedAt/PublishedAt';
 import { EditorContentView } from '@/components/RichTextEditor/EditorContentView';
@@ -61,12 +62,10 @@ export default async function JobPage({
           </Link>
           <div className="mt-8">
             <h2 className="text-2xl font-bold mb-2">Budget</h2>
-            <p className="text-xl font-medium">
+            <p className="text-xl font-medium mb-4">
               ${job.minPrice} - ${job.maxPrice}
             </p>
-            <button className="btn btn-primary w-full mt-4">
-              Create Proposal
-            </button>
+            <CreateProposal jobId={job.id} clientAddress={job.wallet.address} />
           </div>
         </div>
       </div>

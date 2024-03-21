@@ -25,6 +25,9 @@ export const createJob = async (jobValues: Job) => {
       user: {
         connect: { id: userId },
       },
+      wallet: {
+        connect: { userId },
+      },
     },
   });
 };
@@ -79,6 +82,11 @@ export const findJobById = async (id: string) => {
           name: true,
           avatar: true,
           createdAt: true,
+        },
+      },
+      wallet: {
+        select: {
+          address: true,
         },
       },
     },

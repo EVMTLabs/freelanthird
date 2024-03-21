@@ -74,9 +74,9 @@ export const AccountMenu = () => {
           <button
             onClick={show}
             disabled={isLoading}
-            className="btn btn-neutral text-base-100"
+            className="btn btn-neutral text-base-100 w-32"
           >
-            Connect Wallet
+            Connect
           </button>
         );
       }}

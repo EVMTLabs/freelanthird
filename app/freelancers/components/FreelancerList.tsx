@@ -20,7 +20,7 @@ export const FreelancerList = ({
     setIsLoading(false);
   }, []);
 
-  const filteredJobs = useMemo(
+  const filteredFreelancers = useMemo(
     () =>
       freelancerList.filter((freelancer) => {
         if (!idsToFilter.length) return true;
@@ -34,12 +34,12 @@ export const FreelancerList = ({
       <FreelancerCard key={freelancer.username} freelancer={freelancer} />
     ));
 
-  if (!filteredJobs.length)
+  if (!filteredFreelancers.length)
     return <p>No freelancers found. Try changing the filters.</p>;
 
   return (
     <div className="flex flex-wrap">
-      {freelancers?.map((freelancer) => (
+      {filteredFreelancers?.map((freelancer) => (
         <FreelancerCard key={freelancer.username} freelancer={freelancer} />
       ))}
     </div>

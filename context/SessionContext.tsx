@@ -48,7 +48,6 @@ export const SessionProvider = ({
   };
 
   useEffect(() => {
-    console.log(isConnected, isSignedIn);
     if (isSignedIn && isConnected) {
       setIsLoggedIn(true);
     } else if (isSignedIn && !isConnected) {

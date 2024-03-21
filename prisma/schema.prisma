@@ -24,24 +24,35 @@ enum MessageStatus {
   SEEN
 }
 
+enum ProposalStatus {
+  PENDING
+  ACCEPTED
+  DISPUTED
+  IN_PROGRESS
+  REJECTED
+}
+
 model Job {
-  id          String   @id @default(uuid())
+  id          String     @id @default(uuid())
   title       String
   description String
-  category    Category @relation(fields: [categoryId], references: [id])
+  category    Category   @relation(fields: [categoryId], references: [id])
   size        String
   duration    String
   experience  String
-  location    String   @default("Remote")
+  location    String     @default("Remote")
   minPrice    Int
   maxPrice    Int
-  visible     Boolean  @default(true)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  visible     Boolean    @default(true)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
   categoryId  String
   skills      Skill[]
-  user        User     @relation(fields: [userId], references: [id])
+  user        User       @relation(fields: [userId], references: [id])
+  wallet      UserWallet @relation(fields: [walletId], references: [id])
+  walletId    String
   userId      String
+  Proposal    Proposal[]
 
   @@index([visible, createdAt(sort: Desc)])
   @@map("jobs")
@@ -105,6 +116,7 @@ model UserWallet {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
   user      User     @relation(fields: [userId], references: [id])
+  Job       Job[]
 
   @@map("user_wallets")
 }
@@ -129,7 +141,7 @@ model Freelancer {
 model ChatRoom {
   id        String        @id @default(uuid())
   createdAt DateTime      @default(now())
-  updatedAt DateTime?     @updatedAt
+  updatedAt DateTime      @updatedAt
   users     User[]        @relation("user_chats")
   messages  ChatMessage[]
 
@@ -148,4 +160,47 @@ model ChatMessage {
   chatRoom   ChatRoom      @relation(fields: [chatRoomId], references: [id])
 
   @@map("chat_messages")
+}
+
+model PaymentToken {
+  id        String    @id @default(uuid())
+  token     String    @unique
+  chainId   Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  Invoice   Invoice[]
+
+  @@map("payment_tokens")
+}
+
+model Invoice {
+  id                Int           @id @default(autoincrement())
+  amount            Int
+  token             PaymentToken? @relation(fields: [tokenId], references: [id])
+  freelancerAddress String
+  clientAddress     String
+  proposal          Proposal      @relation(fields: [proposalId], references: [id])
+  createdAt         DateTime      @default(now())
+  updatedAt         DateTime      @updatedAt
+  tokenId           String?
+  proposalId        String
+
+  @@map("invoices")
+}
+
+model Proposal {
+  id                String         @id @default(uuid())
+  title             String
+  description       String
+  freelancerAddress String
+  clientAddress     String
+  amount            Int
+  job               Job?           @relation(fields: [jobId], references: [id])
+  status            ProposalStatus @default(PENDING)
+  createdAt         DateTime       @default(now())
+  updatedAt         DateTime       @updatedAt
+  Invoice           Invoice[]
+  jobId             String?
+
+  @@map("proposals")
 }

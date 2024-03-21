@@ -35,16 +35,16 @@ export const ChatHistory = () => {
       <div className="flex flex-col h-full place-content-center">
         <div className="flex flex-col items-center justify-center w-full">
           <h2 className="text-2xl font-extrabold text-center">
-            Connect Wallet
+            Message Anyone
           </h2>
           <p className="text-center mx-4">
             Your messages will appear here once you connect your wallet
           </p>
           <button
-            className="btn btn-primary mt-4 w-fit"
+            className="btn btn-primary mt-4 w-32"
             onClick={handleOpenConnectModal}
           >
-            Connect Wallet
+            Connect
           </button>
         </div>
       </div>

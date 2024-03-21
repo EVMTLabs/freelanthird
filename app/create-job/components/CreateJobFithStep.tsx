@@ -18,16 +18,16 @@ const schema = z.object({
     z
       .number()
       .int()
-      .min(10, { message: 'Minimum price is 10$' })
-      .max(999998, { message: 'Maximum price is 999999$' }),
+      .min(10, { message: 'Minimum price is $10' })
+      .max(999998, { message: 'Maximum price is $999999' }),
   ),
   maxPrice: z.preprocess(
     (val) => Number(val),
     z
       .number()
       .int()
-      .min(10, { message: 'Minimum price is 10$' })
-      .max(999999, { message: 'Maximum price is 999999$' }),
+      .min(10, { message: 'Minimum price is $10' })
+      .max(999999, { message: 'Maximum price is $999999' }),
   ),
 });
 
@@ -84,13 +84,13 @@ export const CreateJobFifthStep = () => {
               errors.minPrice && 'input-error',
             )}
           >
+            <DollarSign />
             <input
               type="number"
               className="grow"
               placeholder="From"
               {...register('minPrice')}
             />
-            <DollarSign />
           </label>
           {errors.minPrice && (
             <p className="text-red-500 text-md mt-1">
@@ -105,13 +105,13 @@ export const CreateJobFifthStep = () => {
               errors.minPrice && 'input-error',
             )}
           >
+            <DollarSign />
             <input
               type="number"
               className="grow"
               placeholder="To"
               {...register('maxPrice')}
             />
-            <DollarSign />
           </label>
           {errors.maxPrice && (
             <p className="text-red-500 text-md mt-1">
