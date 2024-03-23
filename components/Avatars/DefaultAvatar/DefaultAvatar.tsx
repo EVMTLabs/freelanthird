@@ -1,4 +1,5 @@
 import clsx from 'clsx';
+import { User } from 'lucide-react';
 import Image from 'next/image';
 
 interface DefaultAvatarProps {
@@ -39,7 +40,7 @@ export const DefaultAvatar = ({
       <div
         className={clsx(
           'rounded-full',
-          avatar ? 'bg-transparent' : 'bg-neutral text-neutral-content',
+          avatar ? 'bg-transparent' : 'bg-base-200 text-gray-400',
           sizeProps[size].className,
           showRing && 'ring ring-primary ring-offset-base-100 ring-offset-2',
         )}
@@ -52,8 +53,10 @@ export const DefaultAvatar = ({
             height={sizeProps[size].height}
             className="rounded-full"
           />
-        ) : (
+        ) : shortName ? (
           <span className="uppercase">{shortName}</span>
+        ) : (
+          <User />
         )}
       </div>
     </div>

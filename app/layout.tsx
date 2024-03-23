@@ -21,9 +21,9 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const { userId } = await getServerSession();
+  const session = await getServerSession();
 
-  const hasUnreadMessages = await findFirstUnreadMessage(userId);
+  const hasUnreadMessages = await findFirstUnreadMessage(session.userId);
 
   return (
     <html lang="en" data-theme="bumblebee">

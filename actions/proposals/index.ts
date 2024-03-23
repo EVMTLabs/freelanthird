@@ -66,3 +66,86 @@ export const createProposal = async ({
     );
   }
 };
+
+export const findReceivedProposals = async (address: string) => {
+  return prisma.proposal.findMany({
+    where: {
+      clientAddress: address,
+    },
+    include: {
+      job: {
+        select: {
+          id: true,
+          title: true,
+          user: {
+            select: {
+              username: true,
+            },
+          },
+        },
+      },
+      user: {
+        select: {
+          username: true,
+          avatar: true,
+        },
+      },
+    },
+  });
+};
+
+export const findSentProposals = async (address: string) => {
+  return prisma.proposal.findMany({
+    where: {
+      freelancerAddress: address,
+    },
+    include: {
+      job: {
+        select: {
+          id: true,
+          title: true,
+          user: {
+            select: {
+              username: true,
+            },
+          },
+        },
+      },
+      user: {
+        select: {
+          username: true,
+          avatar: true,
+        },
+      },
+    },
+  });
+};
+
+export const findProposalById = async (id: string) => {
+  return prisma.proposal.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      job: {
+        select: {
+          id: true,
+          title: true,
+          description: true,
+          user: {
+            select: {
+              username: true,
+            },
+          },
+        },
+      },
+      user: {
+        select: {
+          username: true,
+          name: true,
+          avatar: true,
+        },
+      },
+    },
+  });
+};

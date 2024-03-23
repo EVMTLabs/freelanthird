@@ -104,6 +104,7 @@ model User {
   messages     ChatMessage[]
   freelancer   Freelancer?
   jobs         Job[]
+  Proposal     Proposal[]
 
   @@map("users")
 }
@@ -196,11 +197,13 @@ model Proposal {
   clientAddress     String
   amount            Int
   job               Job?           @relation(fields: [jobId], references: [id])
+  user              User?          @relation(fields: [userId], references: [id])
   status            ProposalStatus @default(PENDING)
   createdAt         DateTime       @default(now())
   updatedAt         DateTime       @updatedAt
   Invoice           Invoice[]
   jobId             String?
+  userId            String?
 
   @@map("proposals")
 }

@@ -31,7 +31,7 @@ export const WalletAvatar = ({
     <div className={clsx('flex avatar', !ensImage && 'placeholder')}>
       <div
         className={clsx(
-          avatar ? 'bg-transparent' : 'bg-neutral text-neutral-content',
+          avatar ? 'bg-transparent' : 'bg-base-200 text-gray-400',
         )}
         style={{ width: size, height: size, borderRadius: radius }}
       >
