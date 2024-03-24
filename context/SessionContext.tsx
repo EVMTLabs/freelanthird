@@ -60,7 +60,7 @@ export const SessionProvider = ({
   }, [session?.isLoggedIn, session?.username]);
 
   useEffect(() => {
-    if (!isProfileCompleted && isLoggedIn) {
+    if (!isProfileCompleted && isLoggedIn && isConnected) {
       router.push('/onboarding');
     }
   }, [isProfileCompleted, isLoggedIn]);

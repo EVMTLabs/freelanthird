@@ -165,7 +165,8 @@ model ChatMessage {
 
 model PaymentToken {
   id        String    @id @default(uuid())
-  token     String    @unique
+  address   String    @unique
+  symbol    String
   chainId   Int
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -175,15 +176,16 @@ model PaymentToken {
 }
 
 model Invoice {
-  id                Int           @id @default(autoincrement())
+  id                Int          @id @default(autoincrement())
   amount            Int
-  token             PaymentToken? @relation(fields: [tokenId], references: [id])
+  token             PaymentToken @relation(fields: [tokenId], references: [id])
   freelancerAddress String
   clientAddress     String
-  proposal          Proposal      @relation(fields: [proposalId], references: [id])
-  createdAt         DateTime      @default(now())
-  updatedAt         DateTime      @updatedAt
-  tokenId           String?
+  transactionHash   String       @unique
+  proposal          Proposal     @relation(fields: [proposalId], references: [id])
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+  tokenId           String
   proposalId        String
 
   @@map("invoices")

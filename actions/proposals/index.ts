@@ -149,3 +149,37 @@ export const findProposalById = async (id: string) => {
     },
   });
 };
+
+export const findInvoiceByProposalId = async (id: string) => {
+  return prisma.invoice.findFirst({
+    where: {
+      proposalId: id,
+    },
+    select: {
+      id: true,
+      amount: true,
+      freelancerAddress: true,
+      clientAddress: true,
+      proposal: {
+        select: {
+          title: true,
+          description: true,
+          createdAt: true,
+          status: true,
+          user: {
+            select: {
+              username: true,
+              name: true,
+              avatar: true,
+            },
+          },
+        },
+      },
+      token: {
+        select: {
+          symbol: true,
+        },
+      },
+    },
+  });
+};

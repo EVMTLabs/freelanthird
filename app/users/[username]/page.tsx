@@ -1,19 +1,22 @@
-import { Calendar, Send } from 'lucide-react';
-import Link from 'next/link';
+import { Calendar } from 'lucide-react';
 import { redirect } from 'next/navigation';
 
 import { findUserByUsername } from '@/actions/users';
 import { DefaultAvatar } from '@/components/Avatars/DefaultAvatar/DefaultAvatar';
 import { MainLayout } from '@/components/Layouts/MainLayout';
+import { getServerSession } from '@/session/getServerSession';
 
 import { FreelancerProfile } from './components/FreelancerProfile';
 import { JobPosterProfile } from './components/JobPosterProfile';
+import { SendMessageButton } from './components/SendMessageButton';
 
 export default async function UserPage({
   params,
 }: {
   params: { username: string };
 }) {
+  const { address } = await getServerSession();
+
   const username = params.username;
 
   if (!username) {
@@ -49,12 +52,11 @@ export default async function UserPage({
             </div>
           </div>
         </div>
-        <Link
-          className="btn btn-outline"
-          href={`/messages?username=${user.username}&name=${user.name}`}
-        >
-          Send message <Send size={24} />
-        </Link>
+        <SendMessageButton
+          username={user.username}
+          name={user.name}
+          userAddress={address}
+        />
       </div>
       {user.isFreelancer ? (
         <FreelancerProfile

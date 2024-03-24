@@ -42,8 +42,6 @@ export const CreateUserNameStep = () => {
   const onSubmit = handleSubmit(async (data) => {
     const userNameExists = await checkIfUsernameExists(data.username);
 
-    console.log(userNameExists);
-
     if (userNameExists) {
       setError('username', {
         type: 'manual',

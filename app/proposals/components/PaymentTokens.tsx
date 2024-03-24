@@ -1,23 +1,23 @@
 'use client';
+
 import type { ChangeEvent } from 'react';
-import { useState } from 'react';
 import clsx from 'clsx';
 import Image from 'next/image';
 
 import { UsdcCoin } from '@/components/CoinIcons/UsdcCoin/UsdcCoin';
 import { UsdtCoin } from '@/components/CoinIcons/UsdtCoin/UsdtCoin';
+import { usePayTokenStore } from '@/stores/usePayTokenStore';
 
 export const PaymentTokens = () => {
-  const [selectedToken, setSelectedToken] = useState('FLT');
+  const { token, handlePayToken } = usePayTokenStore();
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    console.log(event.target.value);
-    setSelectedToken(event.target.value);
+    handlePayToken(event.target.value);
   };
 
   return (
     <div className="grid grid-cols-3 gap-4">
-      <label className={clsx('btn', selectedToken === 'FLT' && 'btn-neutral')}>
+      <label className={clsx('btn', token === 'FLT' && 'btn-neutral')}>
         <input
           type="checkbox"
           className="hidden"
@@ -32,7 +32,7 @@ export const PaymentTokens = () => {
         />
         FLT
       </label>
-      <label className={clsx('btn', selectedToken === 'USDT' && 'btn-neutral')}>
+      <label className={clsx('btn', token === 'USDT' && 'btn-neutral')}>
         <input
           type="checkbox"
           className="hidden"
@@ -41,7 +41,7 @@ export const PaymentTokens = () => {
         />
         <UsdtCoin /> USDT
       </label>
-      <label className={clsx('btn', selectedToken === 'USDC' && 'btn-neutral')}>
+      <label className={clsx('btn', token === 'USDC' && 'btn-neutral')}>
         <input
           type="checkbox"
           className="hidden"
