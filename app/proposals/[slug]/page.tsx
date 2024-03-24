@@ -127,7 +127,7 @@ export default async function ProposalPage({
           </div>
           <hr className="my-8 border-b border-2 border-dashed" />
           {invoice.proposal.status === ProposalStatus.IN_PROGRESS ? (
-            <CloseProposalButton invoiceId={invoice.id} />
+            <CloseProposalButton invoiceId={invoice.transactionId} />
           ) : (
             <InvoiceStatus status={invoice.proposal.status} />
           )}

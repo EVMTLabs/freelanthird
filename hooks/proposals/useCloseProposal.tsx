@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
-import { freelanthirdAbi, freelanthirdAddress } from '@/contracts/freelanthird';
+import { freelanthirdAddress } from '@/contracts/freelanthird';
 
 export const useCloseProposal = ({ invoiceId }: { invoiceId: number }) => {
   const [isTransacting, setIsTransacting] = useState(false);
@@ -14,16 +14,25 @@ export const useCloseProposal = ({ invoiceId }: { invoiceId: number }) => {
     isPending,
     writeContract,
     isError: isWriteError,
-    error,
   } = useWriteContract();
 
   const closeProposal = useCallback(() => {
     setIsTransacting(true);
     writeContract({
       address: freelanthirdAddress,
-      abi: freelanthirdAbi,
+      abi: [
+        {
+          inputs: [
+            { internalType: 'uint256', name: 'proposalId', type: 'uint256' },
+          ],
+          name: 'closeProposal',
+          outputs: [],
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+      ],
       functionName: 'closeProposal',
-      args: [BigInt(3)],
+      args: [BigInt(invoiceId)],
     });
   }, [invoiceId]);
 
@@ -39,8 +48,6 @@ export const useCloseProposal = ({ invoiceId }: { invoiceId: number }) => {
       toast.error('Failed to close proposal');
     }
   }, [isWriteError, isTransactionError]);
-
-  console.log(error);
 
   return {
     closeProposal,

@@ -181,6 +181,7 @@ model Invoice {
   token             PaymentToken @relation(fields: [tokenId], references: [id])
   freelancerAddress String
   clientAddress     String
+  transactionId     Int          @unique
   transactionHash   String       @unique
   proposal          Proposal     @relation(fields: [proposalId], references: [id])
   createdAt         DateTime     @default(now())

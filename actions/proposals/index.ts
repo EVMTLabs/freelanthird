@@ -156,7 +156,7 @@ export const findInvoiceByProposalId = async (id: string) => {
       proposalId: id,
     },
     select: {
-      id: true,
+      transactionId: true,
       amount: true,
       freelancerAddress: true,
       clientAddress: true,
