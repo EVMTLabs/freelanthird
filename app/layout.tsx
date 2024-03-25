@@ -11,7 +11,10 @@ import './globals.css';
 
 const inter = Albert_Sans({ subsets: ['latin'] });
 
+const WEBSITE_URL = `https://${process.env.VERCEL_URL ?? 'freelanthird.com'}`;
+
 export const metadata: Metadata = {
+  metadataBase: new URL(WEBSITE_URL),
   title: {
     default: 'Freelance Projects Without Fees',
     template: '%s / Freelanthird',
@@ -25,7 +28,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: 'https://freelanthird.com/images/og.webp',
+        url: `${WEBSITE_URL}/images/og.webp`,
         width: 1200,
         height: 630,
         alt: 'Freelanthird.com',

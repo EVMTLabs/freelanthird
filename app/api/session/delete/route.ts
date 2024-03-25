@@ -13,10 +13,7 @@ export const GET = async () => {
 
     session.destroy();
 
-    return Response.json({
-      message: 'Session destroyed',
-      status: 200,
-    });
+    return Response.redirect('/');
   } catch (error) {
     console.error(error);
     return Response.json({
