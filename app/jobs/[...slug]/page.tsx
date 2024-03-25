@@ -11,6 +11,34 @@ import { getServerSession } from '@/session/getServerSession';
 
 import { JobStats } from './components/JobStats';
 
+export async function generateMetadata({
+  params,
+}: {
+  params: { slug: string[] };
+}) {
+  const [, id] = params.slug;
+
+  if (!id) {
+    return redirect('/404');
+  }
+
+  const job = await findJobById(id);
+
+  if (!job) {
+    return redirect('/404');
+  }
+
+  return {
+    title: job.title,
+    description: job.description,
+    referrer: 'origin-when-cross-origin',
+    keywords: job.skills.map((skill) => skill.name),
+    authors: [{ name: job.user.name }],
+    creator: job.user.name,
+    publisher: 'Freelanthird',
+  };
+}
+
 export default async function JobPage({
   params,
 }: {

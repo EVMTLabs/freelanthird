@@ -25,7 +25,7 @@ export const PaymentTokens = () => {
           onChange={handleInputChange}
         />
         <Image
-          src="/images/coin-logo.png"
+          src="/images/coin-logo.webp"
           width={24}
           height={24}
           alt="freelanthird token"

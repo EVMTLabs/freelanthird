@@ -1,4 +1,5 @@
 import { Calendar } from 'lucide-react';
+import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 import { findFreelancerProfile } from '@/actions/freelancers';
@@ -14,6 +15,10 @@ import { ProfilePickInput } from './components/ProfilePickInput';
 import { ProfileUserDescription } from './components/ProfileUserDescription';
 import { SkillsSelector } from './components/SkillsSelector';
 import { ToggleVisibility } from './components/ToggleVisibility';
+
+export const metadata: Metadata = {
+  title: 'Profile',
+};
 
 export default async function ProfilePage() {
   const session = await getServerSession();

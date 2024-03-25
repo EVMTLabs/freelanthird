@@ -1,9 +1,14 @@
+import type { Metadata } from 'next';
 import { redirect } from 'next/navigation';
 
 import { MainLayout } from '@/components/Layouts/MainLayout';
 import { getServerSession } from '@/session/getServerSession';
 
 import { SettingsForm } from './components/SettingsForm';
+
+export const metadata: Metadata = {
+  title: 'Settings',
+};
 
 export default async function SettingsPage() {
   const session = await getServerSession();

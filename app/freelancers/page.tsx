@@ -1,9 +1,15 @@
+import type { Metadata } from 'next';
+
 import { findFreelancers } from '@/actions/freelancers';
 import { findJobCategories } from '@/actions/jobs';
 import { MainLayout } from '@/components/Layouts/MainLayout';
 
 import { FreelancerCategories } from './components/FreelancerCategories';
 import { FreelancerList } from './components/FreelancerList';
+
+export const metadata: Metadata = {
+  title: 'Freelancers',
+};
 
 export default async function FreelancersPage() {
   const freelancers = await findFreelancers();

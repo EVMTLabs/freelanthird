@@ -76,6 +76,11 @@ export const findJobById = async (id: string) => {
       id,
     },
     include: {
+      skills: {
+        select: {
+          name: true,
+        },
+      },
       user: {
         select: {
           username: true,
@@ -87,6 +92,24 @@ export const findJobById = async (id: string) => {
       wallet: {
         select: {
           address: true,
+        },
+      },
+    },
+  });
+};
+
+export const findJobsMetadata = async () => {
+  return prisma.job.findMany({
+    orderBy: {
+      createdAt: 'desc',
+    },
+    select: {
+      id: true,
+      title: true,
+      createdAt: true,
+      user: {
+        select: {
+          name: true,
         },
       },
     },

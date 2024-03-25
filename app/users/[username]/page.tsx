@@ -10,6 +10,23 @@ import { FreelancerProfile } from './components/FreelancerProfile';
 import { JobPosterProfile } from './components/JobPosterProfile';
 import { SendMessageButton } from './components/SendMessageButton';
 
+export async function generateMetadata({
+  params,
+}: {
+  params: { username: string };
+}) {
+  const user = await findUserByUsername(params.username);
+
+  if (!user) {
+    return redirect('/404');
+  }
+
+  return {
+    title: `${user.name} (@${user.username})`,
+    description: user.freelancer?.description || user.description,
+  };
+}
+
 export default async function UserPage({
   params,
 }: {

@@ -59,6 +59,7 @@ export const findUserByUsername = async (username: string) => {
     },
     select: {
       username: true,
+      description: true,
       avatar: true,
       createdAt: true,
       name: true,
@@ -288,4 +289,13 @@ export const updateUserSettings = async ({
     console.error('Error updating user info', error);
     throw new Error('Error updating user info');
   }
+};
+
+export const findUsersMetadata = async () => {
+  return prisma.user.findMany({
+    select: {
+      username: true,
+      createdAt: true,
+    },
+  });
 };
