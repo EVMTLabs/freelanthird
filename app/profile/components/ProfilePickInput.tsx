@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import toast from 'react-hot-toast';
 
 import { createS3ProfileImage } from '@/actions/users';
 import { AvatarInput } from '@/components/Avatars/AvatarInput/AvatarInput';
@@ -19,11 +20,11 @@ export const ProfilePickInput = ({
 
     try {
       setIsLoading(true);
-      const { url, fields, imagePath } = await createS3ProfileImage({
+      const { url, fields, imageUrl } = await createS3ProfileImage({
         contentType,
       });
 
-      if (url && fields && imagePath) {
+      if (url && fields && imageUrl) {
         const formData = new FormData();
 
         Object.entries(fields).forEach(([key, value]) => {
@@ -40,8 +41,10 @@ export const ProfilePickInput = ({
         if (uploadResponse.ok) {
           setSession({
             ...session,
-            avatar: imagePath,
+            avatar: imageUrl,
           });
+
+          toast.success('Profile picture updated');
         }
       }
     } catch (error) {

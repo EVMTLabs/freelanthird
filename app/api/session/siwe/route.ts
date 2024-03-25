@@ -3,13 +3,12 @@ import { generateNonce, SiweErrorType, SiweMessage } from 'siwe';
 
 import { createUser, findUserByAddress } from '@/actions/users';
 import { getServerSession } from '@/session/getServerSession';
+
 export const PUT = async () => {
   try {
     const session = await getServerSession();
 
-    if (!session?.nonce) {
-      session.nonce = generateNonce();
-    }
+    session.nonce = generateNonce();
 
     await session.save();
 

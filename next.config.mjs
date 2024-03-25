@@ -9,6 +9,11 @@ const nextConfig = {
         hostname: 'images.freelanthird.com',
         port: '',
       },
+      {
+        protocol: 'https',
+        hostname: 's3.eu-central-1.amazonaws.com',
+        port: '',
+      },
     ],
   },
   webpack: (config) => {

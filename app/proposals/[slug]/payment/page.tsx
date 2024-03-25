@@ -1,10 +1,12 @@
 import { Toaster } from 'react-hot-toast';
 import { ProposalStatus } from '@prisma/client';
+import { Info } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 import { findProposalById } from '@/actions/proposals';
 import { DefaultAvatar } from '@/components/Avatars/DefaultAvatar/DefaultAvatar';
+import { getServerSession } from '@/session/getServerSession';
 import { truncateEthAddress } from '@/utils/truncateEthAddress';
 
 import { AmountDetails } from '../../components/AmountDetails';
@@ -27,6 +29,8 @@ export default async function ProposalPage({
     return redirect(`/proposals/${params.slug}`);
   }
 
+  const { address } = await getServerSession();
+
   return (
     <>
       <div className="grid grid-cols-2 my-10 shadow-lg rounded-2xl">
@@ -35,34 +39,37 @@ export default async function ProposalPage({
           <p className="text-xl font-normal text-gray-500 scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-base-200 scrollbar-track-transparent overflow-y-auto min-h-[600px] max-h-[600px]">
             {proposal.description}
           </p>
-          <div className="flex items-center mt-8">
-            <DefaultAvatar
-              avatar={proposal.user?.avatar || ''}
-              username={proposal.user?.username || ''}
-            />
-            <div className="ml-2">
-              {proposal.user ? (
-                <div className="flex flex-col">
+          <div className="flex items-end h-full">
+            <div className="flex items-center mt-8">
+              <DefaultAvatar
+                avatar={proposal.user?.avatar || ''}
+                username={proposal.user?.username || ''}
+              />
+              <div className="ml-2">
+                {proposal.user ? (
+                  <div className="flex flex-col">
+                    <Link
+                      href={`/users/${proposal.user.username}`}
+                      className="text-lg font-medium underline"
+                    >
+                      {proposal.user.name}
+                    </Link>
+                    <span className="text-sm text-gray-500">
+                      @{proposal.user.username}
+                    </span>
+                  </div>
+                ) : (
                   <Link
-                    href={`/users/${proposal.user.username}`}
+                    href={`https://etherscan.io/address/${proposal.freelancerAddress}`}
                     className="text-lg font-medium underline"
+                    target="_blank"
                   >
-                    {proposal.user.name}
+                    {truncateEthAddress(
+                      proposal.freelancerAddress as `0x${string}`,
+                    )}
                   </Link>
-                  <span className="text-sm text-gray-500">
-                    @{proposal.user.username}
-                  </span>
-                </div>
-              ) : (
-                <Link
-                  href={`https://etherscan.io/address/${proposal.freelancerAddress}`}
-                  className="text-lg font-medium underline"
-                >
-                  {truncateEthAddress(
-                    proposal.freelancerAddress as `0x${string}`,
-                  )}
-                </Link>
-              )}
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -88,20 +95,35 @@ export default async function ProposalPage({
             </Link>
           </div>
           <hr className="my-8 border-b border-2 border-dashed" />
-          <h3 className="text-lg font-medium text-gray-500 mb-4">
-            Payment method
-          </h3>
-          <PaymentTokens />
-          <hr className="my-8 border-b border-2 border-dashed" />
-          <AmountDetails />
-          <hr className="my-8 border-b border-2 border-dashed" />
-          <div className="flex w-full justify-end mt-8">
-            <PayButton
-              amount={proposal.amount}
-              freelancerAddress={proposal.freelancerAddress}
-              proposalId={proposal.id}
-            />
-          </div>
+          {proposal.freelancerAddress !== address && (
+            <>
+              <h3 className="text-lg font-medium text-gray-500 mb-4">
+                Payment method
+              </h3>
+              <PaymentTokens />
+              <hr className="my-8 border-b border-2 border-dashed" />
+              <AmountDetails />
+              <hr className="my-8 border-b border-2 border-dashed" />
+            </>
+          )}
+
+          {proposal.freelancerAddress === address ? (
+            <div className="alert alert-info">
+              <Info />
+              <p className="text-lg font-medium">
+                Your proposal has been submitted. When the client pays the
+                amount, you will be notified to start working on the proposal.
+              </p>
+            </div>
+          ) : (
+            <div className="flex w-full justify-end mt-8">
+              <PayButton
+                amount={proposal.amount}
+                freelancerAddress={proposal.freelancerAddress}
+                proposalId={proposal.id}
+              />
+            </div>
+          )}
         </div>
       </div>
       <Toaster />

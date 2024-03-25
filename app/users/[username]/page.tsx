@@ -15,7 +15,7 @@ export default async function UserPage({
 }: {
   params: { username: string };
 }) {
-  const { address } = await getServerSession();
+  const { username: sessionUsername } = await getServerSession();
 
   const username = params.username;
 
@@ -55,7 +55,7 @@ export default async function UserPage({
         <SendMessageButton
           username={user.username}
           name={user.name}
-          userAddress={address}
+          isSameUser={sessionUsername === user.username}
         />
       </div>
       {user.isFreelancer ? (

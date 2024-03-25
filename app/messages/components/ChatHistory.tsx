@@ -6,12 +6,11 @@ import { useModal } from 'connectkit';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
+import { DefaultAvatar } from '@/components/Avatars/DefaultAvatar/DefaultAvatar';
 import { useSession } from '@/context/SessionContext';
 import { useChatRooms } from '@/hooks/messages/useChatRooms';
 import { formatDate } from '@/utils/formatDate';
 import { htmlToText } from '@/utils/htmlToText';
-
-import { ChatAvatar } from './ChatAvatar';
 
 export const ChatHistory = () => {
   const { session } = useSession();
@@ -81,10 +80,9 @@ export const ChatHistory = () => {
         )}
       >
         <div className="flex items-center justify-center py-2">
-          <ChatAvatar
+          <DefaultAvatar
             username={chat.users[0].username}
             avatar={chat.users[0].avatar}
-            size={42}
           />
         </div>
         <div className="flex flex-col w-full py-2 ml-4 overflow-hidden">

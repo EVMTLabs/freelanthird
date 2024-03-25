@@ -1,21 +1,16 @@
-'use client';
-
 import { Send, SquarePen } from 'lucide-react';
 import Link from 'next/link';
-import { useAccount } from 'wagmi';
 
 export const SendMessageButton = ({
   username,
   name,
-  userAddress,
+  isSameUser,
 }: {
   username: string | null;
   name: string | null;
-  userAddress: string;
+  isSameUser: boolean;
 }) => {
-  const { address } = useAccount();
-
-  if (address === userAddress) {
+  if (isSameUser) {
     return (
       <Link className="btn btn-outline" href="/profile">
         Edit profile <SquarePen size={24} />

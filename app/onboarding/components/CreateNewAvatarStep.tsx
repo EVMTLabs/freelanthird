@@ -15,11 +15,11 @@ export const CreateNewAvatarStep = () => {
   const handleImageChange = async (file: File, contentType: string) => {
     try {
       setIsLoading(true);
-      const { url, fields, imagePath } = await createS3ProfileImage({
+      const { url, fields, imageUrl } = await createS3ProfileImage({
         contentType,
       });
 
-      if (url && fields && imagePath) {
+      if (url && fields && imageUrl) {
         const formData = new FormData();
 
         Object.entries(fields).forEach(([key, value]) => {
@@ -36,7 +36,7 @@ export const CreateNewAvatarStep = () => {
         if (uploadResponse.ok) {
           setNewUserValues({
             ...newUserValues,
-            avatar: `${process.env.NEXT_PUBLIC_IMAGES_URL}/${imagePath}`,
+            avatar: imageUrl,
           });
         }
       }

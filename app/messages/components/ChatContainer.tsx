@@ -2,6 +2,7 @@
 
 import { MoveRight } from 'lucide-react';
 import Image from 'next/image';
+import { useSearchParams } from 'next/navigation';
 
 import { CustomLink } from '@/components/CustomLink/CustomLink';
 import { useSession } from '@/context/SessionContext';
@@ -14,8 +15,11 @@ import { SendMessageInput } from './SendMessageInput';
 export const ChatContainer = () => {
   const { session } = useSession();
   const { chatRooms } = useChatRooms();
+  const params = useSearchParams();
 
-  if (!session?.isLoggedIn || !chatRooms?.length) {
+  const receiverUsername = params.get('username');
+
+  if (!receiverUsername && (!session?.isLoggedIn || !chatRooms?.length)) {
     return (
       <div className="flex flex-col h-full w-full items-center justify-center min-h-screen">
         <div className="flex items-center justify-center w-full">

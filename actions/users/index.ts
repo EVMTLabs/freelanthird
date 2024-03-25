@@ -171,9 +171,9 @@ export const createS3ProfileImage = async ({
 }: {
   contentType: string;
 }) => {
-  const { userId } = await getServerSession();
+  const session = await getServerSession();
 
-  if (!userId) {
+  if (!session.userId) {
     throw new Error('Unauthorized');
   }
 
@@ -183,7 +183,7 @@ export const createS3ProfileImage = async ({
     throw new Error('Bad request');
   }
 
-  const imageId = btoa(userId + process.env.BASE64_SECRET);
+  const imageId = btoa(session.userId + process.env.BASE64_SECRET);
 
   const imagePath = `users/profiles/avatars/${imageId}`;
 
@@ -201,7 +201,20 @@ export const createS3ProfileImage = async ({
     Expires: 600, // Seconds before the presigned post expires. 3600 by default.
   });
 
-  return { url, fields, imagePath };
+  const imageUrl =
+    new URL(
+      `https://s3.eu-central-1.amazonaws.com/${process.env.AWS_BUCKET_NAME}/${imagePath}`,
+    ).href + `?${Date.now()}`;
+
+  session.avatar = imageUrl;
+
+  await session.save();
+
+  return {
+    url,
+    fields,
+    imageUrl,
+  };
 };
 
 export const updateUserDescription = async (description: string) => {

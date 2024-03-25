@@ -10,9 +10,17 @@ export const Status = ({ status }: { status: ProposalStatus }) => {
     [ProposalStatus.REJECTED]: 'badge-error',
   };
 
+  const statusText = {
+    [ProposalStatus.ACCEPTED]: 'Accepted',
+    [ProposalStatus.DISPUTED]: 'In Dispute',
+    [ProposalStatus.IN_PROGRESS]: 'In Progress',
+    [ProposalStatus.PENDING]: 'Pending',
+    [ProposalStatus.REJECTED]: 'Rejected',
+  };
+
   return (
     <span className={clsx('badge', statusColor[status])}>
-      {status.toLowerCase()}
+      {statusText[status]}
     </span>
   );
 };

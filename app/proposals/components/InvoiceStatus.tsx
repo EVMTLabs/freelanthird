@@ -32,7 +32,7 @@ export const InvoiceStatus = ({ status }: { status: ProposalStatus }) => {
   };
 
   return (
-    <div className={clsx('alert', statusProps[status].className)}>
+    <div className={clsx('alert mb-4', statusProps[status].className)}>
       {statusProps[status].icon}
       <p className="text-lg font-medium">{statusProps[status].text}</p>
     </div>

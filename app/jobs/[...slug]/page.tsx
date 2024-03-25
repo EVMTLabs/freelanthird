@@ -7,6 +7,7 @@ import { CreateProposal } from '@/components/CreateProposal/CreateProposal';
 import { MainLayout } from '@/components/Layouts/MainLayout';
 import { PublishedAt } from '@/components/PublishedAt/PublishedAt';
 import { EditorContentView } from '@/components/RichTextEditor/EditorContentView';
+import { getServerSession } from '@/session/getServerSession';
 
 import { JobStats } from './components/JobStats';
 
@@ -26,6 +27,8 @@ export default async function JobPage({
   if (!job) {
     return redirect('/404');
   }
+
+  const { address } = await getServerSession();
 
   return (
     <MainLayout>
@@ -65,7 +68,12 @@ export default async function JobPage({
             <p className="text-xl font-medium mb-4">
               ${job.minPrice} - ${job.maxPrice}
             </p>
-            <CreateProposal jobId={job.id} clientAddress={job.wallet.address} />
+            {job.wallet.address !== address && (
+              <CreateProposal
+                jobId={job.id}
+                clientAddress={job.wallet.address}
+              />
+            )}
           </div>
         </div>
       </div>

@@ -20,11 +20,7 @@ export default async function ProposalPage({
 }) {
   const invoice = await findInvoiceByProposalId(params.slug);
 
-  if (!invoice) {
-    return redirect('/404');
-  }
-
-  if (invoice.proposal.status === ProposalStatus.PENDING) {
+  if (!invoice || invoice.proposal.status === ProposalStatus.PENDING) {
     return redirect(`/proposals/${params.slug}/payment`);
   }
 
@@ -36,34 +32,37 @@ export default async function ProposalPage({
           <p className="text-xl font-normal text-gray-500 scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-base-200 scrollbar-track-transparent overflow-y-auto min-h-[600px] max-h-[600px]">
             {invoice.proposal.description}
           </p>
-          <div className="flex items-center mt-8">
-            <DefaultAvatar
-              avatar={invoice.proposal.user?.avatar || ''}
-              username={invoice.proposal.user?.username || ''}
-            />
-            <div className="ml-2">
-              {invoice.proposal.user ? (
-                <div className="flex flex-col">
+          <div className="flex items-end h-full">
+            <div className="flex items-center mt-8">
+              <DefaultAvatar
+                avatar={invoice.proposal.user?.avatar || ''}
+                username={invoice.proposal.user?.username || ''}
+              />
+              <div className="ml-2">
+                {invoice.proposal.user ? (
+                  <div className="flex flex-col">
+                    <Link
+                      href={`/users/${invoice.proposal.user.username}`}
+                      className="text-lg font-medium underline"
+                    >
+                      {invoice.proposal.user.name}
+                    </Link>
+                    <span className="text-sm text-gray-500">
+                      @{invoice.proposal.user.username}
+                    </span>
+                  </div>
+                ) : (
                   <Link
-                    href={`/users/${invoice.proposal.user.username}`}
+                    href={`https://etherscan.io/address/${invoice.freelancerAddress}`}
                     className="text-lg font-medium underline"
+                    target="_blank"
                   >
-                    {invoice.proposal.user.name}
+                    {truncateEthAddress(
+                      invoice.freelancerAddress as `0x${string}`,
+                    )}
                   </Link>
-                  <span className="text-sm text-gray-500">
-                    @{invoice.proposal.user.username}
-                  </span>
-                </div>
-              ) : (
-                <Link
-                  href={`https://etherscan.io/address/${invoice.freelancerAddress}`}
-                  className="text-lg font-medium underline"
-                >
-                  {truncateEthAddress(
-                    invoice.freelancerAddress as `0x${string}`,
-                  )}
-                </Link>
-              )}
+                )}
+              </div>
             </div>
           </div>
         </div>
@@ -126,11 +125,11 @@ export default async function ProposalPage({
             </p>
           </div>
           <hr className="my-8 border-b border-2 border-dashed" />
-          {invoice.proposal.status === ProposalStatus.IN_PROGRESS ? (
-            <CloseProposalButton invoiceId={invoice.transactionId} />
-          ) : (
-            <InvoiceStatus status={invoice.proposal.status} />
-          )}
+          <InvoiceStatus status={invoice.proposal.status} />
+          {invoice.proposal.status === ProposalStatus.IN_PROGRESS ||
+            (invoice.proposal.status === ProposalStatus.DISPUTED && (
+              <CloseProposalButton invoiceId={invoice.transactionId} />
+            ))}
         </div>
       </div>
       <Toaster />
