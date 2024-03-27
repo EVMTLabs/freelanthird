@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
-import { freelanthirdAddress } from '@/contracts/freelanthird';
+import { freelanthirdContractAddress } from '@/contracts';
 
 export const useCloseProposal = ({ invoiceId }: { invoiceId: number }) => {
   const [isTransacting, setIsTransacting] = useState(false);
@@ -19,7 +19,7 @@ export const useCloseProposal = ({ invoiceId }: { invoiceId: number }) => {
   const closeProposal = useCallback(() => {
     setIsTransacting(true);
     writeContract({
-      address: freelanthirdAddress,
+      address: freelanthirdContractAddress,
       abi: [
         {
           inputs: [

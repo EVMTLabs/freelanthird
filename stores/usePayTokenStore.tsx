@@ -1,15 +1,17 @@
 import { create } from 'zustand';
 
+import { Token } from '@/contracts';
+
 interface PayTokenState {
   isLoading: boolean;
-  token: string;
+  token: Token;
   fee: number;
   amount: number;
   feeAmount: number;
-  handlePayToken: (token: string) => void;
+  handlePayToken: (token: Token) => void;
 }
 
-export const TOKEN_FEES: Record<string, number> = {
+export const TOKEN_FEES: Record<Token, number> = {
   FLT: 0,
   USDC: 3,
   USDT: 3,
@@ -17,11 +19,11 @@ export const TOKEN_FEES: Record<string, number> = {
 
 export const usePayTokenStore = create<PayTokenState>((set) => ({
   isLoading: true,
-  token: 'FLT',
+  token: Token.FLT,
   fee: 0,
   amount: 0,
   feeAmount: 0,
-  handlePayToken: (token: string) => {
+  handlePayToken: (token: Token) => {
     const tokenFee = TOKEN_FEES[token];
     set(({ amount }) => ({
       token: token,

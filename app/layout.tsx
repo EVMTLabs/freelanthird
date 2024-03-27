@@ -1,9 +1,7 @@
 import type { Metadata } from 'next';
 import { Albert_Sans } from 'next/font/google';
 
-import { findFirstUnreadMessage } from '@/actions/messages';
 import { Navbar } from '@/components/Navbar/Navbar';
-import { getServerSession } from '@/session/getServerSession';
 
 import { Providers } from './providers';
 
@@ -42,15 +40,11 @@ export default async function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const session = await getServerSession();
-
-  const hasUnreadMessages = await findFirstUnreadMessage(session.userId);
-
   return (
     <html lang="en" data-theme="bumblebee">
       <body className={inter.className}>
         <Providers>
-          <Navbar hasUnreadMessages={!!hasUnreadMessages} />
+          <Navbar />
           {children}
         </Providers>
       </body>

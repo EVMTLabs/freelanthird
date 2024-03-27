@@ -40,7 +40,12 @@ export const siweConfig = (router: AppRouterInstance) =>
       useSessionStore.setState({ session, isLoading: false });
 
       if (session.isLoggedIn) {
-        router.refresh();
+        console.log('refresh');
+        if (!session.username) {
+          router.replace('/onbo');
+        } else {
+          router.refresh();
+        }
       }
 
       return session.address && session.chainId

@@ -1,8 +1,7 @@
 'use client';
 
-import { createContext, useContext, useEffect, useMemo, useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
 import { useSIWE } from 'connectkit';
-import { useRouter } from 'next/navigation';
 import { useAccount, useDisconnect } from 'wagmi';
 
 import type { SessionData } from '@/session/sessionConfig';
@@ -30,11 +29,11 @@ export const SessionProvider = ({
   const { isSignedIn, signOut } = useSIWE();
   const { isConnected } = useAccount();
   const { disconnectAsync } = useDisconnect();
-  const router = useRouter();
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
-  const { session, removeSession, setSession } = useSessionStore();
+  const { session, removeSession, setSession, isProfileCompleted } =
+    useSessionStore();
 
   const handleSignOut = async () => {
     try {
@@ -54,16 +53,6 @@ export const SessionProvider = ({
       handleSignOut();
     }
   }, [isSignedIn, isConnected]);
-
-  const isProfileCompleted = useMemo(() => {
-    return Boolean(session?.username);
-  }, [session?.isLoggedIn, session?.username]);
-
-  useEffect(() => {
-    if (!isProfileCompleted && isLoggedIn && isConnected) {
-      router.push('/onboarding');
-    }
-  }, [isProfileCompleted, isLoggedIn]);
 
   return (
     <SessionContext.Provider

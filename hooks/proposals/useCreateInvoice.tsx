@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { parseUnits } from 'viem';
 import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
-import { freelanthirdAddress } from '@/contracts/freelanthird';
+import { tokenAddresses } from '@/contracts';
 import { usePayTokenStore } from '@/stores/usePayTokenStore';
 
 import { useAllowance } from './useAllowance';
@@ -44,6 +44,7 @@ export const useCreateInvoice = ({
     data: paymentHash,
     isPending: isPendingPayment,
     isError: isPaymentError,
+    error: paymentError,
     writeContract,
   } = useWriteContract();
 
@@ -57,12 +58,6 @@ export const useCreateInvoice = ({
       handlePayment();
     }
   }, [allowance]);
-
-  const tokenAddresses: Record<string, string> = {
-    FLT: '0x157663871ee4D333b705e1F0DE6b03750c6D7B67',
-    USDC: '0xcC22104e92B940f71B8Bb4bCF6053BF5960Bf93d',
-    USDT: '0x2c4b0B1C7B96e4D1a1e4D4f29d91c5BfCfA9b9f0',
-  };
 
   const tokenAddress = useMemo(() => {
     return tokenAddresses[token];
@@ -82,7 +77,7 @@ export const useCreateInvoice = ({
     }
 
     writeContract({
-      address: freelanthirdAddress,
+      address: tokenAddresses.FLT,
       abi: [
         {
           inputs: [
@@ -125,6 +120,7 @@ export const useCreateInvoice = ({
       isPaymentConfirmationError
     ) {
       setIsPaying(false);
+      console.error(paymentError);
       toast.error('Failed to create invoice');
     }
   }, [

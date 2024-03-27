@@ -9,19 +9,14 @@ import {
   useWriteContract,
 } from 'wagmi';
 
-import { freelanthirdAddress } from '@/contracts/freelanthird';
-import { fltAddress, usdcAddress } from '@/contracts/tokens';
-
-const CONTRACT_ADDRESSES: Record<string, `0x${string}`> = {
-  FLT: fltAddress,
-  USDC: usdcAddress,
-};
+import type { Token } from '@/contracts';
+import { freelanthirdContractAddress, tokenAddresses } from '@/contracts';
 
 export const useAllowance = ({
   token,
   amount,
 }: {
-  token: string;
+  token: Token;
   amount: number;
 }) => {
   const { address } = useAccount();
@@ -38,9 +33,9 @@ export const useAllowance = ({
         type: 'function',
       },
     ],
-    address: CONTRACT_ADDRESSES[token],
+    address: tokenAddresses[token],
     functionName: 'allowance',
-    args: [address as `0x${string}`, freelanthirdAddress],
+    args: [address as `0x${string}`, freelanthirdContractAddress],
   });
 
   const hasAllowance = useMemo(() => Number(allowance) >= amount, [allowance]);
@@ -54,7 +49,7 @@ export const useAllowance = ({
 
   const increaseAllowance = () => {
     return writeContract({
-      address: CONTRACT_ADDRESSES[token],
+      address: tokenAddresses[token],
       abi: [
         {
           inputs: [
@@ -68,7 +63,7 @@ export const useAllowance = ({
         },
       ],
       functionName: 'approve',
-      args: [freelanthirdAddress, parseUnits(amount.toString(), 18)],
+      args: [freelanthirdContractAddress, parseUnits(amount.toString(), 18)],
     });
   };
 

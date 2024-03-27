@@ -7,13 +7,19 @@ interface SessionState {
   setSession: (session: SessionData) => void;
   removeSession: () => void;
   isLoading: boolean;
+  isProfileCompleted: boolean;
 }
 
 export const useSessionStore = create<SessionState>((set) => ({
   session: null,
   isLoading: true,
+  isProfileCompleted: false,
   setSession: (session: SessionData) => {
-    set(() => ({ session: session, isLoading: false }));
+    set(() => ({
+      session: session,
+      isLoading: false,
+      isProfileCompleted: Boolean(session.username),
+    }));
   },
   removeSession: () => {
     set(() => ({ session: null }));
