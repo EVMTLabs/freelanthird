@@ -19,7 +19,7 @@ export const ChatContainer = () => {
 
   const receiverUsername = params.get('username');
 
-  if (!receiverUsername && (!session?.isLoggedIn || !chatRooms?.length)) {
+  if (!session?.isLoggedIn || !chatRooms?.length || !receiverUsername) {
     return (
       <div className="flex flex-col h-full w-full items-center justify-center min-h-screen">
         <div className="flex items-center justify-center w-full">
@@ -31,8 +31,9 @@ export const ChatContainer = () => {
           />
         </div>
         <p className="my-10 text-xl font-medium max-w-sm text-center">
-          Connect your wallet and start messaging anyone on the freelanthird
-          network
+          {!session?.isLoggedIn
+            ? 'Connect your wallet and start messaging anyone on the freelanthird network'
+            : 'Start messaging anyone on the freelanthird'}
         </p>
         <CustomLink href="/freelancers">
           <span className="flex items-center">

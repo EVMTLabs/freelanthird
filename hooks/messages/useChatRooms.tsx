@@ -16,6 +16,9 @@ export const useChatRooms = () => {
 
   const { userId, username, avatar = '', name } = session || {};
 
+  const paramUsername = params.get('username');
+  const paramName = params.get('name');
+
   const {
     sendMessage: sendMessageToWS,
     selectedRoomId,
@@ -30,7 +33,7 @@ export const useChatRooms = () => {
   });
 
   useEffect(() => {
-    if (!selectedRoomId && chatRooms?.length) {
+    if (!paramUsername && !selectedRoomId && chatRooms?.length) {
       setSelectedRoomId(chatRooms[0].id);
     }
   }, [selectedRoomId]);
@@ -74,9 +77,9 @@ export const useChatRooms = () => {
       },
       receiver: {
         id: receiver?.id || '',
-        username: receiver?.username || params.get('username') || '',
+        username: receiver?.username || paramUsername || '',
         avatar: receiver?.avatar || '',
-        name: receiver?.name || params.get('name') || '',
+        name: receiver?.name || paramName || '',
       },
     });
   };

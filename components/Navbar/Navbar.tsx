@@ -10,7 +10,6 @@ import { CustomMessageLink } from './CustomMessageLink';
 
 export const Navbar = async () => {
   const session = await getServerSession();
-
   const hasUnreadMessages = await findFirstUnreadMessage(session.userId);
 
   return (

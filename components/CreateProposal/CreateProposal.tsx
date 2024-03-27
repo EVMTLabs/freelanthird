@@ -4,11 +4,13 @@ import { useRef, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import clsx from 'clsx';
+import { useModal } from 'connectkit';
 import { DollarSign, X } from 'lucide-react';
 import { useAccount } from 'wagmi';
 import { z } from 'zod';
 
 import { createProposal } from '@/actions/proposals';
+import { useSession } from '@/hooks/session/useSession';
 
 type ProposalFormValues = {
   title: string;
@@ -55,8 +57,12 @@ export const CreateProposal = ({
   jobId: string;
   clientAddress: string;
 }) => {
+  const { session } = useSession();
   const { address: freelancerAddress } = useAccount();
+  const { open, setOpen } = useModal();
+
   const [error, setError] = useState('');
+
   const modalRef = useRef<HTMLDialogElement | null>(null);
 
   const {
@@ -73,6 +79,9 @@ export const CreateProposal = ({
   });
 
   const openModal = () => {
+    if (!open && (!session || !session.isLoggedIn)) {
+      return setOpen(true);
+    }
     modalRef.current?.showModal();
   };
 

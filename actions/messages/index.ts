@@ -102,6 +102,10 @@ export const findChatMessages = async (chatRoomId: string) => {
 };
 
 export const findFirstUnreadMessage = async (userId: string) => {
+  if (!userId) {
+    return null;
+  }
+
   return prisma.chatMessage.findFirst({
     where: {
       status: MessageStatus.SENT,
