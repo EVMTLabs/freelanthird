@@ -5,8 +5,8 @@ import Image from 'next/image';
 import { useSearchParams } from 'next/navigation';
 
 import { CustomLink } from '@/components/CustomLink/CustomLink';
-import { useSession } from '@/context/SessionContext';
 import { useChatRooms } from '@/hooks/messages/useChatRooms';
+import { useSession } from '@/hooks/session/useSession';
 
 import { ChatHeader } from './ChatHeader';
 import { ChatMessages } from './ChatMessages';

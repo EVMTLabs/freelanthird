@@ -3,7 +3,7 @@
 import { createContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
-import { useSession } from '@/context/SessionContext';
+import { useSession } from '@/hooks/session/useSession';
 import type { Job, JobCategory } from '@/types/jobs';
 
 interface JobFormContextProps {

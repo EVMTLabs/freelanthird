@@ -6,10 +6,9 @@ import { ConnectKitProvider, SIWEProvider } from 'connectkit';
 import { useRouter } from 'next/navigation';
 import { WagmiProvider } from 'wagmi';
 
-import { WalletAvatar } from '@/components/Avatars/WalletAvatar/WalletAvatar';
+import { ConnectAvatar } from '@/components/Avatars/ConnectAvatar/ConnectAvatar';
 import { config } from '@/config/connectkit';
 import { siweConfig } from '@/config/siweConfig';
-import { SessionProvider } from '@/context/SessionContext';
 
 const queryClient = new QueryClient();
 
@@ -24,13 +23,13 @@ export function Providers(props: { children: ReactNode }) {
           <ConnectKitProvider
             theme="soft"
             options={{
-              customAvatar: WalletAvatar,
+              customAvatar: ConnectAvatar,
             }}
             customTheme={{
               '--ck-font-family': '"Albert Sans", sans-serif',
             }}
           >
-            <SessionProvider>{props.children}</SessionProvider>
+            {props.children}
           </ConnectKitProvider>
         </SIWEProvider>
       </WagmiProvider>

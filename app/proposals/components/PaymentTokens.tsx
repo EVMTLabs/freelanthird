@@ -6,13 +6,14 @@ import Image from 'next/image';
 
 import { UsdcCoin } from '@/components/CoinIcons/UsdcCoin/UsdcCoin';
 import { UsdtCoin } from '@/components/CoinIcons/UsdtCoin/UsdtCoin';
+import type { Token } from '@/contracts';
 import { usePayTokenStore } from '@/stores/usePayTokenStore';
 
 export const PaymentTokens = () => {
   const { token, handlePayToken } = usePayTokenStore();
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {
-    handlePayToken(event.target.value);
+    handlePayToken(event.target.value as Token);
   };
 
   return (

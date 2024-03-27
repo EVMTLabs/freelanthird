@@ -1,9 +1,12 @@
 'use client';
 
+import { useGetFltPrice } from '@/hooks/proposals/useGetFltPrice';
 import { usePayTokenStore } from '@/stores/usePayTokenStore';
 
 export const AmountDetails = () => {
   const { fee, amount, feeAmount, isLoading } = usePayTokenStore();
+
+  useGetFltPrice();
 
   return (
     <>

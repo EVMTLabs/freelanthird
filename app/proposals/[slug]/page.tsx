@@ -6,6 +6,7 @@ import { redirect } from 'next/navigation';
 
 import { findInvoiceByProposalId } from '@/actions/proposals';
 import { DefaultAvatar } from '@/components/Avatars/DefaultAvatar/DefaultAvatar';
+import type { Token } from '@/contracts';
 import { TOKEN_FEES } from '@/stores/usePayTokenStore';
 import { truncateEthAddress } from '@/utils/truncateEthAddress';
 
@@ -114,13 +115,14 @@ export default async function ProposalPage({
             </p>
             <h3 className="text-lg font-medium mb-4">Fee</h3>
             <p className="text-lg font-medium text-end mb-4">
-              {TOKEN_FEES[invoice.token.symbol]}%
+              {TOKEN_FEES[invoice.token.symbol as Token]}%
             </p>
             <h3 className="text-2xl font-bold">Total amount</h3>
             <p className="text-2xl font-bold text-end">
               $
               {invoice.amount +
-                invoice.amount * (TOKEN_FEES[invoice.token.symbol] / 100)}
+                invoice.amount *
+                  (TOKEN_FEES[invoice.token.symbol as Token] / 100)}
               USD
             </p>
           </div>

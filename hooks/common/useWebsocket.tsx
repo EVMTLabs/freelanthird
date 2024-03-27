@@ -1,7 +1,7 @@
 import { useEffect } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 
-import { useSession } from '@/context/SessionContext';
+import { useSession } from '@/hooks/session/useSession';
 
 export const useWebsocket = <T,>() => {
   const { session } = useSession();

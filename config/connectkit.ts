@@ -13,7 +13,7 @@ export const config = createConfig(
       ? {
           [arbitrumSepolia.id]: fallback([
             http(
-              `https://arb-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID}`,
+              `https://arb-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ARBITRUM_SEPOLIA_ID}`,
             ),
             http(
               `https://arbitrum-sepolia.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ARBITRUM_ID}`,
@@ -23,7 +23,7 @@ export const config = createConfig(
       : {
           [arbitrum.id]: fallback([
             http(
-              `https://arb-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ID}`,
+              `https://arb-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ARBITRUM_ID}`,
             ),
             http(
               `https://arbitrum-mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ARBITRUM_ID}`,

@@ -4,7 +4,7 @@ import { useModal } from 'connectkit';
 import type { LinkProps } from 'next/link';
 import Link from 'next/link';
 
-import { useSession } from '@/context/SessionContext';
+import { useSession } from '@/hooks/session/useSession';
 
 interface LoggedLinkProps extends LinkProps {
   text: string;

@@ -6,6 +6,8 @@ export const metadata: Metadata = {
   title: 'Proposals',
 };
 
+export const revalidate = 0;
+
 export default async function ProposalsLayout({
   children,
 }: Readonly<{

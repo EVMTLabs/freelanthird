@@ -24,12 +24,18 @@ export const siweConfig = (router: AppRouterInstance) =>
         statement: 'Sign In With Ethereum to prove you control this wallet.',
       }).prepareMessage();
     },
-    verifyMessage: ({ message, signature }) => {
-      return fetch('/api/session/siwe', {
+    verifyMessage: async ({ message, signature }) => {
+      const response = await fetch('/api/session/siwe', {
         method: 'POST',
         body: JSON.stringify({ message, signature }),
         headers: { 'Content-Type': 'application/json' },
-      }).then((res) => res.ok);
+      });
+
+      if (response.ok) {
+        router.refresh();
+      }
+
+      return response.ok;
     },
     getSession: async () => {
       const res = await fetch('/api/session');
@@ -39,13 +45,8 @@ export const siweConfig = (router: AppRouterInstance) =>
 
       useSessionStore.setState({ session, isLoading: false });
 
-      if (session.isLoggedIn) {
-        console.log('refresh');
-        if (!session.username) {
-          router.replace('/onbo');
-        } else {
-          router.refresh();
-        }
+      if (session.isLoggedIn && !session.username) {
+        router.replace('/onboarding');
       }
 
       return session.address && session.chainId
@@ -54,8 +55,8 @@ export const siweConfig = (router: AppRouterInstance) =>
     },
     signOut: async () => {
       const response = await fetch('/api/session/delete');
+      useSessionStore.setState({ session: null, isLoading: false });
       router.replace('/');
-
       return response.ok;
     },
   }) satisfies SIWEConfig;

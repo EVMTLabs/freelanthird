@@ -4,7 +4,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 
-import { useSession } from '@/context/SessionContext';
+import { useSession } from '@/hooks/session/useSession';
 import { useWebsocket } from '@/hooks/common/useWebsocket';
 import type { ChatHistory, WSChatMessageResponse } from '@/types/messages';
 

@@ -6,42 +6,19 @@ import { DefaultAvatar } from '@/components/Avatars/DefaultAvatar/DefaultAvatar'
 import { getServerSession } from '@/session/getServerSession';
 import { truncateEthAddress } from '@/utils/truncateEthAddress';
 
+import { ProposalContainer } from './components/ProposalContainer';
 import { Status } from './components/Status';
 import { TableDate } from './components/TableDate';
+
+export const revalidate = 0;
 
 export default async function MyProposalsPage() {
   const { address } = await getServerSession();
 
-  if (!address) {
-    return (
-      <>
-        <div className="flex justify-between items-center w-full my-10">
-          <h1 className="text-4xl font-medium">My Proposals</h1>
-          <div className="flex items-center">
-            <Link
-              href="/proposals"
-              className="btn btn-primary rounded-r-none w-32"
-            >
-              <Inbox /> Received
-            </Link>
-            <Link href="/proposals/sent" className="btn rounded-l-none w-32">
-              <SendHorizonal /> Sent
-            </Link>
-          </div>
-        </div>
-        <div className="flex flex-col gap-5 p-10 border rounded-lg">
-          <div className="text-center text-gray-500">
-            Connect to view your proposals
-          </div>
-        </div>
-      </>
-    );
-  }
-
   const proposals = await findReceivedProposals(address);
 
   return (
-    <>
+    <ProposalContainer>
       <div className="flex justify-between items-center w-full my-10">
         <h1 className="text-4xl font-medium">My Proposals</h1>
         <div className="flex items-center">
@@ -120,6 +97,6 @@ export default async function MyProposalsPage() {
           </div>
         )}
       </div>
-    </>
+    </ProposalContainer>
   );
 }

@@ -5,7 +5,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 import { updateUserInfo } from '@/actions/users';
-import { useSession } from '@/context/SessionContext';
+import { useSession } from '@/hooks/session/useSession';
 import type { BasicUserInfo } from '@/types/users';
 
 interface NewUserContextProps {
