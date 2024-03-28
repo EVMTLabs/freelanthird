@@ -1,5 +1,7 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
+
 import prisma from '@/prisma/db';
 import { getServerSession } from '@/session/getServerSession';
 import type { Job } from '@/types/jobs';
@@ -7,7 +9,7 @@ import type { Job } from '@/types/jobs';
 export const createJob = async (jobValues: Job) => {
   const { userId } = await getServerSession();
 
-  return prisma.job.create({
+  const result = await prisma.job.create({
     data: {
       title: jobValues.title,
       description: jobValues.description,
@@ -30,6 +32,10 @@ export const createJob = async (jobValues: Job) => {
       },
     },
   });
+
+  revalidatePath('/');
+
+  return result;
 };
 
 export const findJobCategories = async () => {

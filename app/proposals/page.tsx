@@ -101,3 +101,5 @@ export default async function MyProposalsPage() {
     </ProposalContainer>
   );
 }
+
+export const dynamic = 'force-dynamic';

@@ -104,3 +104,5 @@ export default async function ProposalPage({
     </>
   );
 }
+
+export const dynamic = 'force-dynamic';

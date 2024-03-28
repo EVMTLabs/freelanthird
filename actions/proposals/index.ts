@@ -1,5 +1,7 @@
 'use server';
 
+import { revalidatePath } from 'next/cache';
+
 import prisma from '@/prisma/db';
 import { getServerSession } from '@/session/getServerSession';
 import { CustomError } from '@/utils/error';
@@ -57,6 +59,8 @@ export const createProposal = async ({
         },
       },
     });
+
+    revalidatePath('/proposals/sent');
   } catch (error: unknown) {
     console.error('Error creating proposal', error);
     throw new Error(

@@ -118,7 +118,7 @@ export default async function ProposalPage({
               symbol={invoice.token.symbol as Token}
               usdAmount={invoice.usdAmount}
               tokenAmount={invoice.tokenAmount}
-              usdFactor={invoice.usdFactor}
+              usdFactor={invoice.usdFltFactor}
             />
           ) : null}
           <hr className="my-8 border-b border-2 border-dashed" />
@@ -156,3 +156,5 @@ export default async function ProposalPage({
     </>
   );
 }
+
+export const dynamic = 'force-dynamic';
