@@ -14,10 +14,10 @@ import { freelanthirdContractAddress, tokenAddresses } from '@/contracts';
 
 export const useAllowance = ({
   token,
-  amount,
+  tokenAmount,
 }: {
   token: Token;
-  amount: number;
+  tokenAmount: number;
 }) => {
   const { address } = useAccount();
   const { data: allowance, refetch: refetchAllowance } = useReadContract({
@@ -38,7 +38,10 @@ export const useAllowance = ({
     args: [address as `0x${string}`, freelanthirdContractAddress],
   });
 
-  const hasAllowance = useMemo(() => Number(allowance) >= amount, [allowance]);
+  const hasAllowance = useMemo(
+    () => Number(allowance) >= tokenAmount,
+    [allowance],
+  );
 
   const {
     data: hash,
@@ -63,7 +66,10 @@ export const useAllowance = ({
         },
       ],
       functionName: 'approve',
-      args: [freelanthirdContractAddress, parseUnits(amount.toString(), 18)],
+      args: [
+        freelanthirdContractAddress,
+        parseUnits(tokenAmount.toString(), 18),
+      ],
     });
   };
 

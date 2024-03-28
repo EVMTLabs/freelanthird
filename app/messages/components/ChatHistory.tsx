@@ -7,8 +7,8 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { DefaultAvatar } from '@/components/Avatars/DefaultAvatar/DefaultAvatar';
-import { useSession } from '@/hooks/session/useSession';
 import { useChatRooms } from '@/hooks/messages/useChatRooms';
+import { useSession } from '@/hooks/session/useSession';
 import { formatDate } from '@/utils/formatDate';
 import { htmlToText } from '@/utils/htmlToText';
 

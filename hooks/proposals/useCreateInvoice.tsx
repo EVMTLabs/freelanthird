@@ -6,26 +6,25 @@ import { useRouter } from 'next/navigation';
 import { parseUnits } from 'viem';
 import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
-import { tokenAddresses } from '@/contracts';
+import { freelanthirdContractAddress, tokenAddresses } from '@/contracts';
+import { freelanthirdAbi } from '@/contracts/freelanthird/abi';
 import { usePayTokenStore } from '@/stores/usePayTokenStore';
 
 import { useAllowance } from './useAllowance';
 
 interface CreateInvoiceProps {
-  amount: number;
   freelancerAddress: string;
   proposalId: string;
 }
 
 export const useCreateInvoice = ({
-  amount,
   freelancerAddress,
   proposalId,
 }: CreateInvoiceProps) => {
   const [isPaying, setIsPaying] = useState(false);
   const [isWaitingAllowance, setIsWaitingAllowance] = useState(false);
 
-  const { token } = usePayTokenStore();
+  const { token, tokenAmount } = usePayTokenStore();
 
   const router = useRouter();
 
@@ -37,7 +36,7 @@ export const useCreateInvoice = ({
     isAllowanceError,
   } = useAllowance({
     token,
-    amount,
+    tokenAmount,
   });
 
   const {
@@ -47,10 +46,6 @@ export const useCreateInvoice = ({
     error: paymentError,
     writeContract,
   } = useWriteContract();
-
-  useEffect(() => {
-    usePayTokenStore.setState({ amount, isLoading: false });
-  }, [amount]);
 
   useEffect(() => {
     if (hasAllowance && isWaitingAllowance) {
@@ -77,26 +72,13 @@ export const useCreateInvoice = ({
     }
 
     writeContract({
-      address: tokenAddresses.FLT,
-      abi: [
-        {
-          inputs: [
-            { internalType: 'address', name: '_freelance', type: 'address' },
-            { internalType: 'address', name: '_tokenAddress', type: 'address' },
-            { internalType: 'uint256', name: 'amount', type: 'uint256' },
-            { internalType: 'string', name: '_uuid', type: 'string' },
-          ],
-          name: 'createProposal',
-          outputs: [],
-          stateMutability: 'nonpayable',
-          type: 'function',
-        },
-      ],
+      address: freelanthirdContractAddress,
+      abi: freelanthirdAbi,
       functionName: 'createProposal',
       args: [
         freelancerAddress,
         tokenAddress,
-        parseUnits(amount.toString(), 18),
+        parseUnits(tokenAmount.toString(), 18),
         proposalId,
       ],
     });
@@ -113,7 +95,8 @@ export const useCreateInvoice = ({
 
   useEffect(() => {
     if (isPaymentConfirmed) {
-      router.push(`/proposals/${proposalId}`);
+      router.refresh();
+      router.replace(`/proposals/${proposalId}`);
     } else if (
       isPaymentError ||
       isAllowanceError ||
@@ -121,7 +104,9 @@ export const useCreateInvoice = ({
     ) {
       setIsPaying(false);
       console.error(paymentError);
-      toast.error('Failed to create invoice');
+      if (!paymentError?.message.includes('User rejected the request')) {
+        toast.error('Failed to create invoice');
+      }
     }
   }, [
     isPaymentConfirmed,
@@ -133,11 +118,11 @@ export const useCreateInvoice = ({
   return {
     token,
     handlePayment,
+    isPaymentConfirmed,
     isWaitingTransaction:
       isPaying ||
       isPendingPayment ||
       isConfirmingPayment ||
       isWaitingAllowanceTransaction,
-    isPaymentConfirmed: isPaymentConfirmed,
   };
 };

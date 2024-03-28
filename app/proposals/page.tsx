@@ -1,3 +1,4 @@
+import { ProposalStatus } from '@prisma/client';
 import { ChevronRight, Inbox, SendHorizonal } from 'lucide-react';
 import Link from 'next/link';
 
@@ -84,7 +85,7 @@ export default async function MyProposalsPage() {
                     <td className="text-lg font-medium">${proposal.amount}</td>
                     <td>
                       <Link
-                        href={`/proposals/${proposal.id}`}
+                        href={`/proposals/${proposal.id}${proposal.status === ProposalStatus.PENDING ? '/payment' : ''}`}
                         className="btn btn-link text-neutral"
                       >
                         View Proposal <ChevronRight />

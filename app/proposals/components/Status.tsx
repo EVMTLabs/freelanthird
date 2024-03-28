@@ -4,7 +4,7 @@ import clsx from 'clsx';
 export const Status = ({ status }: { status: ProposalStatus }) => {
   const statusColor = {
     [ProposalStatus.ACCEPTED]: 'badge-success',
-    [ProposalStatus.DISPUTED]: 'badge-warning',
+    [ProposalStatus.DISPUTED]: 'badge-error',
     [ProposalStatus.IN_PROGRESS]: 'badge-neutral',
     [ProposalStatus.PENDING]: 'badge-warning',
     [ProposalStatus.REJECTED]: 'badge-error',

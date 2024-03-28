@@ -177,7 +177,9 @@ model PaymentToken {
 
 model Invoice {
   id                Int          @id @default(autoincrement())
-  amount            Int
+  usdAmount         Int
+  usdFltFactor      String       @default("1.00")
+  tokenAmount       String
   token             PaymentToken @relation(fields: [tokenId], references: [id])
   freelancerAddress String
   clientAddress     String

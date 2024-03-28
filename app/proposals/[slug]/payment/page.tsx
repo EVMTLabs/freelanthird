@@ -1,16 +1,18 @@
 import { Toaster } from 'react-hot-toast';
 import { ProposalStatus } from '@prisma/client';
-import { Info } from 'lucide-react';
+import { CheckCircle, Info } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
-import { findProposalById } from '@/actions/proposals';
+import { findInvoiceByProposalId, findProposalById } from '@/actions/proposals';
 import { DefaultAvatar } from '@/components/Avatars/DefaultAvatar/DefaultAvatar';
+import type { Token } from '@/contracts';
 import { getServerSession } from '@/session/getServerSession';
 import { truncateEthAddress } from '@/utils/truncateEthAddress';
 
 import { AmountDetails } from '../../components/AmountDetails';
 import { DateTime } from '../../components/DateTime';
+import { Invoice } from '../../components/Invoice';
 import { PayButton } from '../../components/PayButton';
 import { PaymentTokens } from '../../components/PaymentTokens';
 
@@ -20,16 +22,19 @@ export default async function ProposalPage({
   params: { slug: string };
 }) {
   const proposal = await findProposalById(params.slug);
+  let invoice;
 
   if (!proposal) {
     return redirect('/404');
   }
 
+  const { address } = await getServerSession();
+
   if (proposal.status !== ProposalStatus.PENDING) {
-    return redirect(`/proposals/${params.slug}`);
+    invoice = await findInvoiceByProposalId(params.slug);
   }
 
-  const { address } = await getServerSession();
+  console.log(proposal);
 
   return (
     <>
@@ -95,33 +100,54 @@ export default async function ProposalPage({
             </Link>
           </div>
           <hr className="my-8 border-b border-2 border-dashed" />
-          {proposal.freelancerAddress !== address && (
-            <>
-              <h3 className="text-lg font-medium text-gray-500 mb-4">
-                Payment method
-              </h3>
-              <PaymentTokens />
-              <hr className="my-8 border-b border-2 border-dashed" />
-              <AmountDetails />
-              <hr className="my-8 border-b border-2 border-dashed" />
-            </>
-          )}
+          {proposal.freelancerAddress !== address &&
+            proposal.status === ProposalStatus.PENDING && (
+              <>
+                <h3 className="text-lg font-medium text-gray-500 mb-4">
+                  Payment method
+                </h3>
+                <PaymentTokens />
+                <hr className="my-8 border-b border-2 border-dashed" />
+              </>
+            )}
+
+          {proposal.status === ProposalStatus.PENDING ? (
+            <AmountDetails paymentAmount={proposal.amount} />
+          ) : invoice ? (
+            <Invoice
+              symbol={invoice.token.symbol as Token}
+              usdAmount={invoice.usdAmount}
+              tokenAmount={invoice.tokenAmount}
+              usdFactor={invoice.usdFactor}
+            />
+          ) : null}
+          <hr className="my-8 border-b border-2 border-dashed" />
 
           {proposal.freelancerAddress === address ? (
-            <div className="alert alert-info">
+            <div className="alert alert-neutral">
               <Info />
               <p className="text-lg font-medium">
                 Your proposal has been submitted. When the client pays the
                 amount, you will be notified to start working on the proposal.
               </p>
             </div>
-          ) : (
-            <div className="flex w-full justify-end mt-8">
+          ) : proposal.status === ProposalStatus.PENDING ? (
+            <div className="flex w-full justify-end">
               <PayButton
-                amount={proposal.amount}
                 freelancerAddress={proposal.freelancerAddress}
                 proposalId={proposal.id}
               />
+            </div>
+          ) : (
+            <div className="alert alert-neutral">
+              <CheckCircle />
+              <p className="text-lg font-medium">
+                Your payment has been confirmed and the freelancer has been
+                notified.{' '}
+                <Link className="underline" href={`/proposals/${proposal.id}`}>
+                  Check status
+                </Link>
+              </p>
             </div>
           )}
         </div>

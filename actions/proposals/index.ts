@@ -127,18 +127,6 @@ export const findProposalById = async (id: string) => {
       id,
     },
     include: {
-      job: {
-        select: {
-          id: true,
-          title: true,
-          description: true,
-          user: {
-            select: {
-              username: true,
-            },
-          },
-        },
-      },
       user: {
         select: {
           username: true,
@@ -150,14 +138,16 @@ export const findProposalById = async (id: string) => {
   });
 };
 
-export const findInvoiceByProposalId = async (id: string) => {
+export const findInvoiceWithProposalByProposalId = async (id: string) => {
   return prisma.invoice.findFirst({
     where: {
       proposalId: id,
     },
     select: {
       transactionId: true,
-      amount: true,
+      usdAmount: true,
+      usdFltFactor: true,
+      tokenAmount: true,
       freelancerAddress: true,
       clientAddress: true,
       proposal: {
@@ -175,6 +165,24 @@ export const findInvoiceByProposalId = async (id: string) => {
           },
         },
       },
+      token: {
+        select: {
+          symbol: true,
+        },
+      },
+    },
+  });
+};
+
+export const findInvoiceByProposalId = async (id: string) => {
+  return prisma.invoice.findFirst({
+    where: {
+      proposalId: id,
+    },
+    select: {
+      usdAmount: true,
+      usdFltFactor: true,
+      tokenAmount: true,
       token: {
         select: {
           symbol: true,

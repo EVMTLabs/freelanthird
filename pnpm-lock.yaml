@@ -48,16 +48,16 @@ dependencies:
     specifier: 2.2.4
     version: 2.2.4(@tiptap/pm@2.2.4)
   '@uniswap/sdk-core':
-    specifier: ^4.2.0
+    specifier: 4.2.0
     version: 4.2.0
   '@uniswap/v3-core':
-    specifier: ^1.0.1
+    specifier: 1.0.1
     version: 1.0.1
   '@uniswap/v3-periphery':
-    specifier: ^1.4.4
+    specifier: 1.4.4
     version: 1.4.4
   '@uniswap/v3-sdk':
-    specifier: ^3.11.0
+    specifier: 3.11.0
     version: 3.11.0(hardhat@2.22.2)
   clsx:
     specifier: 2.1.0
@@ -74,18 +74,12 @@ dependencies:
   iron-session:
     specifier: 8.0.1
     version: 8.0.1
-  iso-3166-2:
-    specifier: 1.0.0
-    version: 1.0.0
   jsonwebtoken:
     specifier: 9.0.2
     version: 9.0.2
   lucide-react:
     specifier: 0.340.0
     version: 0.340.0(react@18.2.0)
-  nanoid:
-    specifier: 5.0.6
-    version: 5.0.6
   next:
     specifier: 14.1.0
     version: 14.1.0(@babel/core@7.24.3)(react-dom@18.2.0)(react@18.2.0)
@@ -127,9 +121,6 @@ devDependencies:
   '@types/html-to-text':
     specifier: 9.0.4
     version: 9.0.4
-  '@types/iso-3166-2':
-    specifier: 1.0.3
-    version: 1.0.3
   '@types/jsonwebtoken':
     specifier: 9.0.6
     version: 9.0.6
@@ -5286,10 +5277,6 @@ packages:
     resolution: {integrity: sha512-pUY3cKH/Nm2yYrEmDlPR1mR7yszjGx4DrwPjQ702C4/D5CwHuZTgZdIdwPkRbcuhs7BAh2L5rg3CL5cbRiGTCQ==}
     dev: true
 
-  /@types/iso-3166-2@1.0.3:
-    resolution: {integrity: sha512-jOqKFSfZYVJ5ARkXH2V2RrEhLvFds1RVrFGRKKxqLU3jjExlf5LtqdFgXNd19KAMRhgsZSNjedeLDVYlGUemZg==}
-    dev: true
-
   /@types/istanbul-lib-coverage@2.0.6:
     resolution: {integrity: sha512-2QF/t/auWm0lsy8XtKVPG19v3sSOQlJe/YHZgfjb/KBBHOGSV+J2q/S671rcq9uTBrLAXmZpqJiaQbMT+zNU1w==}
     dev: false
@@ -9615,10 +9602,6 @@ packages:
   /isexe@2.0.0:
     resolution: {integrity: sha512-RHxMLp9lnKHGHRng9QFhRCMbYAcVpn69smSGcq3f36xjgVVWThj4qqLbTLlq7Ssj8B+fIQ1EuCEGI2lKsyQeIw==}
 
-  /iso-3166-2@1.0.0:
-    resolution: {integrity: sha512-xLAazfKZzwlsg/Zz/GQGQk3jJez5/2ORrjD3TjSuqz/arMht/xTK49c0GOE3afO/gEd9tHtBVVlfBla01unUng==}
-    dev: false
-
   /isobject@3.0.1:
     resolution: {integrity: sha512-WhB9zCku7EGTj/HQQRz5aUQEUeoQZH2bWcltRErOpymJ4boYE6wL9Tbr23krRPSZ+C5zqNSrSw+Cc7sZZ4b7vg==}
     engines: {node: '>=0.10.0'}
@@ -10741,12 +10724,6 @@ packages:
     resolution: {integrity: sha512-eSRppjcPIatRIMC1U6UngP8XFcz8MQWGQdt1MTBQ7NaAmvXDfvNxbvWV3x2y6CdEUciCSsDHDQZbhYaB8QEo2g==}
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
-
-  /nanoid@5.0.6:
-    resolution: {integrity: sha512-rRq0eMHoGZxlvaFOUdK1Ev83Bd1IgzzR+WJ3IbDJ7QOSdAxYjlurSPqFs9s4lJg29RT6nPwizFtJhQS6V5xgiA==}
-    engines: {node: ^18 || >=20}
-    hasBin: true
-    dev: false
 
   /natural-compare@1.4.0:
     resolution: {integrity: sha512-OWND8ei3VtNC9h7V60qff3SVobHr996CTwgxubgyQYEpg290h9J0buyECNNJexkFm5sOajh5G116RYA1c8ZMSw==}

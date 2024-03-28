@@ -1,7 +1,7 @@
 import { useEffect, useMemo } from 'react';
 import { MessageStatus } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
-import { useSearchParams } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import {
   messagesQueryKey,
@@ -13,6 +13,8 @@ import type { ChatHistory } from '@/types/messages';
 export const useChatRooms = () => {
   const { session } = useSession();
   const params = useSearchParams();
+
+  const router = useRouter();
 
   const { userId, username, avatar = '', name } = session || {};
 
@@ -34,9 +36,13 @@ export const useChatRooms = () => {
 
   useEffect(() => {
     if (!paramUsername && !selectedRoomId && chatRooms?.length) {
-      setSelectedRoomId(chatRooms[0].id);
+      const usernameRoute =
+        chatRooms[0].users[0].username === username
+          ? chatRooms[0].users[1].username
+          : chatRooms[0].users[0].username;
+      router.push(`/messages?username=${usernameRoute}`);
     }
-  }, [selectedRoomId]);
+  }, []);
 
   const currentRoomMessages = useMemo(
     () => chatRooms?.find((room) => room.id === selectedRoomId)?.messages,

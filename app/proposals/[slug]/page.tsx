@@ -4,26 +4,30 @@ import { Flag } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
-import { findInvoiceByProposalId } from '@/actions/proposals';
-import { DefaultAvatar } from '@/components/Avatars/DefaultAvatar/DefaultAvatar';
+import { findInvoiceWithProposalByProposalId } from '@/actions/proposals';
 import type { Token } from '@/contracts';
-import { TOKEN_FEES } from '@/stores/usePayTokenStore';
+import { getServerSession } from '@/session/getServerSession';
 import { truncateEthAddress } from '@/utils/truncateEthAddress';
 
 import { CloseProposalButton } from '../components/CloseProposalButton';
 import { DateTime } from '../components/DateTime';
-import { InvoiceStatus } from '../components/InvoiceStatus';
+import { Invoice } from '../components/Invoice';
+import { ProposalFooter } from '../components/ProposalFooter';
 
 export default async function ProposalPage({
   params,
 }: {
   params: { slug: string };
 }) {
-  const invoice = await findInvoiceByProposalId(params.slug);
+  const invoice = await findInvoiceWithProposalByProposalId(params.slug);
 
   if (!invoice || invoice.proposal.status === ProposalStatus.PENDING) {
     return redirect(`/proposals/${params.slug}/payment`);
   }
+
+  const { address } = await getServerSession();
+
+  const isClient = invoice.clientAddress === address;
 
   return (
     <>
@@ -33,39 +37,12 @@ export default async function ProposalPage({
           <p className="text-xl font-normal text-gray-500 scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-base-200 scrollbar-track-transparent overflow-y-auto min-h-[600px] max-h-[600px]">
             {invoice.proposal.description}
           </p>
-          <div className="flex items-end h-full">
-            <div className="flex items-center mt-8">
-              <DefaultAvatar
-                avatar={invoice.proposal.user?.avatar || ''}
-                username={invoice.proposal.user?.username || ''}
-              />
-              <div className="ml-2">
-                {invoice.proposal.user ? (
-                  <div className="flex flex-col">
-                    <Link
-                      href={`/users/${invoice.proposal.user.username}`}
-                      className="text-lg font-medium underline"
-                    >
-                      {invoice.proposal.user.name}
-                    </Link>
-                    <span className="text-sm text-gray-500">
-                      @{invoice.proposal.user.username}
-                    </span>
-                  </div>
-                ) : (
-                  <Link
-                    href={`https://etherscan.io/address/${invoice.freelancerAddress}`}
-                    className="text-lg font-medium underline"
-                    target="_blank"
-                  >
-                    {truncateEthAddress(
-                      invoice.freelancerAddress as `0x${string}`,
-                    )}
-                  </Link>
-                )}
-              </div>
-            </div>
-          </div>
+          <ProposalFooter
+            username={invoice.proposal.user?.username || ''}
+            name={invoice.proposal.user?.name || ''}
+            avatar={invoice.proposal.user?.avatar || ''}
+            freelancerAddress={invoice.freelancerAddress}
+          />
         </div>
         <div className="flex flex-col px-8 py-10 bg-slate-100 rounded-r-2xl">
           <div className="flex items-center justify-between mb-4">
@@ -108,30 +85,19 @@ export default async function ProposalPage({
             </Link>
           </div>
           <hr className="my-8 border-b border-2 border-dashed" />
-          <div className="grid grid-cols-2">
-            <h3 className="text-lg font-medium mb-2">Subtotal</h3>
-            <p className="text-lg font-medium text-end mb-2">
-              ${invoice.amount} USD
-            </p>
-            <h3 className="text-lg font-medium mb-4">Fee</h3>
-            <p className="text-lg font-medium text-end mb-4">
-              {TOKEN_FEES[invoice.token.symbol as Token]}%
-            </p>
-            <h3 className="text-2xl font-bold">Total amount</h3>
-            <p className="text-2xl font-bold text-end">
-              $
-              {invoice.amount +
-                invoice.amount *
-                  (TOKEN_FEES[invoice.token.symbol as Token] / 100)}
-              USD
-            </p>
-          </div>
+          <Invoice
+            symbol={invoice.token.symbol as Token}
+            usdAmount={invoice.usdAmount}
+            tokenAmount={invoice.tokenAmount}
+            usdFactor={invoice.usdFltFactor}
+          />
           <hr className="my-8 border-b border-2 border-dashed" />
-          <InvoiceStatus status={invoice.proposal.status} />
-          {invoice.proposal.status === ProposalStatus.IN_PROGRESS ||
-            (invoice.proposal.status === ProposalStatus.DISPUTED && (
-              <CloseProposalButton invoiceId={invoice.transactionId} />
-            ))}
+
+          <CloseProposalButton
+            status={invoice.proposal.status}
+            isClient={isClient}
+            invoiceId={invoice.transactionId}
+          />
         </div>
       </div>
       <Toaster />
