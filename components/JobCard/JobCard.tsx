@@ -2,6 +2,7 @@ import { MapPin } from 'lucide-react';
 import Link from 'next/link';
 
 import type { DetailedJob } from '@/types/jobs';
+import { formatBigNumber } from '@/utils/formatBigNumbers';
 import { htmlToText } from '@/utils/htmlToText';
 
 import { DefaultAvatar } from '../Avatars/DefaultAvatar/DefaultAvatar';
@@ -42,7 +43,7 @@ export const JobCard = ({ job }: { job: DetailedJob }) => {
         </div>
         <div className="flex flex-col">
           <p className="font-extrabold text-end whitespace-nowrap">
-            ${job.minPrice} - ${job.maxPrice}
+            ${formatBigNumber(job.minPrice)} - ${formatBigNumber(job.minPrice)}
           </p>
           <div className="flex justify-end text-sm items-center text-gray-500 text-end font-bold">
             <MapPin size={16} />
@@ -55,7 +56,7 @@ export const JobCard = ({ job }: { job: DetailedJob }) => {
           {job.title}
         </h3>
         <p className="font-medium mt-1 line-clamp-2">{description}</p>
-        <div className="lg:flex flex-wrap gap-2 mt-4">
+        <div className="flex flex-wrap gap-2 mt-4">
           {job.skills.map((skill) => (
             <span key={skill.id} className="badge">
               {skill.name}
