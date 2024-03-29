@@ -46,7 +46,7 @@ export default async function ProfilePage() {
         userDescription={userProfile?.description || ''}
       >
         <div className="grid grid-cols-12 gap-5">
-          <div className="flex flex-col col-span-4 gap-8">
+          <div className="flex flex-col col-span-12 gap-8 lg:col-span-4">
             <div className="shadow border py-8 px-6">
               <div className="flex flex-col py-4 border-b w-full items-center justify-center">
                 <ProfilePickInput defaultImage={session.avatar} />
@@ -74,7 +74,7 @@ export default async function ProfilePage() {
               </div>
             )}
           </div>
-          <div className="shadow border col-span-8 py-8 px-6">
+          <div className="shadow border col-span-12 py-8 px-6 lg:col-span-8">
             <p className="text-xl font-extrabold pb-6 border-b">
               {userProfile?.isFreelancer
                 ? 'Freelancer profile'

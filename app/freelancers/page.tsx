@@ -17,14 +17,14 @@ export default async function FreelancersPage() {
 
   return (
     <MainLayout>
-      <div className="grid grid-cols-12 gap-6 my-20">
-        <div className="col-span-3">
+      <div className="grid grid-cols-12 gap-6 my-10">
+        <div className="col-span-3 hidden lg:block">
           <div className="flex flex-col border-r">
             <h2 className="text-xl">Specialities</h2>
             <FreelancerCategories categories={categories} />
           </div>
         </div>
-        <div className="col-span-9">
+        <div className="col-span-12 lg:col-span-9">
           <FreelancerList freelancers={freelancers} />
         </div>
       </div>

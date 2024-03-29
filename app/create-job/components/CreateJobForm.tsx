@@ -16,12 +16,12 @@ import { CreateJobThirdStep } from './CreateJobThirdStep';
 export const CreateJobForm = () => {
   const { formStep } = useContext(JobFormContext);
   return (
-    <>
+    <div className="pb-10">
       {formStep === CreateJobFormSteps.FIRST_STEP && <CreateJobFirstStep />}
       {formStep === CreateJobFormSteps.SECOND_STEP && <CreateJobSecondStep />}
       {formStep === CreateJobFormSteps.THIRD_STEP && <CreateJobThirdStep />}
       {formStep === CreateJobFormSteps.FOURTH_STEP && <CreateJobFourthStep />}
       {formStep === CreateJobFormSteps.FIFTH_STEP && <CreateJobFifthStep />}
-    </>
+    </div>
   );
 };

@@ -46,7 +46,7 @@ export const NewUserStepInfo = () => {
   );
 
   return (
-    <div className="flex flex-col border-r-2 pr-6">
+    <div className="flex flex-col pb-2 lg:border-r">
       <p className="text-sm mb-2">
         {formStep + 1}/4{' '}
         <span className="ml-2">{steps[formStep].subTitle}</span>

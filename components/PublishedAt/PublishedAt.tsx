@@ -16,5 +16,9 @@ export const PublishedAt = ({ date, showDivider }: PublishedAtProps) => {
     ? `| Posted ${postedSince}`
     : `Posted ${postedSince}`;
 
-  return <span className="font-light text-sm text-gray-500">{text}</span>;
+  return (
+    <span className="font-light text-sm text-gray-500 block lg:inline">
+      {text}
+    </span>
+  );
 };

@@ -53,7 +53,7 @@ export default async function UserPage({
 
   return (
     <MainLayout>
-      <div className="flex w-full justify-between items-center border-b pt-10 pb-5">
+      <div className="flex flex-col w-full gap-5 md:flex-row md:justify-between md:items-center border-b pt-10 pb-5">
         <div className="flex">
           <DefaultAvatar
             avatar={user.avatar}

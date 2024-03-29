@@ -2,7 +2,7 @@
 
 export const TableDate = ({ date }: { date: Date }) => {
   return (
-    <span>
+    <span className="whitespace-nowrap">
       {new Date(date).toLocaleDateString(undefined, {
         month: 'short',
         day: 'numeric',

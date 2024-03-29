@@ -42,7 +42,7 @@ export const useChatRooms = () => {
           : chatRooms[0].users[0].username;
       router.push(`/messages?username=${usernameRoute}`);
     }
-  }, []);
+  }, [chatRooms]);
 
   const currentRoomMessages = useMemo(
     () => chatRooms?.find((room) => room.id === selectedRoomId)?.messages,

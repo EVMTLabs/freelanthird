@@ -3,7 +3,7 @@ import { CreateJobFormStepInfo } from './components/CreateJobFormStepInfo';
 
 export default function NewJobPage() {
   return (
-    <div className="grid grid-cols-2 my-20 gap-10">
+    <div className="grid grid-cols-1 my-5 gap-10 lg:grid-cols-2 lg:my-20">
       <CreateJobFormStepInfo />
       <CreateJobForm />
     </div>

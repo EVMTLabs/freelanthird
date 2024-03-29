@@ -58,10 +58,12 @@ export default async function JobPage({
 
   const { address } = await getServerSession();
 
+  console.log(job.wallet.address, address);
+
   return (
     <MainLayout>
       <div className="grid grid-cols-12 my-10">
-        <div className="col-span-9 border-r px-5">
+        <div className="col-span-12 px-5 order-2 lg:col-span-9 lg:order-1">
           <h1 className="text-2xl font-extrabold">{job.title}</h1>
           <div className="flex gap-2 mt-2">
             <PublishedAt date={job.createdAt} />
@@ -75,8 +77,15 @@ export default async function JobPage({
             />
             <EditorContentView description={job.description} />
           </div>
+          <div className="mt-8 border-t pt-8 lg:hidden">
+            <h2 className="text-2xl font-bold mb-2">Budget</h2>
+            <p className="text-xl font-medium mb-4">
+              ${job.minPrice} - ${job.maxPrice}
+            </p>
+            <CreateProposal jobId={job.id} clientAddress={job.wallet.address} />
+          </div>
         </div>
-        <div className="flex flex-col px-8 col-span-3">
+        <div className="flex flex-col px-8 col-span-12 order-1 border-b pb-8 mb-8 lg:col-span-3 lg:order-2 lg:border-l lg:mb-0 lg:pb-0 lg:border-b-0">
           <Link href={`/users/${job.user.username}`} className="flex">
             <DefaultAvatar
               avatar={job.user.avatar}
@@ -91,7 +100,7 @@ export default async function JobPage({
               </p>
             </div>
           </Link>
-          <div className="mt-8">
+          <div className="mt-8 hidden lg:block">
             <h2 className="text-2xl font-bold mb-2">Budget</h2>
             <p className="text-xl font-medium mb-4">
               ${job.minPrice} - ${job.maxPrice}

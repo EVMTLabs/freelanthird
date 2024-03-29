@@ -21,25 +21,25 @@ export const ChatContainer = () => {
 
   if (!session?.isLoggedIn || !chatRooms?.length || !receiverUsername) {
     return (
-      <div className="flex flex-col h-full w-full items-center justify-center min-h-screen">
-        <div className="flex items-center justify-center w-full">
+      <div className="flex flex-col h-full w-full min-h-screen">
+        <div className="flex flex-col items-center justify-center w-full my-20">
           <Image
-            src="/images/empty-chats.svg"
-            width={500}
-            height={500}
+            src="/images/empty-chat.webp"
+            width={650}
+            height={650}
             alt="Empty chat"
           />
+          <p className="my-10 text-xl font-medium max-w-sm text-center">
+            {!session?.isLoggedIn
+              ? 'Connect your wallet and start messaging anyone on the freelanthird network'
+              : 'Start messaging anyone on the freelanthird'}
+          </p>
+          <CustomLink href="/freelancers">
+            <span className="flex items-center">
+              Find Freelancers <MoveRight className="ml-2" />
+            </span>
+          </CustomLink>
         </div>
-        <p className="my-10 text-xl font-medium max-w-sm text-center">
-          {!session?.isLoggedIn
-            ? 'Connect your wallet and start messaging anyone on the freelanthird network'
-            : 'Start messaging anyone on the freelanthird'}
-        </p>
-        <CustomLink href="/freelancers">
-          <span className="flex items-center">
-            Find Freelancers <MoveRight className="ml-2" />
-          </span>
-        </CustomLink>
       </div>
     );
   }

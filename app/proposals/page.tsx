@@ -20,9 +20,9 @@ export default async function MyProposalsPage() {
 
   return (
     <ProposalContainer>
-      <div className="flex justify-between items-center w-full my-10">
-        <h1 className="text-4xl font-medium">My Proposals</h1>
-        <div className="flex items-center">
+      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center w-full lg:my-10">
+        <h1 className="text-4xl font-medium mb-8 lg:mb-0">My Proposals</h1>
+        <div className="flex items-center mb-4">
           <Link
             href="/proposals"
             className="btn btn-primary rounded-r-none w-32"
@@ -86,7 +86,7 @@ export default async function MyProposalsPage() {
                     <td>
                       <Link
                         href={`/proposals/${proposal.id}${proposal.status === ProposalStatus.PENDING ? '/payment' : ''}`}
-                        className="btn btn-link text-neutral"
+                        className="btn btn-link text-neutral whitespace-nowrap flex-nowrap"
                       >
                         View Proposal <ChevronRight />
                       </Link>

@@ -105,9 +105,13 @@ export const CreateProposal = ({
     }
   });
 
+  if (clientAddress === freelancerAddress) {
+    return null;
+  }
+
   return (
     <>
-      <button className="btn btn-primary w-full" onClick={openModal}>
+      <button className="btn btn-primary w-full mt-4" onClick={openModal}>
         Create Proposal
       </button>
       <dialog className="modal" ref={modalRef}>

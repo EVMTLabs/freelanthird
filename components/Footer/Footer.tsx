@@ -14,9 +14,9 @@ export const Footer = () => {
   ];
 
   return (
-    <footer className="flex flex-col w-full justify-between items-center p-10 lg:flex-row">
-      <div className="mb-8 lg:mb-0">
-        <div className="flex space-x-4 justify-center lg:justify-start">
+    <footer className="flex flex-col w-full md:justify-between md:items-center p-10 md:flex-row">
+      <div className="mb-8 md:mb-0">
+        <div className="flex flex-col gap-4 justify-center md:flex-row md:justify-start">
           {links.map(({ name, href }) => (
             <Link
               className="text-gray-500 hover:text-gray-900"
@@ -27,7 +27,7 @@ export const Footer = () => {
             </Link>
           ))}
         </div>
-        <p className="text-xs mt-2">
+        <p className="text-xs mt-5 w-52 md:w-full">
           Media inquires for Freelanthird.com - Contact{' '}
           <Link
             href="mailto:info@freelanthird.com"
@@ -39,7 +39,7 @@ export const Footer = () => {
           </Link>
         </p>
       </div>
-      <div className="flex space-x-1">
+      <div className="flex space-x-1 w-full items-center justify-center md:w-fit">
         <Link
           className="btn btn-link text-neutral hover:text-primary"
           href="https://discord.com"

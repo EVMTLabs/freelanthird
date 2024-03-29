@@ -165,7 +165,7 @@ model ChatMessage {
 
 model PaymentToken {
   id        String    @id @default(uuid())
-  address   String    @unique
+  address   String
   symbol    String
   chainId   Int
   createdAt DateTime  @default(now())

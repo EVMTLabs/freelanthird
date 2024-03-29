@@ -3,7 +3,8 @@
 import { useSessionStore } from '@/stores/useSessionStore';
 
 export const useSession = () => {
-  const { session, isProfileCompleted, isLoading } = useSessionStore();
+  const { session, isProfileCompleted, isLoading, setSession } =
+    useSessionStore();
 
-  return { session, isProfileCompleted, isLoading };
+  return { session, isProfileCompleted, isLoading, setSession };
 };

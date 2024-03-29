@@ -16,15 +16,15 @@ export default async function MyProposalsPage() {
 
   return (
     <ProposalContainer>
-      <div className="flex justify-between items-center w-full my-10">
-        <h1 className="text-4xl font-medium">My Proposals</h1>
-        <div className="flex items-center">
-          <Link href="/proposals" className="btn  rounded-r-none w-32">
+      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center w-full lg:my-10">
+        <h1 className="text-4xl font-medium mb-8 lg:mb-0">My Proposals</h1>
+        <div className="flex items-center mb-4">
+          <Link href="/proposals" className="btn rounded-r-none w-32">
             <Inbox /> Received
           </Link>
           <Link
             href="/proposals/sent"
-            className="btn btn-primary rounded-l-none w-32"
+            className="btn rounded-l-none w-32 btn-primary"
           >
             <SendHorizonal /> Sent
           </Link>
@@ -75,14 +75,14 @@ export default async function MyProposalsPage() {
                     <td className="text-lg font-medium">
                       <TableDate date={proposal.createdAt} />
                     </td>
-                    <td>
+                    <td className="w-fit">
                       <Status status={proposal.status} />
                     </td>
                     <td className="text-lg font-medium">${proposal.amount}</td>
                     <td>
                       <Link
                         href={`/proposals/${proposal.id}`}
-                        className="btn btn-link text-neutral"
+                        className="btn btn-link text-neutral whitespace-nowrap flex-nowrap"
                       >
                         View Proposal <ChevronRight />
                       </Link>

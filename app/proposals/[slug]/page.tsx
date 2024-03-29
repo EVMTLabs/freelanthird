@@ -31,8 +31,8 @@ export default async function ProposalPage({
 
   return (
     <>
-      <div className="grid grid-cols-2 my-10 shadow-lg rounded-2xl">
-        <div className="flex flex-col px-8 py-10 rounded-l-2xl border">
+      <div className="grid grid-cols-1 lg:grid-cols-2 lg:my-10 shadow-lg rounded-2xl">
+        <div className="flex flex-col order-2 px-8 py-10 rounded-b-2xl border lg:order-1 lg:rounded-l-2xl lg:rounded-r-none">
           <h1 className="text-4xl font-bold mb-8">{invoice.proposal.title}</h1>
           <p className="text-xl font-normal text-gray-500 scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-base-200 scrollbar-track-transparent overflow-y-auto min-h-[600px] max-h-[600px]">
             {invoice.proposal.description}
@@ -44,7 +44,7 @@ export default async function ProposalPage({
             freelancerAddress={invoice.freelancerAddress}
           />
         </div>
-        <div className="flex flex-col px-8 py-10 bg-slate-100 rounded-r-2xl">
+        <div className="flex flex-col px-8 py-10 bg-slate-100 rounded-t-2xl order-1 lg:order-2 lg:rounded-r-2xl lg:rounded-l-none">
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-bold">Payment confirmed</h2>
             <div className="tooltip tooltip-bottom" data-tip="Create dispute">

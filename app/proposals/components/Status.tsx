@@ -19,7 +19,7 @@ export const Status = ({ status }: { status: ProposalStatus }) => {
   };
 
   return (
-    <span className={clsx('badge', statusColor[status])}>
+    <span className={clsx('badge whitespace-nowrap', statusColor[status])}>
       {statusText[status]}
     </span>
   );
