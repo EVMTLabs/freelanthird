@@ -2,8 +2,8 @@ import { MapPin } from 'lucide-react';
 import Link from 'next/link';
 
 import type { DetailedJob } from '@/types/jobs';
-import { formatBigNumber } from '@/utils/formatBigNumbers';
 import { htmlToText } from '@/utils/htmlToText';
+import { kFormatter } from '@/utils/kFormatter';
 
 import { DefaultAvatar } from '../Avatars/DefaultAvatar/DefaultAvatar';
 import { PublishedAt } from '../PublishedAt/PublishedAt';
@@ -43,7 +43,7 @@ export const JobCard = ({ job }: { job: DetailedJob }) => {
         </div>
         <div className="flex flex-col">
           <p className="font-extrabold text-end whitespace-nowrap">
-            ${formatBigNumber(job.minPrice)} - ${formatBigNumber(job.minPrice)}
+            ${kFormatter(job.minPrice)} - ${kFormatter(job.maxPrice)}
           </p>
           <div className="flex justify-end text-sm items-center text-gray-500 text-end font-bold">
             <MapPin size={16} />
