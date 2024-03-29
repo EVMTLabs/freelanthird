@@ -1,4 +1,5 @@
 import jwt from 'jsonwebtoken';
+import { NextResponse } from 'next/server';
 import { generateNonce, SiweErrorType, SiweMessage } from 'siwe';
 
 import { createUser, findUserByAddress } from '@/actions/users';
@@ -23,15 +24,15 @@ export const PUT = async () => {
 };
 
 export const POST = async (req: Request) => {
-  const { message, signature } = await req.json();
-  const session = await getServerSession();
-
-  const countryIso = req.headers.get('x-vercel-ip-country') ?? undefined;
-  const region = req.headers.get('x-vercel-ip-country-region') ?? undefined;
-  const city = req.headers.get('x-vercel-ip-city') ?? undefined;
-  const ip = req.headers.get('x-forwarded-for') ?? undefined;
-
   try {
+    const { message, signature } = await req.json();
+    const session = await getServerSession();
+
+    const countryIso = req.headers.get('x-vercel-ip-country') ?? undefined;
+    const region = req.headers.get('x-vercel-ip-country-region') ?? undefined;
+    const city = req.headers.get('x-vercel-ip-city') ?? undefined;
+    const ip = req.headers.get('x-forwarded-for') ?? undefined;
+
     const siweMessage = new SiweMessage(message);
     const { data: fields } = await siweMessage.verify({
       signature,
@@ -82,27 +83,38 @@ export const POST = async (req: Request) => {
     session.token = token;
 
     await session.save();
+
+    return NextResponse.json(
+      {
+        message: 'Successfully signed in',
+        session,
+      },
+      { status: 200 },
+    );
   } catch (error) {
     console.error(error);
     switch (error) {
       case SiweErrorType.INVALID_NONCE:
-        return Response.json({
-          message: 'Invalid nonce',
-          status: 422,
-        });
+        return NextResponse.json(
+          {
+            message: 'Invalid nonce',
+          },
+          { status: 422 },
+        );
       case SiweErrorType.INVALID_SIGNATURE:
-        return Response.json({
-          message: 'Invalid signature',
-          status: 401,
-        });
-
+        return NextResponse.json(
+          {
+            message: 'Invalid signature',
+          },
+          { status: 401 },
+        );
       default:
-        return Response.json({
-          message: 'Internal server error',
-          status: 500,
-        });
+        NextResponse.json(
+          {
+            message: error,
+          },
+          { status: 500 },
+        );
     }
   }
-
-  return Response.json(session);
 };
