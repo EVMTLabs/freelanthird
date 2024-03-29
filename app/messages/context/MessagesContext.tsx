@@ -4,6 +4,7 @@ import { createContext, useContext, useEffect, useState } from 'react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useSearchParams } from 'next/navigation';
 
+import { updateMessagesToSeen } from '@/actions/messages';
 import { useWebsocket } from '@/hooks/common/useWebsocket';
 import { useSession } from '@/hooks/session/useSession';
 import type { ChatHistory, WSChatMessageResponse } from '@/types/messages';
@@ -111,7 +112,7 @@ export const MessagesProvider = ({
 
   const updateUnreadCounter = async () => {
     try {
-      await fetch(`/api/messages/status?chatRoomId=${selectedRoomId}`);
+      await updateMessagesToSeen(selectedRoomId || '');
       queryClient.setQueryData(messagesQueryKey, (prevRooms: ChatHistory[]) => {
         return prevRooms.map((room) => {
           if (room.id === selectedRoomId) {

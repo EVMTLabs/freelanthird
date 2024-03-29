@@ -1,27 +1,22 @@
+import { NextResponse } from 'next/server';
+
 import { getServerSession } from '@/session/getServerSession';
 
 export const GET = async () => {
-  try {
-    const session = await getServerSession();
+  const session = await getServerSession();
 
-    if (!session) {
-      return Response.json({
+  if (!session) {
+    return NextResponse.json(
+      {
         message: 'No session found',
-        status: 404,
-      });
-    }
-
-    session.destroy();
-
-    return Response.json({
-      message: 'Session destroyed',
-      status: 200,
-    });
-  } catch (error) {
-    console.error(error);
-    return Response.json({
-      message: 'Internal server error',
-      status: 500,
-    });
+      },
+      { status: 404 },
+    );
   }
+
+  session.destroy();
+
+  return NextResponse.json({
+    message: 'Session destroyed',
+  });
 };

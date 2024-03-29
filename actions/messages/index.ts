@@ -3,6 +3,7 @@
 import { MessageStatus } from '@prisma/client';
 
 import prisma from '@/prisma/db';
+import { getServerSession } from '@/session/getServerSession';
 
 export const findChatHistory = async (id: string) => {
   try {
@@ -120,10 +121,17 @@ export const findFirstUnreadMessage = async (userId: string) => {
   });
 };
 
-export const updateMessagesToSeen = async (
-  chatRoomId: string,
-  userId: string,
-) => {
+export const updateMessagesToSeen = async (chatRoomId: string) => {
+  if (!chatRoomId) {
+    throw new Error('Bad request');
+  }
+
+  const session = await getServerSession();
+
+  if (!session || !session.isLoggedIn) {
+    throw new Error('Unauthorized');
+  }
+
   const updatedMessages = await prisma.chatMessage.updateMany({
     where: {
       chatRoomId: chatRoomId,
@@ -131,7 +139,7 @@ export const updateMessagesToSeen = async (
       chatRoom: {
         users: {
           some: {
-            id: userId,
+            id: session.userId,
           },
         },
       },
