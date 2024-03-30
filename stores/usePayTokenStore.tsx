@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 
-import { Token } from '@/contracts';
+import { Token, TOKEN_FEES } from '@/contracts';
 
 interface PayTokenState {
   isLoading: boolean;
@@ -15,12 +15,6 @@ interface PayTokenState {
   setFltUSDFactor: (fltUSDFactor: number) => void;
   setIsLoading: (isLoading: boolean) => void;
 }
-
-export const TOKEN_FEES: Record<Token, number> = {
-  FLT: 0,
-  USDC: 3,
-  USDT: 3,
-};
 
 export const usePayTokenStore = create<PayTokenState>((set) => ({
   isLoading: true,

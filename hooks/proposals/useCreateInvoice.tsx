@@ -6,7 +6,11 @@ import { useRouter } from 'next/navigation';
 import { parseUnits } from 'viem';
 import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
-import { freelanthirdContractAddress, tokenAddresses } from '@/contracts';
+import {
+  freelanthirdContractAddress,
+  TOKEN_DECIMALS,
+  tokenAddresses,
+} from '@/contracts';
 import { freelanthirdAbi } from '@/contracts/freelanthird/abi';
 import { usePayTokenStore } from '@/stores/usePayTokenStore';
 
@@ -74,11 +78,11 @@ export const useCreateInvoice = ({
     writeContract({
       address: freelanthirdContractAddress,
       abi: freelanthirdAbi,
-      functionName: 'createProposal',
+      functionName: 'createInvoice',
       args: [
         freelancerAddress,
         tokenAddress,
-        parseUnits(tokenAmount.toString(), 18),
+        parseUnits(tokenAmount.toString(), TOKEN_DECIMALS[token]),
         proposalId,
       ],
     });
@@ -90,7 +94,7 @@ export const useCreateInvoice = ({
     isError: isPaymentConfirmationError,
   } = useWaitForTransactionReceipt({
     hash: paymentHash,
-    confirmations: 2,
+    confirmations: 3,
   });
 
   useEffect(() => {

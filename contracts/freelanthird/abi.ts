@@ -194,7 +194,7 @@ export const freelanthirdAbi = [
       { internalType: 'uint256', name: 'amount', type: 'uint256' },
       { internalType: 'string', name: '_uuid', type: 'string' },
     ],
-    name: 'createProposal',
+    name: 'createInvoice',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

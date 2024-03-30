@@ -1,5 +1,4 @@
-import { Token } from '@/contracts';
-import { TOKEN_FEES } from '@/stores/usePayTokenStore';
+import { Token, TOKEN_FEES } from '@/contracts';
 
 interface InvoiceProps {
   symbol: Token;

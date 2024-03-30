@@ -12,6 +12,7 @@ export const config = createConfig(
     transports: isDev
       ? {
           [arbitrumSepolia.id]: fallback([
+            http(),
             http(
               `https://arb-sepolia.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ARBITRUM_SEPOLIA_ID}`,
             ),
@@ -22,6 +23,7 @@ export const config = createConfig(
         }
       : {
           [arbitrum.id]: fallback([
+            http(),
             http(
               `https://arb-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ARBITRUM_ID}`,
             ),

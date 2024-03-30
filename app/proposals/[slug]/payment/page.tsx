@@ -34,8 +34,6 @@ export default async function ProposalPage({
     invoice = await findInvoiceByProposalId(params.slug);
   }
 
-  console.log(proposal);
-
   return (
     <>
       <div className="grid grid-cols-1 lg:grid-cols-2 lg:my-10 shadow-lg rounded-2xl">

@@ -58,8 +58,6 @@ export default async function JobPage({
 
   const { address } = await getServerSession();
 
-  console.log(job.wallet.address, address);
-
   return (
     <MainLayout>
       <div className="grid grid-cols-12 my-10">

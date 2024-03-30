@@ -51,9 +51,7 @@ export const currentConfig: TokenConfig = {
 
 const client = createPublicClient({
   chain: arbitrum,
-  transport: http(
-    `https://arb-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ARBITRUM_ID}`,
-  ),
+  transport: http(),
 });
 
 async function getPoolConstants(): Promise<{

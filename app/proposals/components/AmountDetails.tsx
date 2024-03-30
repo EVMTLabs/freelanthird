@@ -22,6 +22,7 @@ export const AmountDetails = ({ paymentAmount }: { paymentAmount: number }) => {
 
   useEffect(() => {
     const handleGetPrice = async () => {
+      if (token !== Token.FLT) return;
       setIsLoading(true);
       const fltUSDFactor = await getQuotePrice();
       const tokenAmount = Number(
@@ -48,7 +49,7 @@ export const AmountDetails = ({ paymentAmount }: { paymentAmount: number }) => {
 
     // Clear the interval when the component is unmounted
     return () => clearInterval(intervalId);
-  }, [paymentAmount]);
+  }, [paymentAmount, token]);
 
   return (
     <>

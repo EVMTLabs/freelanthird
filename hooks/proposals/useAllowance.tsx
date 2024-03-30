@@ -10,7 +10,11 @@ import {
 } from 'wagmi';
 
 import type { Token } from '@/contracts';
-import { freelanthirdContractAddress, tokenAddresses } from '@/contracts';
+import {
+  freelanthirdContractAddress,
+  TOKEN_DECIMALS,
+  tokenAddresses,
+} from '@/contracts';
 
 export const useAllowance = ({
   token,
@@ -39,8 +43,8 @@ export const useAllowance = ({
   });
 
   const hasAllowance = useMemo(
-    () => Number(allowance) >= tokenAmount,
-    [allowance],
+    () => Number(allowance) >= parseUnits(tokenAmount.toString(), 18),
+    [allowance, tokenAmount],
   );
 
   const {
@@ -68,7 +72,7 @@ export const useAllowance = ({
       functionName: 'approve',
       args: [
         freelanthirdContractAddress,
-        parseUnits(tokenAmount.toString(), 18),
+        parseUnits(tokenAmount.toString(), TOKEN_DECIMALS[token]),
       ],
     });
   };
@@ -79,7 +83,7 @@ export const useAllowance = ({
     isError: isConfirmationError,
   } = useWaitForTransactionReceipt({
     hash,
-    confirmations: 2,
+    confirmations: 3,
   });
 
   useEffect(() => {
