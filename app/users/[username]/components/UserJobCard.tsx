@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { PublishedAt } from '@/components/PublishedAt/PublishedAt';
 import type { JobCard } from '@/types/jobs';
 import { htmlToText } from '@/utils/htmlToText';
+import { slugify } from '@/utils/slugify';
 
 export interface UserJobCardProps {
   job: JobCard;
@@ -11,7 +12,7 @@ export interface UserJobCardProps {
 
 export const UserJobCard = ({ job }: UserJobCardProps) => {
   const description = `${htmlToText(job.description)}`;
-  const jobLink = `/jobs/${job.title.replace(/ /g, '-').toLowerCase()}/${job.id}`;
+  const jobLink = `/jobs/${slugify(job.title)}/${job.id}`;
 
   return (
     <Link href={jobLink} className="border-b hover:shadow-xl cursor-pointer">

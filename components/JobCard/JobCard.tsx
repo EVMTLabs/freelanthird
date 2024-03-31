@@ -4,6 +4,7 @@ import Link from 'next/link';
 import type { DetailedJob } from '@/types/jobs';
 import { htmlToText } from '@/utils/htmlToText';
 import { kFormatter } from '@/utils/kFormatter';
+import { slugify } from '@/utils/slugify';
 
 import { DefaultAvatar } from '../Avatars/DefaultAvatar/DefaultAvatar';
 import { PublishedAt } from '../PublishedAt/PublishedAt';
@@ -12,7 +13,7 @@ export const JobCard = ({ job }: { job: DetailedJob }) => {
   const { avatar, username } = job.user;
 
   const description = `${htmlToText(job.description)}`;
-  const jobLink = `/jobs/${job.title.replace(/ /g, '-').toLowerCase()}/${job.id}`;
+  const jobLink = `/jobs/${slugify(job.title)}/${job.id}`;
 
   return (
     <Link

@@ -62,15 +62,16 @@ export default async function ProposalPage({
                     </span>
                   </div>
                 ) : (
-                  <Link
-                    href={`https://etherscan.io/address/${proposal.freelancerAddress}`}
+                  <a
+                    href={`https://arbiscan.io/address/${proposal.freelancerAddress}`}
                     className="text-lg font-medium underline"
                     target="_blank"
+                    rel="noopener noreferrer"
                   >
                     {truncateEthAddress(
                       proposal.freelancerAddress as `0x${string}`,
                     )}
-                  </Link>
+                  </a>
                 )}
               </div>
             </div>
@@ -89,13 +90,14 @@ export default async function ProposalPage({
             <p className="text-lg font-medium text-gray-500">
               Freelancer Address:
             </p>
-            <Link
-              href={`https://etherscan.io/address/${proposal.freelancerAddress}`}
+            <a
+              href={`https://arbiscan.io/address/${proposal.freelancerAddress}`}
               target="_blank"
               className="text-lg text-gray-500 underline"
+              rel="noopener noreferrer"
             >
               {truncateEthAddress(proposal.freelancerAddress as `0x${string}`)}
-            </Link>
+            </a>
           </div>
           <hr className="my-8 border-b border-2 border-dashed" />
           {proposal.freelancerAddress !== address &&

@@ -1,9 +1,9 @@
 import { ExternalLink } from 'lucide-react';
 import Image from 'next/image';
-import Link from 'next/link';
 
 import { findFullTimeJobs } from '@/actions/jobs';
 import { MainLayout } from '@/components/Layouts/MainLayout';
+import { PublishedAt } from '@/components/PublishedAt/PublishedAt';
 
 export default async function FullTimeJobPage() {
   const fullTimeJobs = await findFullTimeJobs();
@@ -31,19 +31,23 @@ export default async function FullTimeJobPage() {
                     className="object-contain"
                   />
                 </figure>
-                <h2 className="ml-2">{job.title}</h2>
+                <div className="flex flex-col gap-1 ml-2">
+                  <h2>{job.title}</h2>
+                  <PublishedAt date={job.createdAt} />
+                </div>
               </div>
               <p className="mt-2">{job.description}</p>
               <div className="card-actions justify-end">
-                <Link
+                <a
                   title={job.title}
                   href={job.link}
                   target="_blank"
                   className="btn btn-primary mt-4"
+                  rel="noopener noreferrer"
                 >
                   Apply
                   <ExternalLink size={18} />
-                </Link>
+                </a>
               </div>
             </div>
           </div>

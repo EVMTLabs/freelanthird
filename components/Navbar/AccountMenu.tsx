@@ -34,7 +34,7 @@ export const AccountMenu = () => {
             <>
               <div className="flex items-center">
                 <Link
-                  href="/help"
+                  href="/faq"
                   className="btn btn-ghost btn-circle hover:bg-transparent"
                 >
                   <HelpCircle size={21} />

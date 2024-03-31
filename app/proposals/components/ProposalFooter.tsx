@@ -32,13 +32,13 @@ export const ProposalFooter = ({
               <span className="text-sm text-gray-500">@{username}</span>
             </div>
           ) : (
-            <Link
-              href={`https://etherscan.io/address/${freelancerAddress}`}
+            <a
+              href={`https://arbiscan.io/address/${freelancerAddress}`}
               className="text-lg font-medium underline"
               target="_blank"
             >
               {truncateEthAddress(freelancerAddress as `0x${string}`)}
-            </Link>
+            </a>
           )}
         </div>
       </div>

@@ -1,7 +1,6 @@
 import { Toaster } from 'react-hot-toast';
 import { ProposalStatus } from '@prisma/client';
 import { Flag } from 'lucide-react';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 import { findInvoiceWithProposalByProposalId } from '@/actions/proposals';
@@ -64,25 +63,27 @@ export default async function ProposalPage({
             <p className="text-lg font-medium text-gray-500">
               Freelancer Address:
             </p>
-            <Link
-              href={`https://etherscan.io/address/${invoice.freelancerAddress}`}
+            <a
+              href={`https://arbiscan.io/address/${invoice.freelancerAddress}`}
               target="_blank"
               className="text-lg text-gray-500 underline"
+              rel="noopener noreferrer"
             >
               {truncateEthAddress(invoice.freelancerAddress as `0x${string}`)}
-            </Link>
+            </a>
           </div>
           <hr className="my-8 border-b border-2 border-dashed" />
           <DateTime title="Invoice date:" date={invoice.proposal.createdAt} />
           <div className="flex items-center justify-between mt-4">
             <p className="text-lg font-medium text-gray-500">Client Address:</p>
-            <Link
-              href={`https://etherscan.io/address/${invoice.clientAddress}`}
+            <a
+              href={`https://arbiscan.io/address/${invoice.clientAddress}`}
               target="_blank"
               className="text-lg text-gray-500 underline"
+              rel="noopener noreferrer"
             >
               {truncateEthAddress(invoice.clientAddress as `0x${string}`)}
-            </Link>
+            </a>
           </div>
           <hr className="my-8 border-b border-2 border-dashed" />
           <Invoice

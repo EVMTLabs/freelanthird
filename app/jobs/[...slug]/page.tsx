@@ -8,6 +8,7 @@ import { MainLayout } from '@/components/Layouts/MainLayout';
 import { PublishedAt } from '@/components/PublishedAt/PublishedAt';
 import { EditorContentView } from '@/components/RichTextEditor/EditorContentView';
 import { getServerSession } from '@/session/getServerSession';
+import { slugify } from '@/utils/slugify';
 
 import { JobStats } from './components/JobStats';
 
@@ -60,6 +61,27 @@ export default async function JobPage({
 
   return (
     <MainLayout>
+      <script
+        type="application/ld+json"
+        suppressHydrationWarning
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            '@context': 'https://schema.org',
+            '@type': 'Offer',
+            name: job.title,
+            datePublished: job.createdAt,
+            dateModified: job.updatedAt,
+            description: job.description,
+            image: `https://freelanthird.com/og?title=${job.title}`,
+            url: `https://freelanthird.com/jobs/${slugify(job.title)}/${job.id}`,
+            price: `${job.minPrice} - ${job.maxPrice}`,
+            author: {
+              '@type': 'Person',
+              name: job.user.name,
+            },
+          }),
+        }}
+      />
       <div className="grid grid-cols-12 my-10">
         <div className="col-span-12 px-5 order-2 lg:col-span-9 lg:order-1">
           <h1 className="text-2xl font-extrabold">{job.title}</h1>
