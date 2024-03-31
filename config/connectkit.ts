@@ -2,14 +2,14 @@ import { getDefaultConfig } from 'connectkit';
 import { createConfig, fallback, http } from 'wagmi';
 import { arbitrum, arbitrumSepolia } from 'wagmi/chains';
 
-import { isDev } from './enviroment';
+import { isTestnet } from './enviroment';
 
 export const config = createConfig(
   getDefaultConfig({
     appName: 'Freelanthird',
-    chains: isDev ? [arbitrumSepolia] : [arbitrum],
+    chains: isTestnet ? [arbitrumSepolia] : [arbitrum],
     walletConnectProjectId: process.env.NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID!,
-    transports: isDev
+    transports: isTestnet
       ? {
           [arbitrumSepolia.id]: fallback([
             http(),
