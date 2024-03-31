@@ -62,6 +62,9 @@ export const findJobs = async () => {
   noStore();
   return prisma.job.findMany({
     take: 100,
+    where: {
+      visible: true,
+    },
     orderBy: {
       createdAt: 'desc',
     },
