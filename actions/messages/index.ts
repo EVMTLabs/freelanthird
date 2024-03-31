@@ -1,11 +1,13 @@
 'use server';
 
 import { MessageStatus } from '@prisma/client';
+import { unstable_noStore as noStore } from 'next/cache';
 
 import prisma from '@/prisma/db';
 import { getServerSession } from '@/session/getServerSession';
 
 export const findChatHistory = async (id: string) => {
+  noStore();
   try {
     const chatHistory = await prisma.chatRoom.findMany({
       take: 100,
@@ -69,6 +71,7 @@ export const findUserInChatRoom = async (
   chatRoomId: string,
   userId: string,
 ) => {
+  noStore();
   return prisma.chatRoom.findFirst({
     where: {
       id: chatRoomId,
@@ -82,6 +85,7 @@ export const findUserInChatRoom = async (
 };
 
 export const findChatMessages = async (chatRoomId: string) => {
+  noStore();
   return prisma.chatMessage.findMany({
     take: 100,
     where: {
@@ -103,6 +107,7 @@ export const findChatMessages = async (chatRoomId: string) => {
 };
 
 export const findFirstUnreadMessage = async (userId: string) => {
+  noStore();
   if (!userId) {
     return null;
   }

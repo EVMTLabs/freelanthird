@@ -1,6 +1,7 @@
 'use server';
 
 import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
+import { unstable_noStore as noStore } from 'next/cache';
 
 import { s3Client } from '@/config/aws';
 import prisma from '@/prisma/db';
@@ -38,6 +39,7 @@ export const createUser = async ({
 };
 
 export const findUserByAddress = async (address: string) => {
+  noStore();
   return prisma.user.findFirst({
     where: {
       wallets: {
@@ -50,6 +52,7 @@ export const findUserByAddress = async (address: string) => {
 };
 
 export const findUserByUsername = async (username: string) => {
+  noStore();
   return prisma.user.findFirst({
     where: {
       username: {
@@ -104,6 +107,7 @@ export const findUserByUsername = async (username: string) => {
 };
 
 export const checkIfUsernameExists = async (username: string) => {
+  noStore();
   const result = await prisma.user.findFirst({
     where: {
       username: {
@@ -292,6 +296,7 @@ export const updateUserSettings = async ({
 };
 
 export const findUsersMetadata = async () => {
+  noStore();
   return prisma.user.findMany({
     select: {
       username: true,

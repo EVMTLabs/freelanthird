@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { unstable_noStore as noStore } from 'next/cache';
 
 import prisma from '@/prisma/db';
 import { getServerSession } from '@/session/getServerSession';
@@ -58,6 +59,7 @@ export const findJobCategoriesWithSkills = async () => {
 };
 
 export const findJobs = async () => {
+  noStore();
   return prisma.job.findMany({
     take: 100,
     orderBy: {
@@ -77,6 +79,7 @@ export const findJobs = async () => {
 };
 
 export const findJobById = async (id: string) => {
+  noStore();
   return prisma.job.findFirst({
     where: {
       id,
@@ -123,6 +126,7 @@ export const findJobsMetadata = async () => {
 };
 
 export const findFullTimeJobs = async () => {
+  noStore();
   return prisma.fullTimeJobs.findMany({
     orderBy: {
       createdAt: 'desc',

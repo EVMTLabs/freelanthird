@@ -1,6 +1,7 @@
 'use server';
 
 import { revalidatePath } from 'next/cache';
+import { unstable_noStore as noStore } from 'next/cache';
 
 import prisma from '@/prisma/db';
 import { getServerSession } from '@/session/getServerSession';
@@ -72,6 +73,7 @@ export const createProposal = async ({
 };
 
 export const findReceivedProposals = async (address: string) => {
+  noStore();
   return prisma.proposal.findMany({
     where: {
       clientAddress: address,
@@ -99,6 +101,7 @@ export const findReceivedProposals = async (address: string) => {
 };
 
 export const findSentProposals = async (address: string) => {
+  noStore();
   return prisma.proposal.findMany({
     where: {
       freelancerAddress: address,
@@ -126,6 +129,7 @@ export const findSentProposals = async (address: string) => {
 };
 
 export const findProposalById = async (id: string) => {
+  noStore();
   return prisma.proposal.findUnique({
     where: {
       id,
@@ -143,6 +147,7 @@ export const findProposalById = async (id: string) => {
 };
 
 export const findInvoiceWithProposalByProposalId = async (id: string) => {
+  noStore();
   return prisma.invoice.findFirst({
     where: {
       proposalId: id,
@@ -179,6 +184,7 @@ export const findInvoiceWithProposalByProposalId = async (id: string) => {
 };
 
 export const findInvoiceByProposalId = async (id: string) => {
+  noStore();
   return prisma.invoice.findFirst({
     where: {
       proposalId: id,
