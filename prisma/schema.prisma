@@ -58,6 +58,19 @@ model Job {
   @@map("jobs")
 }
 
+model FullTimeJobs {
+  id          String   @id @default(uuid())
+  title       String
+  description String
+  companyName String
+  companyLogo String
+  link        String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("full_time_jobs")
+}
+
 model Category {
   id         String       @id @default(uuid())
   name       String       @unique
@@ -183,6 +196,7 @@ model Invoice {
   token             PaymentToken @relation(fields: [tokenId], references: [id])
   freelancerAddress String
   clientAddress     String
+  blockNumber       BigInt       @unique
   transactionId     Int          @unique
   transactionHash   String       @unique
   proposal          Proposal     @relation(fields: [proposalId], references: [id])

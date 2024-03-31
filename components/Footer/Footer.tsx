@@ -42,7 +42,7 @@ export const Footer = () => {
       <div className="flex space-x-1 w-full items-center justify-center md:w-fit">
         <Link
           className="btn btn-link text-neutral hover:text-primary"
-          href="https://discord.com"
+          href="https://discord.gg/fQageBbAA4"
           target="_blank"
           rel="noopener noreferrer"
         >

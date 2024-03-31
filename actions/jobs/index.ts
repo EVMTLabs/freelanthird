@@ -121,3 +121,20 @@ export const findJobsMetadata = async () => {
     },
   });
 };
+
+export const findFullTimeJobs = async () => {
+  return prisma.fullTimeJobs.findMany({
+    orderBy: {
+      createdAt: 'desc',
+    },
+    select: {
+      id: true,
+      title: true,
+      description: true,
+      companyLogo: true,
+      companyName: true,
+      link: true,
+      createdAt: true,
+    },
+  });
+};

@@ -1,4 +1,5 @@
 import Image from 'next/image';
+import Link from 'next/link';
 
 import { findJobCategories, findJobs } from '@/actions/jobs';
 import { MainLayout } from '@/components/Layouts/MainLayout';
@@ -16,8 +17,12 @@ export default async function HomePage() {
       <div className="flex gap-12 relative">
         <div>
           <div className="flex gap-6">
-            <button className="btn btn-sm">Freelance Projects</button>
-            <button className="btn btn-sm btn-ghost">Full-Time Jobs</button>
+            <Link href="/" className="btn btn-sm">
+              Freelance Projects
+            </Link>
+            <Link href="/jobs/full-time" className="btn btn-sm btn-ghost">
+              Full-Time Jobs
+            </Link>
           </div>
           <div className="flex gap-6 mt-6">
             <div className="flex flex-col max-w-xl">

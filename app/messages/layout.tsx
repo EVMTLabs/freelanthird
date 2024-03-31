@@ -32,7 +32,7 @@ export default async function RootLayout({
             alt="Empty chat"
           />
         </div>
-        <p className="my-5 text-xl font-medium max-w-sm text-center">
+        <p className="w-full mx-auto my-5 text-xl font-medium max-w-xs text-center">
           This functionality is not accessible on mobile devices. Please switch
           to a desktop device to access the messages page.
         </p>
