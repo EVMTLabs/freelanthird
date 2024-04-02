@@ -1,3 +1,5 @@
+import { formatUnits } from 'viem';
+
 import { Token, TOKEN_FEES } from '@/contracts';
 
 interface InvoiceProps {
@@ -5,6 +7,7 @@ interface InvoiceProps {
   usdAmount: number;
   tokenAmount: string;
   usdFactor: string;
+  decimals: number;
 }
 
 export const Invoice = ({
@@ -12,13 +15,15 @@ export const Invoice = ({
   usdAmount,
   tokenAmount,
   usdFactor,
+  decimals,
 }: InvoiceProps) => {
+  const formattedTokenAmount = formatUnits(BigInt(tokenAmount), decimals);
   return (
     <div className="grid grid-cols-2">
       <h3 className="text-lg font-medium mb-2">Subtotal</h3>
       <p className="text-lg font-medium text-end mb-2">
         {symbol === Token.FLT ? '' : '$'}
-        {tokenAmount} {symbol}
+        {formattedTokenAmount} {symbol}
       </p>
       <h3 className="text-lg font-medium mb-2">Fee</h3>
       <p className="text-lg font-medium text-end mb-2">
@@ -35,7 +40,7 @@ export const Invoice = ({
       <h3 className="text-2xl font-bold">Total amount</h3>
       <p className="text-2xl font-bold text-end">
         {symbol === Token.FLT ? '' : '$'}
-        {tokenAmount}
+        {formattedTokenAmount}
         {symbol}
       </p>
     </div>

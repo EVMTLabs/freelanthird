@@ -92,6 +92,7 @@ export default async function ProposalPage({
             usdAmount={invoice.usdAmount}
             tokenAmount={invoice.tokenAmount}
             usdFactor={invoice.usdFltFactor}
+            decimals={invoice.token.decimals}
           />
           <hr className="my-8 border-b border-2 border-dashed" />
 
