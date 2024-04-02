@@ -1,6 +1,5 @@
 import { Toaster } from 'react-hot-toast';
 import { ProposalStatus } from '@prisma/client';
-import { Flag } from 'lucide-react';
 import { redirect } from 'next/navigation';
 
 import { findInvoiceWithProposalByProposalId } from '@/actions/proposals';
@@ -8,7 +7,8 @@ import type { Token } from '@/contracts';
 import { getServerSession } from '@/session/getServerSession';
 import { truncateEthAddress } from '@/utils/truncateEthAddress';
 
-import { CloseProposalButton } from '../components/CloseProposalButton';
+import { CloseInvoiceButton } from '../components/CloseInvoiceButton';
+import { CreateDispute } from '../components/CreateDispute';
 import { DateTime } from '../components/DateTime';
 import { Invoice } from '../components/Invoice';
 import { ProposalFooter } from '../components/ProposalFooter';
@@ -47,9 +47,10 @@ export default async function ProposalPage({
           <div className="flex items-center justify-between mb-4">
             <h2 className="text-2xl font-bold">Payment confirmed</h2>
             <div className="tooltip tooltip-bottom" data-tip="Create dispute">
-              <button className="btn btn-square btn-sm btn-outline btn-error">
-                <Flag size={18} />
-              </button>
+              <CreateDispute
+                proposalId={params.slug}
+                disputeId={invoice.proposal.dispute?.shortId}
+              />
             </div>
           </div>
           <p className="text-lg text-gray-500">
@@ -94,10 +95,10 @@ export default async function ProposalPage({
           />
           <hr className="my-8 border-b border-2 border-dashed" />
 
-          <CloseProposalButton
+          <CloseInvoiceButton
             status={invoice.proposal.status}
             isClient={isClient}
-            invoiceId={invoice.transactionId}
+            invoiceId={invoice.id}
           />
         </div>
       </div>

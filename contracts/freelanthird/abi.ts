@@ -182,7 +182,7 @@ export const freelanthirdAbi = [
   },
   {
     inputs: [{ internalType: 'uint256', name: '_id', type: 'uint256' }],
-    name: 'closeProposal',
+    name: 'closeInvoice',
     outputs: [],
     stateMutability: 'nonpayable',
     type: 'function',

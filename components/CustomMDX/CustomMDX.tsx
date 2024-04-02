@@ -184,8 +184,6 @@ const components = {
 };
 
 export function CustomMDX(props: MDXRemoteProps) {
-  console.log('first');
-
   return (
     <MDXRemote
       {...props}

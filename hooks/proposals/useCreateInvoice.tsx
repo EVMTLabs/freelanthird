@@ -11,7 +11,6 @@ import {
   TOKEN_DECIMALS,
   tokenAddresses,
 } from '@/contracts';
-import { freelanthirdAbi } from '@/contracts/freelanthird/abi';
 import { usePayTokenStore } from '@/stores/usePayTokenStore';
 
 import { useAllowance } from './useAllowance';
@@ -38,6 +37,7 @@ export const useCreateInvoice = ({
     increaseAllowance,
     isWaitingAllowanceTransaction,
     isAllowanceError,
+    allowanceError,
   } = useAllowance({
     token,
     tokenAmount,
@@ -77,7 +77,20 @@ export const useCreateInvoice = ({
 
     writeContract({
       address: freelanthirdContractAddress,
-      abi: freelanthirdAbi,
+      abi: [
+        {
+          inputs: [
+            { internalType: 'address', name: '_freelance', type: 'address' },
+            { internalType: 'address', name: '_tokenAddress', type: 'address' },
+            { internalType: 'uint256', name: 'amount', type: 'uint256' },
+            { internalType: 'string', name: '_uuid', type: 'string' },
+          ],
+          name: 'createInvoice',
+          outputs: [],
+          stateMutability: 'nonpayable',
+          type: 'function',
+        },
+      ],
       functionName: 'createInvoice',
       args: [
         freelancerAddress,
@@ -99,7 +112,6 @@ export const useCreateInvoice = ({
 
   useEffect(() => {
     if (isPaymentConfirmed) {
-      router.refresh();
       router.replace(`/proposals/${proposalId}`);
     } else if (
       isPaymentError ||
@@ -108,7 +120,10 @@ export const useCreateInvoice = ({
     ) {
       setIsPaying(false);
       console.error(paymentError);
-      if (!paymentError?.message.includes('User rejected the request')) {
+      if (allowanceError) {
+        console.error(allowanceError);
+        toast.error('Failed to increase allowance');
+      } else if (!paymentError?.message.includes('User rejected the request')) {
         toast.error('Failed to create invoice');
       }
     }

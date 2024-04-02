@@ -1,5 +1,7 @@
 'use server';
 
+import { ProposalStatus } from '@prisma/client';
+import { customAlphabet } from 'nanoid';
 import { revalidatePath } from 'next/cache';
 import { unstable_noStore as noStore } from 'next/cache';
 
@@ -153,6 +155,7 @@ export const findInvoiceWithProposalByProposalId = async (id: string) => {
       proposalId: id,
     },
     select: {
+      id: true,
       transactionId: true,
       usdAmount: true,
       usdFltFactor: true,
@@ -170,6 +173,11 @@ export const findInvoiceWithProposalByProposalId = async (id: string) => {
               username: true,
               name: true,
               avatar: true,
+            },
+          },
+          dispute: {
+            select: {
+              shortId: true,
             },
           },
         },
@@ -200,4 +208,51 @@ export const findInvoiceByProposalId = async (id: string) => {
       },
     },
   });
+};
+
+export const createDispute = async ({
+  proposalId,
+  description,
+}: {
+  proposalId: string;
+  description: string;
+}) => {
+  const { userId } = await getServerSession();
+
+  if (!userId) {
+    throw new CustomError('User is not authenticated', 401);
+  }
+
+  const nanoid = customAlphabet('1234567890abcdef');
+  const shortId = nanoid(10);
+
+  try {
+    await prisma.dispute.create({
+      data: {
+        shortId,
+        description,
+        proposal: {
+          connect: { id: proposalId },
+        },
+      },
+    });
+
+    await prisma.proposal.update({
+      where: {
+        id: proposalId,
+      },
+      data: {
+        status: ProposalStatus.DISPUTED,
+      },
+    });
+
+    revalidatePath(`/proposals/${proposalId}`);
+  } catch (error: unknown) {
+    console.error('Error creating dispute', error);
+    throw new Error(
+      error instanceof CustomError
+        ? error.message
+        : 'An error occurred while creating dispute, try again later',
+    );
+  }
 };

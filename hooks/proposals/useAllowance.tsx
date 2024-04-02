@@ -52,6 +52,7 @@ export const useAllowance = ({
     isPending,
     writeContract,
     isError: isWriteError,
+    error: writeError,
   } = useWriteContract();
 
   const increaseAllowance = () => {
@@ -104,5 +105,6 @@ export const useAllowance = ({
     isAllowanceConfirmed: isConfirmed,
     refetchAllowance,
     isAllowanceError: isWriteError || isConfirmationError,
+    allowanceError: writeError,
   };
 };
