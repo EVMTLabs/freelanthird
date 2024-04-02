@@ -205,6 +205,7 @@ export const findInvoiceByProposalId = async (id: string) => {
       token: {
         select: {
           symbol: true,
+          decimals: true,
         },
       },
     },
