@@ -58,7 +58,7 @@ export default async function HomePage() {
         <div className="flex flex-col col-span-12 lg:col-span-8">
           <JobsList jobs={jobs} />
         </div>
-        <div className="col-start-10 col-span-3 hidden">
+        <div className="col-start-10 col-span-3 hidden lg:block">
           <div className="flex flex-col border p-4 rounded-lg">
             <h3 className="text-xl">Specialties</h3>
             <JobCategories categories={categories} />
