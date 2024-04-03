@@ -82,7 +82,7 @@ export default async function JobPage({
           }),
         }}
       />
-      <div className="grid grid-cols-12 my-10">
+      <div className="grid grid-cols-12 mt-4 mb-10">
         <div className="col-span-12 px-5 order-2 lg:col-span-9 lg:order-1">
           <h1 className="text-2xl font-extrabold">{job.title}</h1>
           <div className="flex gap-2 mt-2">
