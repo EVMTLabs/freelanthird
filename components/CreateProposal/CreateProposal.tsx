@@ -22,13 +22,7 @@ type ProposalFormValues = {
 };
 
 const schema = z.object({
-  title: z
-    .string()
-    .min(5, { message: 'Title is too short' })
-    .max(80)
-    .refine((value) => /^[a-zA-Z0-9 @.-]*$/.test(value), {
-      message: 'Only letters, numbers, and @.- are allowed',
-    }),
+  title: z.string().min(5, { message: 'Title is too short' }).max(80),
   description: z
     .string()
     .min(10, {
@@ -36,9 +30,6 @@ const schema = z.object({
     })
     .max(1500, {
       message: 'Description is too long',
-    })
-    .refine((value) => /^[a-zA-Z0-9 @.-]*$/.test(value), {
-      message: 'Only letters, numbers, and @.- are allowed',
     }),
   amount: z
     .number()
