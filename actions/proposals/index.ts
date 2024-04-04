@@ -80,6 +80,9 @@ export const findReceivedProposals = async (address: string) => {
     where: {
       clientAddress: address,
     },
+    orderBy: {
+      createdAt: 'desc',
+    },
     include: {
       job: {
         select: {
@@ -107,6 +110,9 @@ export const findSentProposals = async (address: string) => {
   return prisma.proposal.findMany({
     where: {
       freelancerAddress: address,
+    },
+    orderBy: {
+      createdAt: 'desc',
     },
     include: {
       job: {
