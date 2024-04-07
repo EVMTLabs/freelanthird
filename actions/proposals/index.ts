@@ -14,7 +14,7 @@ interface CreateProposalInput {
   description: string;
   amount: number;
   freelancerAddress: string;
-  clientAddress: string;
+  clientAddress?: string;
   jobId?: string;
 }
 
@@ -22,7 +22,6 @@ export const createProposal = async ({
   title,
   description,
   amount,
-  freelancerAddress,
   clientAddress,
   jobId,
 }: CreateProposalInput) => {
@@ -33,37 +32,41 @@ export const createProposal = async ({
   }
 
   try {
-    const lastproposal = await prisma.proposal.findFirst({
-      where: {
-        jobId,
+    if (jobId) {
+      const lastProposal = await prisma.proposal.findFirst({
+        where: {
+          AND: [{ jobId }, { freelancerAddress: address }],
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      if (lastProposal) {
+        throw new CustomError(
+          'You have already submitted a proposal for this job',
+          409,
+        );
+      }
+    }
+
+    const result = await prisma.proposal.create({
+      data: {
+        title,
+        description,
+        amount,
+        clientAddress,
         freelancerAddress: address,
+        ...(jobId && { job: { connect: { id: jobId } } }),
       },
       select: {
         id: true,
       },
     });
 
-    if (lastproposal) {
-      throw new CustomError(
-        'You have already submitted a proposal for this job',
-        409,
-      );
-    }
-
-    await prisma.proposal.create({
-      data: {
-        title,
-        description,
-        amount,
-        freelancerAddress,
-        clientAddress,
-        job: {
-          connect: { id: jobId },
-        },
-      },
-    });
-
     revalidatePath('/proposals/sent');
+
+    return result;
   } catch (error: unknown) {
     console.error('Error creating proposal', error);
     throw new Error(
@@ -74,11 +77,80 @@ export const createProposal = async ({
   }
 };
 
-export const findReceivedProposals = async (address: string) => {
+export const findReceivedProposals = async (
+  take: number = 10,
+  skip: number = 0,
+) => {
   noStore();
+
+  const { address } = await getServerSession();
+
+  if (!address) {
+    throw new CustomError('User is not authenticated', 401);
+  }
+
   return prisma.proposal.findMany({
     where: {
       clientAddress: address,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    take,
+    skip,
+    select: {
+      id: true,
+      freelancerAddress: true,
+      amount: true,
+      status: true,
+      createdAt: true,
+      job: {
+        select: {
+          id: true,
+          title: true,
+          user: {
+            select: {
+              username: true,
+            },
+          },
+        },
+      },
+      user: {
+        select: {
+          username: true,
+          avatar: true,
+        },
+      },
+    },
+  });
+};
+
+export const totalReceivedProposals = async () => {
+  noStore();
+  const { address } = await getServerSession();
+
+  if (!address) {
+    throw new CustomError('User is not authenticated', 401);
+  }
+
+  return prisma.proposal.count({
+    where: {
+      clientAddress: address,
+    },
+  });
+};
+
+export const findSentProposals = async () => {
+  noStore();
+  const { address } = await getServerSession();
+
+  if (!address) {
+    throw new CustomError('User is not authenticated', 401);
+  }
+
+  return prisma.proposal.findMany({
+    where: {
+      freelancerAddress: address,
     },
     orderBy: {
       createdAt: 'desc',
@@ -105,33 +177,17 @@ export const findReceivedProposals = async (address: string) => {
   });
 };
 
-export const findSentProposals = async (address: string) => {
+export const totalProposalsSent = async () => {
   noStore();
-  return prisma.proposal.findMany({
+  const { address } = await getServerSession();
+
+  if (!address) {
+    throw new CustomError('User is not authenticated', 401);
+  }
+
+  return prisma.proposal.count({
     where: {
       freelancerAddress: address,
-    },
-    orderBy: {
-      createdAt: 'desc',
-    },
-    include: {
-      job: {
-        select: {
-          id: true,
-          title: true,
-          user: {
-            select: {
-              username: true,
-            },
-          },
-        },
-      },
-      user: {
-        select: {
-          username: true,
-          avatar: true,
-        },
-      },
     },
   });
 };

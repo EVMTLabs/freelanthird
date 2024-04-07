@@ -17,7 +17,9 @@ export const Invoice = ({
   usdFactor,
   decimals,
 }: InvoiceProps) => {
-  const formattedTokenAmount = formatUnits(BigInt(tokenAmount), decimals);
+  const formattedUnits = formatUnits(BigInt(tokenAmount), decimals);
+  const formattedTokenAmount = parseFloat(formattedUnits).toFixed(6);
+
   return (
     <div className="grid grid-cols-2">
       <h3 className="text-lg font-medium mb-2">Subtotal</h3>

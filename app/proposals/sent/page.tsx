@@ -3,7 +3,7 @@ import Link from 'next/link';
 
 import { findSentProposals } from '@/actions/proposals';
 import { DefaultAvatar } from '@/components/Avatars/DefaultAvatar/DefaultAvatar';
-import { getServerSession } from '@/session/getServerSession';
+import { CreateProposal } from '@/components/CreateProposal/CreateProposal';
 import { truncateEthAddress } from '@/utils/truncateEthAddress';
 
 import { ProposalContainer } from '../components/ProposalContainer';
@@ -11,13 +11,11 @@ import { Status } from '../components/Status';
 import { TableDate } from '../components/TableDate';
 
 export default async function MyProposalsPage() {
-  const { address } = await getServerSession();
-  const proposals = await findSentProposals(address);
+  const proposals = await findSentProposals();
 
   return (
     <ProposalContainer>
-      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center w-full lg:my-10">
-        <h1 className="text-4xl font-medium mb-8 lg:mb-0">My Proposals</h1>
+      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center w-full lg:my-5">
         <div className="flex items-center mb-4">
           <Link href="/proposals" className="btn rounded-r-none w-32">
             <Inbox /> Received
@@ -29,6 +27,7 @@ export default async function MyProposalsPage() {
             <SendHorizonal /> Sent
           </Link>
         </div>
+        <CreateProposal btnClass="btn btn-outline" showIcon />
       </div>
       <div className="flex flex-col gap-5 p-10 border rounded-lg">
         {proposals.length === 0 ? (

@@ -102,7 +102,7 @@ export default async function JobPage({
             <p className="text-xl font-medium mb-4">
               ${job.minPrice} - ${job.maxPrice}
             </p>
-            <CreateProposal jobId={job.id} clientAddress={job.wallet.address} />
+            <CreateProposal jobId={job.id} />
           </div>
         </div>
         <div className="flex flex-col px-8 col-span-12 order-1 border-b pb-8 mb-8 lg:col-span-3 lg:order-2 lg:border-l lg:mb-0 lg:pb-0 lg:border-b-0">
@@ -126,10 +126,7 @@ export default async function JobPage({
               ${job.minPrice} - ${job.maxPrice}
             </p>
             {job.wallet.address !== address && (
-              <CreateProposal
-                jobId={job.id}
-                clientAddress={job.wallet.address}
-              />
+              <CreateProposal jobId={job.id} />
             )}
           </div>
         </div>

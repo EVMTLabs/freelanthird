@@ -54,7 +54,7 @@ export const DefaultAvatar = ({
             className="rounded-full"
           />
         ) : shortName ? (
-          <span className="uppercase">{shortName}</span>
+          <span className="uppercase font-semibold">{shortName}</span>
         ) : (
           <User />
         )}

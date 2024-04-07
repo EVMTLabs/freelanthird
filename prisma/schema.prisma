@@ -216,7 +216,7 @@ model Proposal {
   title             String
   description       String
   freelancerAddress String
-  clientAddress     String
+  clientAddress     String?
   amount            Int
   job               Job?           @relation(fields: [jobId], references: [id])
   user              User?          @relation(fields: [userId], references: [id])
