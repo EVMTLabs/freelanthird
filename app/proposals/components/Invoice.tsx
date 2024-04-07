@@ -1,21 +1,21 @@
 import { formatUnits } from 'viem';
 
-import { Token, TOKEN_FEES } from '@/contracts';
-
 interface InvoiceProps {
-  symbol: Token;
+  symbol: string;
   usdAmount: number;
   tokenAmount: string;
-  usdFactor: string;
+  tokenPrice: string;
   decimals: number;
+  fee: number;
 }
 
 export const Invoice = ({
   symbol,
   usdAmount,
   tokenAmount,
-  usdFactor,
+  tokenPrice,
   decimals,
+  fee,
 }: InvoiceProps) => {
   const formattedUnits = formatUnits(BigInt(tokenAmount), decimals);
   const formattedTokenAmount = parseFloat(formattedUnits).toFixed(6);
@@ -24,24 +24,22 @@ export const Invoice = ({
     <div className="grid grid-cols-2">
       <h3 className="text-lg font-medium mb-2">Subtotal</h3>
       <p className="text-lg font-medium text-end mb-2">
-        {symbol === Token.FLT ? '' : '$'}
+        {tokenPrice !== '1.00' ? '' : '$'}
         {formattedTokenAmount} {symbol}
       </p>
       <h3 className="text-lg font-medium mb-2">Fee</h3>
-      <p className="text-lg font-medium text-end mb-2">
-        {TOKEN_FEES[symbol as Token]}%
-      </p>
+      <p className="text-lg font-medium text-end mb-2">{fee}%</p>
       <h3 className="text-lg font-medium mb-4">Total USD</h3>
       <div>
         <p className="text-lg font-medium text-end">${usdAmount} </p>
         <p className="text-sm font-medium text-end mb-4">
-          (1FLT = ${usdFactor})
+          (1{symbol} = ${tokenPrice})
         </p>
       </div>
 
       <h3 className="text-2xl font-bold">Total amount</h3>
       <p className="text-2xl font-bold text-end">
-        {symbol === Token.FLT ? '' : '$'}
+        {tokenPrice !== '1.00' ? '' : '$'}
         {formattedTokenAmount}
         {symbol}
       </p>

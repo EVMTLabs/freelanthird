@@ -182,6 +182,8 @@ model PaymentToken {
   symbol    String
   decimals  Int
   chainId   Int
+  fee       Int       @default(0)
+  price     String    @default("1.00")
   available Boolean
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
@@ -194,7 +196,7 @@ model PaymentToken {
 model Invoice {
   id                Int          @id
   usdAmount         Int
-  usdFltFactor      String       @default("1.00")
+  tokenPrice        String       @default("1.00")
   tokenAmount       String
   token             PaymentToken @relation(fields: [tokenId], references: [id])
   freelancerAddress String

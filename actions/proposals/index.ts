@@ -220,7 +220,7 @@ export const findInvoiceWithProposalByProposalId = async (id: string) => {
       id: true,
       transactionId: true,
       usdAmount: true,
-      usdFltFactor: true,
+      tokenPrice: true,
       tokenAmount: true,
       freelancerAddress: true,
       clientAddress: true,
@@ -248,6 +248,7 @@ export const findInvoiceWithProposalByProposalId = async (id: string) => {
         select: {
           symbol: true,
           decimals: true,
+          fee: true,
         },
       },
     },
@@ -262,12 +263,13 @@ export const findInvoiceByProposalId = async (id: string) => {
     },
     select: {
       usdAmount: true,
-      usdFltFactor: true,
+      tokenPrice: true,
       tokenAmount: true,
       token: {
         select: {
           symbol: true,
           decimals: true,
+          fee: true,
         },
       },
     },

@@ -1,16 +1,12 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { parseUnits } from 'viem';
 import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
-import {
-  freelanthirdContractAddress,
-  TOKEN_DECIMALS,
-  tokenAddresses,
-} from '@/contracts';
+import { freelanthirdContractAddress } from '@/contracts';
 import { usePayTokenStore } from '@/stores/usePayTokenStore';
 
 import { useAllowance } from './useAllowance';
@@ -58,10 +54,6 @@ export const useCreateInvoice = ({
     }
   }, [allowance]);
 
-  const tokenAddress = useMemo(() => {
-    return tokenAddresses[token];
-  }, [token]);
-
   const handlePayment = useCallback(() => {
     if (
       isPendingPayment ||
@@ -94,8 +86,8 @@ export const useCreateInvoice = ({
       functionName: 'createInvoice',
       args: [
         freelancerAddress,
-        tokenAddress,
-        parseUnits(tokenAmount.toString(), TOKEN_DECIMALS[token]),
+        token.address,
+        parseUnits(tokenAmount.toString(), token.decimals),
         proposalId,
       ],
     });

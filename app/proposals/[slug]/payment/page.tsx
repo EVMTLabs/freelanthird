@@ -4,6 +4,7 @@ import { CheckCircle, Info } from 'lucide-react';
 import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
+import { findTokenList } from '@/actions/payments';
 import { findInvoiceByProposalId, findProposalById } from '@/actions/proposals';
 import { DefaultAvatar } from '@/components/Avatars/DefaultAvatar/DefaultAvatar';
 import type { Token } from '@/contracts';
@@ -33,6 +34,8 @@ export default async function ProposalPage({
   if (proposal.status !== ProposalStatus.PENDING) {
     invoice = await findInvoiceByProposalId(params.slug);
   }
+
+  const tokenList = await findTokenList();
 
   return (
     <>
@@ -106,20 +109,21 @@ export default async function ProposalPage({
                 <h3 className="text-lg font-medium text-gray-500 mb-4">
                   Payment method
                 </h3>
-                <PaymentTokens />
+                <PaymentTokens tokenList={tokenList} />
                 <hr className="my-8 border-b border-2 border-dashed" />
               </>
             )}
 
           {proposal.status === ProposalStatus.PENDING ? (
-            <AmountDetails paymentAmount={proposal.amount} />
+            <AmountDetails proposalAmount={proposal.amount} />
           ) : invoice ? (
             <Invoice
               symbol={invoice.token.symbol as Token}
               usdAmount={invoice.usdAmount}
               tokenAmount={invoice.tokenAmount}
-              usdFactor={invoice.usdFltFactor}
+              tokenPrice={invoice.tokenPrice}
               decimals={invoice.token.decimals}
+              fee={invoice.token.fee}
             />
           ) : null}
           <hr className="my-8 border-b border-2 border-dashed" />

@@ -9,12 +9,8 @@ import {
   useWriteContract,
 } from 'wagmi';
 
-import type { Token } from '@/contracts';
-import {
-  freelanthirdContractAddress,
-  TOKEN_DECIMALS,
-  tokenAddresses,
-} from '@/contracts';
+import { freelanthirdContractAddress } from '@/contracts';
+import type { Token } from '@/stores/usePayTokenStore';
 
 export const useAllowance = ({
   token,
@@ -37,7 +33,7 @@ export const useAllowance = ({
         type: 'function',
       },
     ],
-    address: tokenAddresses[token],
+    address: token.address as `0x${string}`,
     functionName: 'allowance',
     args: [address as `0x${string}`, freelanthirdContractAddress],
   });
@@ -57,7 +53,7 @@ export const useAllowance = ({
 
   const increaseAllowance = () => {
     return writeContract({
-      address: tokenAddresses[token],
+      address: token.address as `0x${string}`,
       abi: [
         {
           inputs: [
@@ -73,7 +69,7 @@ export const useAllowance = ({
       functionName: 'approve',
       args: [
         freelanthirdContractAddress,
-        parseUnits(tokenAmount.toString(), TOKEN_DECIMALS[token]),
+        parseUnits(tokenAmount.toString(), token.decimals),
       ],
     });
   };

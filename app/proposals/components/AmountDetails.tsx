@@ -2,92 +2,47 @@
 
 import { useEffect } from 'react';
 
-import { Token } from '@/contracts';
-import { getQuotePrice } from '@/contracts/freelanthird/getFltPrice';
 import { usePayTokenStore } from '@/stores/usePayTokenStore';
 
-export const AmountDetails = ({ paymentAmount }: { paymentAmount: number }) => {
-  const {
-    fee,
-    usdAmount,
-    tokenAmount,
-    feeAmount,
-    fltUSDFactor,
-    isLoading,
-    token,
-    setIsLoading,
-    setTokenAmount,
-    setFltUSDFactor,
-  } = usePayTokenStore();
+export const AmountDetails = ({
+  proposalAmount,
+}: {
+  proposalAmount: number;
+}) => {
+  const { token, usdAmount, tokenAmount, feeAmount } = usePayTokenStore();
 
   useEffect(() => {
-    const handleGetPrice = async () => {
-      if (token !== Token.FLT) return;
-      setIsLoading(true);
-      const fltUSDFactor = await getQuotePrice();
-      const tokenAmount = Number(
-        (paymentAmount / parseFloat(fltUSDFactor)).toFixed(6),
-      );
-      if (usdAmount === 0) {
-        usePayTokenStore.setState({
-          isLoading: false,
-          usdAmount: paymentAmount,
-          fltUSDFactor: parseFloat(fltUSDFactor),
-          tokenAmount,
-        });
-      } else {
-        setTokenAmount(tokenAmount);
-        setFltUSDFactor(parseFloat(fltUSDFactor));
-      }
-      setIsLoading(false);
-    };
-    // Call handleGetPrice immediately
-    handleGetPrice();
-
-    // Then set an interval to call it every 60 seconds
-    const intervalId = setInterval(handleGetPrice, 60000);
-
-    // Clear the interval when the component is unmounted
-    return () => clearInterval(intervalId);
-  }, [paymentAmount, token]);
+    usePayTokenStore.setState({
+      usdAmount: proposalAmount,
+    });
+  }, [proposalAmount]);
 
   return (
     <>
       <div className="flex items-center justify-between mb-2">
         <h3 className="text-lg font-medium">Subtotal</h3>
-        {isLoading ? (
-          <div className="skeleton w-24 h-4 rounded-md" />
-        ) : (
-          <p className="text-lg font-medium">
-            {token !== Token.FLT ? '$' : ''}
-            {tokenAmount} {token}
-          </p>
-        )}
+        <p className="text-lg font-medium">
+          {token.price === 1 ? '$' : ''}
+          {tokenAmount % 1 !== 0 ? tokenAmount.toFixed(6) : tokenAmount}{' '}
+          {token.symbol}
+        </p>
       </div>
       <div className="flex items-center justify-between mb-4">
         <h3 className="text-lg font-medium">Fee</h3>
-        {isLoading ? (
-          <div className="skeleton w-24 h-4 rounded-md" />
-        ) : (
-          <p className="text-lg font-medium">{fee}%</p>
-        )}
+        <p className="text-lg font-medium">{token.fee}%</p>
       </div>
       <div className="flex justify-between">
         <h3 className="text-2xl font-bold">Total amount</h3>
-        {isLoading ? (
-          <div className="skeleton w-24 h-8 rounded-md" />
-        ) : (
-          <div>
-            <p className="text-2xl font-bold text-end">
-              ${usdAmount + feeAmount} USD
+        <div>
+          <p className="text-2xl font-bold text-end">
+            ${usdAmount + feeAmount} USD
+          </p>
+          {token.price !== 1 && (
+            <p className="text-sm font-medium text-end">
+              (1{token.symbol} ≈ ${token.price.toFixed(2)})
             </p>
-            {token === Token.FLT && (
-              <p className="text-sm font-medium text-end">
-                (1FLT ≈ ${fltUSDFactor.toFixed(2)})
-              </p>
-            )}
-          </div>
-        )}
+          )}
+        </div>
       </div>
     </>
   );
