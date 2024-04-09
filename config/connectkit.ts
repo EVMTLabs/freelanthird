@@ -15,7 +15,7 @@ export const config = createConfig(
             [polygonMumbai.id]: fallback([
               http(),
               http(
-                `https://polygon-mumbai.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ARBITRUM_SEPOLIA_ID}`,
+                `https://polygon-mumbai.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_MUMBAI_ID}`,
               ),
             ]),
           }
@@ -23,10 +23,10 @@ export const config = createConfig(
             [polygon.id]: fallback([
               http(),
               http(
-                `https://polygon-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_ARBITRUM_ID}`,
+                `https://polygon-mainnet.g.alchemy.com/v2/${process.env.NEXT_PUBLIC_ALCHEMY_POLYGON_ID}`,
               ),
               http(
-                `https://polygon-mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ARBITRUM_ID}`,
+                `https://polygon-mainnet.infura.io/v3/${process.env.NEXT_PUBLIC_INFURA_ID}`,
               ),
             ]),
           },
