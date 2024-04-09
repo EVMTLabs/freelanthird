@@ -86,7 +86,7 @@ export const findReceivedProposals = async (
   const { address } = await getServerSession();
 
   if (!address) {
-    throw new CustomError('User is not authenticated', 401);
+    return [];
   }
 
   return prisma.proposal.findMany({
@@ -130,7 +130,7 @@ export const totalReceivedProposals = async () => {
   const { address } = await getServerSession();
 
   if (!address) {
-    throw new CustomError('User is not authenticated', 401);
+    return 0;
   }
 
   return prisma.proposal.count({
@@ -145,7 +145,7 @@ export const findSentProposals = async () => {
   const { address } = await getServerSession();
 
   if (!address) {
-    throw new CustomError('User is not authenticated', 401);
+    return [];
   }
 
   return prisma.proposal.findMany({
@@ -182,7 +182,7 @@ export const totalProposalsSent = async () => {
   const { address } = await getServerSession();
 
   if (!address) {
-    throw new CustomError('User is not authenticated', 401);
+    return 0;
   }
 
   return prisma.proposal.count({
