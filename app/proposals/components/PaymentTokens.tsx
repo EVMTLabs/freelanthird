@@ -12,9 +12,12 @@ export const PaymentTokens = ({ tokenList }: { tokenList: Token[] }) => {
   const { token, handlePayToken } = usePayTokenStore();
 
   useEffect(() => {
-    usePayTokenStore.setState({
-      tokens: tokenList,
-    });
+    if (tokenList.length > 0) {
+      usePayTokenStore.setState({
+        tokens: tokenList,
+        token: tokenList[0],
+      });
+    }
   }, [tokenList]);
 
   const handleInputChange = (event: ChangeEvent<HTMLInputElement>) => {

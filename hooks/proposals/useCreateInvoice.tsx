@@ -4,7 +4,11 @@ import { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { parseUnits } from 'viem';
-import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
+import {
+  useAccount,
+  useWaitForTransactionReceipt,
+  useWriteContract,
+} from 'wagmi';
 
 import { freelanthirdContractAddress } from '@/contracts';
 import { usePayTokenStore } from '@/stores/usePayTokenStore';
@@ -24,6 +28,7 @@ export const useCreateInvoice = ({
   const [isWaitingAllowance, setIsWaitingAllowance] = useState(false);
 
   const { token, tokenAmount } = usePayTokenStore();
+  const { address } = useAccount();
 
   const router = useRouter();
 
@@ -34,10 +39,7 @@ export const useCreateInvoice = ({
     isWaitingAllowanceTransaction,
     isAllowanceError,
     allowanceError,
-  } = useAllowance({
-    token,
-    tokenAmount,
-  });
+  } = useAllowance();
 
   const {
     data: paymentHash,
@@ -86,12 +88,12 @@ export const useCreateInvoice = ({
       functionName: 'createInvoice',
       args: [
         freelancerAddress,
-        token.address,
+        address,
         parseUnits(tokenAmount.toString(), token.decimals),
         proposalId,
       ],
     });
-  }, [hasAllowance, isPaying]);
+  }, [hasAllowance, isPaying, token.decimals, tokenAmount]);
 
   const {
     isLoading: isConfirmingPayment,

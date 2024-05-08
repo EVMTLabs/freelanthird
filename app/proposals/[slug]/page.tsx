@@ -33,7 +33,7 @@ export default async function ProposalPage({
       <div className="grid grid-cols-1 lg:grid-cols-2 lg:my-10 shadow-lg rounded-2xl">
         <div className="flex flex-col order-2 px-8 py-10 rounded-b-2xl border lg:order-1 lg:rounded-l-2xl lg:rounded-r-none">
           <h1 className="text-4xl font-bold mb-8">{invoice.proposal.title}</h1>
-          <p className="text-xl font-normal text-gray-500 scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-base-200 scrollbar-track-transparent overflow-y-auto min-h-[600px] max-h-[600px]">
+          <p className="text-xl font-normal pb-8 text-gray-500 scrollbar-thumb-rounded-full scrollbar-track-rounded-full scrollbar-thin scrollbar-thumb-base-200 scrollbar-track-transparent overflow-y-auto min-h-[600px] max-h-[600px]">
             {invoice.proposal.description}
           </p>
           <ProposalFooter
@@ -91,8 +91,9 @@ export default async function ProposalPage({
             symbol={invoice.token.symbol as Token}
             usdAmount={invoice.usdAmount}
             tokenAmount={invoice.tokenAmount}
-            usdFactor={invoice.usdFltFactor}
+            tokenPrice={invoice.tokenPrice}
             decimals={invoice.token.decimals}
+            fee={invoice.token.fee}
           />
           <hr className="my-8 border-b border-2 border-dashed" />
 

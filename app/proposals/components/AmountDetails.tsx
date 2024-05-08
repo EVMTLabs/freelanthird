@@ -13,6 +13,7 @@ export const AmountDetails = ({
 
   useEffect(() => {
     usePayTokenStore.setState({
+      tokenAmount: proposalAmount,
       usdAmount: proposalAmount,
     });
   }, [proposalAmount]);

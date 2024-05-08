@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { parseUnits } from 'viem';
 import {
   useAccount,
@@ -10,16 +10,12 @@ import {
 } from 'wagmi';
 
 import { freelanthirdContractAddress } from '@/contracts';
-import type { Token } from '@/stores/usePayTokenStore';
+import { usePayTokenStore } from '@/stores/usePayTokenStore';
 
-export const useAllowance = ({
-  token,
-  tokenAmount,
-}: {
-  token: Token;
-  tokenAmount: number;
-}) => {
+export const useAllowance = () => {
   const { address } = useAccount();
+  const { token, tokenAmount } = usePayTokenStore();
+
   const { data: allowance, refetch: refetchAllowance } = useReadContract({
     abi: [
       {
@@ -51,7 +47,8 @@ export const useAllowance = ({
     error: writeError,
   } = useWriteContract();
 
-  const increaseAllowance = () => {
+  const increaseAllowance = useCallback(() => {
+    console.log(token.decimals);
     return writeContract({
       address: token.address as `0x${string}`,
       abi: [
@@ -72,7 +69,7 @@ export const useAllowance = ({
         parseUnits(tokenAmount.toString(), token.decimals),
       ],
     });
-  };
+  }, [token.decimals, tokenAmount]);
 
   const {
     isLoading: isConfirming,
