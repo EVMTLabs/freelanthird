@@ -48,7 +48,6 @@ export const useAllowance = () => {
   } = useWriteContract();
 
   const increaseAllowance = useCallback(() => {
-    console.log(token.decimals);
     return writeContract({
       address: token.address as `0x${string}`,
       abi: [

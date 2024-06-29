@@ -4,11 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { parseUnits } from 'viem';
-import {
-  useAccount,
-  useWaitForTransactionReceipt,
-  useWriteContract,
-} from 'wagmi';
+import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
 import { freelanthirdContractAddress } from '@/contracts';
 import { usePayTokenStore } from '@/stores/usePayTokenStore';
@@ -28,7 +24,6 @@ export const useCreateInvoice = ({
   const [isWaitingAllowance, setIsWaitingAllowance] = useState(false);
 
   const { token, tokenAmount } = usePayTokenStore();
-  const { address } = useAccount();
 
   const router = useRouter();
 
@@ -73,22 +68,38 @@ export const useCreateInvoice = ({
       address: freelanthirdContractAddress,
       abi: [
         {
-          inputs: [
-            { internalType: 'address', name: '_freelance', type: 'address' },
-            { internalType: 'address', name: '_tokenAddress', type: 'address' },
-            { internalType: 'uint256', name: 'amount', type: 'uint256' },
-            { internalType: 'string', name: '_uuid', type: 'string' },
-          ],
+          type: 'function',
           name: 'createInvoice',
+          inputs: [
+            {
+              name: '_freelance',
+              type: 'address',
+              internalType: 'address',
+            },
+            {
+              name: '_tokenAddress',
+              type: 'address',
+              internalType: 'address',
+            },
+            {
+              name: 'amount',
+              type: 'uint256',
+              internalType: 'uint256',
+            },
+            {
+              name: '_uuid',
+              type: 'string',
+              internalType: 'string',
+            },
+          ],
           outputs: [],
           stateMutability: 'nonpayable',
-          type: 'function',
         },
       ],
       functionName: 'createInvoice',
       args: [
         freelancerAddress,
-        address,
+        token.address,
         parseUnits(tokenAmount.toString(), token.decimals),
         proposalId,
       ],

@@ -19,30 +19,32 @@ export const findTokenList = async () => {
     (token) => token.symbol === 'MATIC',
   );
 
-  const currentTime = new Date();
-  const diffInMinutes =
-    (currentTime.getTime() -
-      new Date(tokenList[maticTokenIndex].updatedAt).getTime()) /
-    (1000 * 60);
+  if (maticTokenIndex >= 0) {
+    const currentTime = new Date();
+    const updatedAt = new Date(tokenList[maticTokenIndex].updatedAt);
+    const diffInMilliseconds = currentTime.getTime() - updatedAt.getTime();
+    const diffInMinutes = diffInMilliseconds / (1000 * 60);
 
-  if (diffInMinutes >= 15) {
-    try {
-      const result = await fetch(
-        `https://rest.coinapi.io/v1/exchangerate/matic/usd?apikey=${process.env.COINAPI_KEY}`,
-      );
-      const data = await result.json();
-      tokenList[maticTokenIndex].price = data.rate;
+    if (diffInMinutes >= 15) {
+      try {
+        const result = await fetch(
+          `https://rest.coinapi.io/v1/exchangerate/matic/usd?apikey=${process.env.COINAPI_KEY}`,
+        );
+        const data = await result.json();
+        console.log(data);
+        tokenList[maticTokenIndex].price = data.rate;
 
-      await prisma.paymentToken.update({
-        where: {
-          id: tokenList[maticTokenIndex].id,
-        },
-        data: {
-          price: data.rate.toString(),
-        },
-      });
-    } catch (error) {
-      console.error(error);
+        await prisma.paymentToken.update({
+          where: {
+            id: tokenList[maticTokenIndex].id,
+          },
+          data: {
+            price: data.rate.toString(),
+          },
+        });
+      } catch (error) {
+        console.error(error);
+      }
     }
   }
 

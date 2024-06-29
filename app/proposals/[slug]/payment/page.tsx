@@ -1,21 +1,19 @@
 import { Toaster } from 'react-hot-toast';
 import { ProposalStatus } from '@prisma/client';
-import { CheckCircle, Info } from 'lucide-react';
-import Link from 'next/link';
 import { redirect } from 'next/navigation';
 
 import { findTokenList } from '@/actions/payments';
 import { findInvoiceByProposalId, findProposalById } from '@/actions/proposals';
 import type { Token } from '@/contracts';
-import { getServerSession } from '@/session/getServerSession';
 import { truncateEthAddress } from '@/utils/truncateEthAddress';
 
 import { AmountDetails } from '../../components/AmountDetails';
 import { DateTime } from '../../components/DateTime';
 import { Invoice } from '../../components/Invoice';
-import { PayButton } from '../../components/PayButton';
-import { PaymentTokens } from '../../components/PaymentTokens';
 import { ProposalFooter } from '../../components/ProposalFooter';
+
+import { PaymentButton } from './components/PaymentButton';
+import { PaymentMethods } from './components/PaymentMethods';
 
 export default async function ProposalPage({
   params,
@@ -28,8 +26,6 @@ export default async function ProposalPage({
   if (!proposal) {
     return redirect('/404');
   }
-
-  const { address } = await getServerSession();
 
   if (proposal.status !== ProposalStatus.PENDING) {
     invoice = await findInvoiceByProposalId(params.slug);
@@ -75,16 +71,16 @@ export default async function ProposalPage({
             </a>
           </div>
           <hr className="my-8 border-b border-2 border-dashed" />
-          {proposal.freelancerAddress !== address &&
-            proposal.status === ProposalStatus.PENDING && (
-              <>
-                <h3 className="text-lg font-medium text-gray-500 mb-4">
-                  Payment method
-                </h3>
-                <PaymentTokens tokenList={tokenList} />
-                <hr className="my-8 border-b border-2 border-dashed" />
-              </>
-            )}
+
+          <h3 className="text-lg font-medium text-gray-500 mb-4">
+            Payment method
+          </h3>
+          <PaymentMethods
+            tokenList={tokenList}
+            proposalStatus={proposal.status}
+            freelancerAddress={proposal.freelancerAddress}
+          />
+          <hr className="my-8 border-b border-2 border-dashed" />
 
           {proposal.status === ProposalStatus.PENDING ? (
             <AmountDetails proposalAmount={proposal.amount} />
@@ -100,33 +96,11 @@ export default async function ProposalPage({
           ) : null}
           <hr className="my-8 border-b border-2 border-dashed" />
 
-          {proposal.freelancerAddress === address ? (
-            <div className="alert alert-neutral">
-              <Info />
-              <p className="text-lg font-medium">
-                Your proposal has been submitted. When the client pays the
-                amount, you will be notified to start working on the proposal.
-              </p>
-            </div>
-          ) : proposal.status === ProposalStatus.PENDING ? (
-            <div className="flex w-full justify-end">
-              <PayButton
-                freelancerAddress={proposal.freelancerAddress}
-                proposalId={proposal.id}
-              />
-            </div>
-          ) : (
-            <div className="alert alert-neutral">
-              <CheckCircle />
-              <p className="text-lg font-medium">
-                Your payment has been confirmed and the freelancer has been
-                notified.{' '}
-                <Link className="underline" href={`/proposals/${proposal.id}`}>
-                  Check status
-                </Link>
-              </p>
-            </div>
-          )}
+          <PaymentButton
+            freelancerAddress={proposal.freelancerAddress}
+            proposalStatus={proposal.status}
+            proposalId={params.slug}
+          />
         </div>
       </div>
       <Toaster />
