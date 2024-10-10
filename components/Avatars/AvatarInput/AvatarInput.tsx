@@ -19,7 +19,7 @@ export const AvatarInput = ({
   isLoading,
   showDisclaimer = true,
 }: AvatarInputProps) => {
-  const [avatar, setAvatar] = useState(defaultAvatar);
+  const [avatar, setAvatar] = useState<string | null>(defaultAvatar);
   const [error, setError] = useState('');
 
   const handleAvatarChange: ChangeEventHandler<HTMLInputElement> = (event) => {
@@ -60,6 +60,7 @@ export const AvatarInput = ({
                   height={128}
                   width={128}
                   alt="user avatar"
+                  onError={() => setAvatar(null)}
                 />
               </>
             ) : (

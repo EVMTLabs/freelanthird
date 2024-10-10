@@ -1,5 +1,6 @@
 'use client';
 
+import { useState } from 'react';
 import clsx from 'clsx';
 import { UserRound } from 'lucide-react';
 import Image from 'next/image';
@@ -27,21 +28,24 @@ export const WalletAvatar = ({
 
   const imageUrl = ensImage || avatar;
 
+  const [avatarUrl, setAvatarUrl] = useState<string | undefined>(imageUrl);
+
   return (
-    <div className={clsx('flex avatar', !ensImage && 'placeholder')}>
+    <div className={clsx('flex avatar', !avatarUrl && 'placeholder')}>
       <div
         className={clsx(
-          avatar ? 'bg-transparent' : 'bg-base-200 text-gray-400',
+          avatarUrl ? 'bg-transparent' : 'bg-base-200 text-gray-400',
         )}
         style={{ width: size, height: size, borderRadius: radius }}
       >
-        {imageUrl ? (
+        {avatarUrl ? (
           <Image
             alt={ensName ?? address}
-            src={imageUrl}
+            src={avatarUrl}
             width={32}
             height={32}
             className="rounded-full"
+            onError={() => setAvatarUrl(undefined)}
           />
         ) : (
           <span>{username ? username[0] : <UserRound size={24} />}</span>
