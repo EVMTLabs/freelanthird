@@ -43,7 +43,7 @@ export const POST = async (req: Request) => {
       throw SiweErrorType.INVALID_NONCE;
     }
 
-    session.address = fields.address;
+    session.address = fields.address as `0x${string}`;
     session.chainId = fields.chainId;
 
     let user = await findUserByAddress(fields.address);

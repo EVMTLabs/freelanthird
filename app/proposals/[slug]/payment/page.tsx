@@ -97,7 +97,7 @@ export default async function ProposalPage({
           <hr className="my-8 border-b border-2 border-dashed" />
 
           <PaymentButton
-            freelancerAddress={proposal.freelancerAddress}
+            freelancerAddress={proposal.freelancerAddress as `0x${string}`}
             proposalStatus={proposal.status}
             proposalId={params.slug}
           />

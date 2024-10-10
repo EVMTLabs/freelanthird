@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect, useMemo } from 'react';
 import { MessageStatus } from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';

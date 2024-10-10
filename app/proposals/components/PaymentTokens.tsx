@@ -11,8 +11,6 @@ import { type Token, usePayTokenStore } from '@/stores/usePayTokenStore';
 export const PaymentTokens = ({ tokenList }: { tokenList: Token[] }) => {
   const { token, handlePayToken } = usePayTokenStore();
 
-  console.log(tokenList);
-
   useEffect(() => {
     if (tokenList.length > 0) {
       usePayTokenStore.setState({

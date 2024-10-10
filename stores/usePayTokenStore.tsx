@@ -2,7 +2,7 @@ import { create } from 'zustand';
 
 export type Token = {
   symbol: string;
-  address: string;
+  address: `0x${string}`;
   decimals: number;
   fee: number;
   price: number;
@@ -20,7 +20,7 @@ interface PayTokenState {
 export const usePayTokenStore = create<PayTokenState>((set) => ({
   token: {
     symbol: 'USDT',
-    address: '',
+    address: '0x',
     decimals: 6,
     fee: 3,
     price: 1,

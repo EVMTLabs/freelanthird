@@ -31,7 +31,6 @@ export const findTokenList = async () => {
           `https://rest.coinapi.io/v1/exchangerate/matic/usd?apikey=${process.env.COINAPI_KEY}`,
         );
         const data = await result.json();
-        console.log(data);
         tokenList[maticTokenIndex].price = data.rate;
 
         await prisma.paymentToken.update({
@@ -51,6 +50,7 @@ export const findTokenList = async () => {
   return tokenList
     .map((token) => ({
       ...token,
+      address: token.address as `0x${string}`,
       price: Number(token.price),
       fee: Number(token.fee),
     }))
