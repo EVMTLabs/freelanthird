@@ -12,7 +12,7 @@ import { usePayTokenStore } from '@/stores/usePayTokenStore';
 import { useAllowance } from './useAllowance';
 
 interface CreateInvoiceProps {
-  freelancerAddress: string;
+  freelancerAddress: `0x${string}`;
   proposalId: string;
 }
 

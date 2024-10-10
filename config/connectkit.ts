@@ -4,8 +4,6 @@ import { polygon, polygonAmoy } from 'wagmi/chains';
 
 import { isDev, isTestnet } from './enviroment';
 
-console.log(isDev, isTestnet);
-
 export const config = createConfig(
   getDefaultConfig({
     appName: 'Freelanthird',

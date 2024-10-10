@@ -20,32 +20,39 @@ export const ProfilePickInput = ({
 
     try {
       setIsLoading(true);
-      const { url, fields, imageUrl } = await createS3ProfileImage({
+      const { imageUrl } = await createS3ProfileImage({
         contentType,
       });
 
-      if (url && fields && imageUrl) {
-        const formData = new FormData();
+      if (imageUrl) {
+        // const formData = new FormData();
 
-        Object.entries(fields).forEach(([key, value]) => {
-          formData.append(key, value as string);
+        // Object.entries(fields).forEach(([key, value]) => {
+        //   formData.append(key, value as string);
+        // });
+
+        // formData.append('file', file);
+
+        // const uploadResponse = await fetch(url, {
+        //   method: 'POST',
+        //   body: formData,
+        // });
+
+        // if (uploadResponse.ok) {
+        //   setSession({
+        //     ...session,
+        //     avatar: imageUrl,
+        //   });
+
+        //   toast.success('Profile picture updated');
+        // }
+
+        setSession({
+          ...session,
+          avatar: imageUrl,
         });
 
-        formData.append('file', file);
-
-        const uploadResponse = await fetch(url, {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (uploadResponse.ok) {
-          setSession({
-            ...session,
-            avatar: imageUrl,
-          });
-
-          toast.success('Profile picture updated');
-        }
+        toast.success('Profile picture updated');
       }
     } catch (error) {
       console.error('Failed to upload image', error);

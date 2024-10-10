@@ -12,7 +12,7 @@ export const PaymentButton = ({
   proposalStatus,
   proposalId,
 }: {
-  freelancerAddress: string;
+  freelancerAddress: `0x${string}`;
   proposalStatus: ProposalStatus;
   proposalId: string;
 }) => {

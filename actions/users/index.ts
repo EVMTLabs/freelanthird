@@ -1,9 +1,8 @@
 'use server';
 
-import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
+//import { createPresignedPost } from '@aws-sdk/s3-presigned-post';
 import { unstable_noStore as noStore } from 'next/cache';
 
-import { s3Client } from '@/config/aws';
 import prisma from '@/prisma/db';
 import { getServerSession } from '@/session/getServerSession';
 
@@ -192,19 +191,19 @@ export const createS3ProfileImage = async ({
 
   const imagePath = `users/profiles/avatars/${imageId}`;
 
-  const { url, fields } = await createPresignedPost(s3Client, {
-    Bucket: process.env.AWS_BUCKET_NAME!,
-    Key: imagePath,
-    Conditions: [
-      ['content-length-range', 0, 1 * 1024 * 1024], // up to 1 MB
-      ['starts-with', '$Content-Type', contentType],
-    ],
-    Fields: {
-      acl: 'public-read',
-      'Content-Type': contentType,
-    },
-    Expires: 600, // Seconds before the presigned post expires. 3600 by default.
-  });
+  // const { url, fields } = await createPresignedPost(s3Client, {
+  //   Bucket: process.env.AWS_BUCKET_NAME!,
+  //   Key: imagePath,
+  //   Conditions: [
+  //     ['content-length-range', 0, 1 * 1024 * 1024], // up to 1 MB
+  //     ['starts-with', '$Content-Type', contentType],
+  //   ],
+  //   Fields: {
+  //     acl: 'public-read',
+  //     'Content-Type': contentType,
+  //   },
+  //   Expires: 600, // Seconds before the presigned post expires. 3600 by default.
+  // });
 
   const imageUrl =
     new URL(
@@ -216,8 +215,8 @@ export const createS3ProfileImage = async ({
   await session.save();
 
   return {
-    url,
-    fields,
+    //url,
+    //fields,
     imageUrl,
   };
 };

@@ -1,3 +1,5 @@
+'use client';
+
 import type { SIWEConfig } from 'connectkit';
 import type { AppRouterInstance } from 'next/dist/shared/lib/app-router-context.shared-runtime';
 import { SiweMessage } from 'siwe';

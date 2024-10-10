@@ -7,7 +7,7 @@ import { useMounted } from '@/hooks/common/useMounted';
 import { useCreateInvoice } from '@/hooks/proposals/useCreateInvoice';
 
 interface PayButtonProps {
-  freelancerAddress: string;
+  freelancerAddress: `0x${string}`;
   proposalId: string;
 }
 

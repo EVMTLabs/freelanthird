@@ -1,3 +1,5 @@
+'use client';
+
 import { useEffect } from 'react';
 import useWebSocket, { ReadyState } from 'react-use-websocket';
 

@@ -41,11 +41,11 @@ export const DefaultAvatar = ({
   const [avatarUrl, setAvatarUrl] = useState<string | null>(avatar);
 
   return (
-    <div className={clsx('flex avatar', !avatar && 'placeholder')}>
+    <div className={clsx('flex avatar', !avatarUrl && 'placeholder')}>
       <div
         className={clsx(
           'rounded-full',
-          avatar ? 'bg-transparent' : 'bg-base-200 text-gray-400',
+          avatarUrl ? 'bg-transparent' : 'bg-base-200 text-gray-400',
           sizeProps[size].className,
           showRing && 'ring ring-primary ring-offset-base-100 ring-offset-2',
         )}

@@ -3,7 +3,7 @@ import type { SessionOptions } from 'iron-session';
 export interface SessionData {
   nonce: string;
   isLoggedIn: boolean;
-  address: string;
+  address: `0x${string}`;
   chainId: number;
   role: string;
   userId: string;
@@ -19,7 +19,7 @@ export interface SessionData {
 export const defaultSession: SessionData = {
   isLoggedIn: false,
   nonce: '',
-  address: '',
+  address: '0x',
   chainId: 0,
   role: 'user',
   userId: '',
