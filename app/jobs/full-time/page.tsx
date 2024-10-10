@@ -62,16 +62,7 @@ export default async function FullTimeJobPage() {
           >
             <div className="card-body">
               <div className="card-title">
-                <figure className="relative h-14 w-14">
-                  <Image
-                    src={job.companyLogo}
-                    fill
-                    alt={job.companyName}
-                    unoptimized
-                    className="object-contain"
-                  />
-                </figure>
-                <div className="flex flex-col gap-1 ml-2">
+                <div className="flex flex-col gap-1">
                   <h2>{job.title}</h2>
                   <PublishedAt date={job.createdAt} />
                 </div>
