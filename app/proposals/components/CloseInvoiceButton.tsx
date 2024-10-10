@@ -7,17 +7,17 @@ import { useCloseProposal } from '@/hooks/proposals/useCloseProposal';
 
 import { InvoiceStatus } from './InvoiceStatus';
 
-interface CloseProposalButtonProps {
+interface CloseInvoiceButtonProps {
   invoiceId: number;
   status: ProposalStatus;
   isClient: boolean;
 }
 
-export const CloseProposalButton = ({
+export const CloseInvoiceButton = ({
   invoiceId,
   status,
   isClient,
-}: CloseProposalButtonProps) => {
+}: CloseInvoiceButtonProps) => {
   const { closeProposal, isSuccess, isTransacting } = useCloseProposal({
     invoiceId,
   });
@@ -34,10 +34,14 @@ export const CloseProposalButton = ({
     );
   }
 
+  if (!isClient) {
+    return <InvoiceStatus status={status} isClient={isClient} />;
+  }
+
   return (
     <>
       <InvoiceStatus status={status} isClient={isClient} />
-      {isClient && !isTransacting ? (
+      {!isTransacting ? (
         <button
           onClick={closeProposal}
           className="btn btn-success w-full text-base-100 text-xl"

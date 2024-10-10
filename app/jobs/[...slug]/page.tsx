@@ -82,7 +82,7 @@ export default async function JobPage({
           }),
         }}
       />
-      <div className="grid grid-cols-12 my-10">
+      <div className="grid grid-cols-12 mt-4 mb-10 min-h-screen">
         <div className="col-span-12 px-5 order-2 lg:col-span-9 lg:order-1">
           <h1 className="text-2xl font-extrabold">{job.title}</h1>
           <div className="flex gap-2 mt-2">
@@ -102,7 +102,7 @@ export default async function JobPage({
             <p className="text-xl font-medium mb-4">
               ${job.minPrice} - ${job.maxPrice}
             </p>
-            <CreateProposal jobId={job.id} clientAddress={job.wallet.address} />
+            <CreateProposal jobId={job.id} />
           </div>
         </div>
         <div className="flex flex-col px-8 col-span-12 order-1 border-b pb-8 mb-8 lg:col-span-3 lg:order-2 lg:border-l lg:mb-0 lg:pb-0 lg:border-b-0">
@@ -126,10 +126,7 @@ export default async function JobPage({
               ${job.minPrice} - ${job.maxPrice}
             </p>
             {job.wallet.address !== address && (
-              <CreateProposal
-                jobId={job.id}
-                clientAddress={job.wallet.address}
-              />
+              <CreateProposal jobId={job.id} />
             )}
           </div>
         </div>

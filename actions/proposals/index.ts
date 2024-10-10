@@ -1,5 +1,7 @@
 'use server';
 
+import { ProposalStatus } from '@prisma/client';
+import { customAlphabet } from 'nanoid';
 import { revalidatePath } from 'next/cache';
 import { unstable_noStore as noStore } from 'next/cache';
 
@@ -12,7 +14,7 @@ interface CreateProposalInput {
   description: string;
   amount: number;
   freelancerAddress: string;
-  clientAddress: string;
+  clientAddress?: string;
   jobId?: string;
 }
 
@@ -20,7 +22,6 @@ export const createProposal = async ({
   title,
   description,
   amount,
-  freelancerAddress,
   clientAddress,
   jobId,
 }: CreateProposalInput) => {
@@ -31,37 +32,41 @@ export const createProposal = async ({
   }
 
   try {
-    const lastproposal = await prisma.proposal.findFirst({
-      where: {
-        jobId,
+    if (jobId) {
+      const lastProposal = await prisma.proposal.findFirst({
+        where: {
+          AND: [{ jobId }, { freelancerAddress: address }],
+        },
+        select: {
+          id: true,
+        },
+      });
+
+      if (lastProposal) {
+        throw new CustomError(
+          'You have already submitted a proposal for this job',
+          409,
+        );
+      }
+    }
+
+    const result = await prisma.proposal.create({
+      data: {
+        title,
+        description,
+        amount,
+        clientAddress,
         freelancerAddress: address,
+        ...(jobId && { job: { connect: { id: jobId } } }),
       },
       select: {
         id: true,
       },
     });
 
-    if (lastproposal) {
-      throw new CustomError(
-        'You have already submitted a proposal for this job',
-        409,
-      );
-    }
-
-    await prisma.proposal.create({
-      data: {
-        title,
-        description,
-        amount,
-        freelancerAddress,
-        clientAddress,
-        job: {
-          connect: { id: jobId },
-        },
-      },
-    });
-
     revalidatePath('/proposals/sent');
+
+    return result;
   } catch (error: unknown) {
     console.error('Error creating proposal', error);
     throw new Error(
@@ -72,11 +77,83 @@ export const createProposal = async ({
   }
 };
 
-export const findReceivedProposals = async (address: string) => {
+export const findReceivedProposals = async (
+  take: number = 10,
+  skip: number = 0,
+) => {
   noStore();
+
+  const { address } = await getServerSession();
+
+  if (!address) {
+    return [];
+  }
+
   return prisma.proposal.findMany({
     where: {
       clientAddress: address,
+    },
+    orderBy: {
+      createdAt: 'desc',
+    },
+    take,
+    skip,
+    select: {
+      id: true,
+      freelancerAddress: true,
+      amount: true,
+      status: true,
+      createdAt: true,
+      job: {
+        select: {
+          id: true,
+          title: true,
+          user: {
+            select: {
+              username: true,
+            },
+          },
+        },
+      },
+      user: {
+        select: {
+          username: true,
+          avatar: true,
+        },
+      },
+    },
+  });
+};
+
+export const totalReceivedProposals = async () => {
+  noStore();
+  const { address } = await getServerSession();
+
+  if (!address) {
+    return 0;
+  }
+
+  return prisma.proposal.count({
+    where: {
+      clientAddress: address,
+    },
+  });
+};
+
+export const findSentProposals = async () => {
+  noStore();
+  const { address } = await getServerSession();
+
+  if (!address) {
+    return [];
+  }
+
+  return prisma.proposal.findMany({
+    where: {
+      freelancerAddress: address,
+    },
+    orderBy: {
+      createdAt: 'desc',
     },
     include: {
       job: {
@@ -100,30 +177,17 @@ export const findReceivedProposals = async (address: string) => {
   });
 };
 
-export const findSentProposals = async (address: string) => {
+export const totalProposalsSent = async () => {
   noStore();
-  return prisma.proposal.findMany({
+  const { address } = await getServerSession();
+
+  if (!address) {
+    return 0;
+  }
+
+  return prisma.proposal.count({
     where: {
       freelancerAddress: address,
-    },
-    include: {
-      job: {
-        select: {
-          id: true,
-          title: true,
-          user: {
-            select: {
-              username: true,
-            },
-          },
-        },
-      },
-      user: {
-        select: {
-          username: true,
-          avatar: true,
-        },
-      },
     },
   });
 };
@@ -153,9 +217,10 @@ export const findInvoiceWithProposalByProposalId = async (id: string) => {
       proposalId: id,
     },
     select: {
+      id: true,
       transactionId: true,
       usdAmount: true,
-      usdFltFactor: true,
+      tokenPrice: true,
       tokenAmount: true,
       freelancerAddress: true,
       clientAddress: true,
@@ -172,11 +237,18 @@ export const findInvoiceWithProposalByProposalId = async (id: string) => {
               avatar: true,
             },
           },
+          dispute: {
+            select: {
+              shortId: true,
+            },
+          },
         },
       },
       token: {
         select: {
           symbol: true,
+          decimals: true,
+          fee: true,
         },
       },
     },
@@ -191,13 +263,62 @@ export const findInvoiceByProposalId = async (id: string) => {
     },
     select: {
       usdAmount: true,
-      usdFltFactor: true,
+      tokenPrice: true,
       tokenAmount: true,
       token: {
         select: {
           symbol: true,
+          decimals: true,
+          fee: true,
         },
       },
     },
   });
+};
+
+export const createDispute = async ({
+  proposalId,
+  description,
+}: {
+  proposalId: string;
+  description: string;
+}) => {
+  const { userId } = await getServerSession();
+
+  if (!userId) {
+    throw new CustomError('User is not authenticated', 401);
+  }
+
+  const nanoid = customAlphabet('1234567890abcdef');
+  const shortId = nanoid(10);
+
+  try {
+    await prisma.dispute.create({
+      data: {
+        shortId,
+        description,
+        proposal: {
+          connect: { id: proposalId },
+        },
+      },
+    });
+
+    await prisma.proposal.update({
+      where: {
+        id: proposalId,
+      },
+      data: {
+        status: ProposalStatus.DISPUTED,
+      },
+    });
+
+    revalidatePath(`/proposals/${proposalId}`);
+  } catch (error: unknown) {
+    console.error('Error creating dispute', error);
+    throw new Error(
+      error instanceof CustomError
+        ? error.message
+        : 'An error occurred while creating dispute, try again later',
+    );
+  }
 };

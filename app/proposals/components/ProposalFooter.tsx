@@ -3,6 +3,8 @@ import Link from 'next/link';
 import { DefaultAvatar } from '@/components/Avatars/DefaultAvatar/DefaultAvatar';
 import { truncateEthAddress } from '@/utils/truncateEthAddress';
 
+import { HowItWorksModal } from './HowItWorksModal';
+
 interface ProposalFooterProps {
   username: string;
   avatar: string;
@@ -17,8 +19,8 @@ export const ProposalFooter = ({
   freelancerAddress,
 }: ProposalFooterProps) => {
   return (
-    <div className="flex items-end h-full">
-      <div className="flex items-center mt-8">
+    <div className="flex items-end justify-between h-full">
+      <div className="flex items-center">
         <DefaultAvatar avatar={avatar} username={username} />
         <div className="ml-2">
           {username ? (
@@ -42,6 +44,7 @@ export const ProposalFooter = ({
           )}
         </div>
       </div>
+      <HowItWorksModal />
     </div>
   );
 };

@@ -1,54 +1,39 @@
 import { create } from 'zustand';
 
-import { Token, TOKEN_FEES } from '@/contracts';
+export type Token = {
+  symbol: string;
+  address: string;
+  decimals: number;
+  fee: number;
+  price: number;
+};
 
 interface PayTokenState {
-  isLoading: boolean;
   token: Token;
-  fee: number;
+  tokens: Token[];
   usdAmount: number;
   tokenAmount: number;
-  fltUSDFactor: number;
   feeAmount: number;
   handlePayToken: (token: Token) => void;
-  setTokenAmount: (tokenAmount: number) => void;
-  setFltUSDFactor: (fltUSDFactor: number) => void;
-  setIsLoading: (isLoading: boolean) => void;
 }
 
 export const usePayTokenStore = create<PayTokenState>((set) => ({
-  isLoading: true,
-  token: Token.FLT,
-  fee: 0,
+  token: {
+    symbol: 'USDT',
+    address: '',
+    decimals: 6,
+    fee: 3,
+    price: 1,
+  },
+  tokens: [],
   usdAmount: 0,
   tokenAmount: 0,
-  fltUSDFactor: 0,
   feeAmount: 0,
   handlePayToken: (token: Token) => {
-    const tokenFee = TOKEN_FEES[token];
-    set(({ usdAmount, fltUSDFactor }) => ({
+    set(({ usdAmount }) => ({
       token: token,
-      fee: tokenFee,
-      feeAmount: usdAmount * (tokenFee / 100),
-      tokenAmount:
-        token === Token.FLT
-          ? Number((usdAmount / fltUSDFactor).toFixed(6))
-          : usdAmount / 1,
-    }));
-  },
-  setTokenAmount: (tokenAmount: number) => {
-    set(() => ({
-      tokenAmount,
-    }));
-  },
-  setFltUSDFactor: (fltUSDFactor: number) => {
-    set(() => ({
-      fltUSDFactor,
-    }));
-  },
-  setIsLoading: (isLoading: boolean) => {
-    set(() => ({
-      isLoading,
+      feeAmount: usdAmount * (token.fee / 100),
+      tokenAmount: usdAmount / token.price,
     }));
   },
 }));

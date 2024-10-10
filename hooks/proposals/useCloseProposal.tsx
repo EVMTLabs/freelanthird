@@ -29,13 +29,13 @@ export const useCloseProposal = ({ invoiceId }: { invoiceId: number }) => {
           inputs: [
             { internalType: 'uint256', name: 'proposalId', type: 'uint256' },
           ],
-          name: 'closeProposal',
+          name: 'closeInvoice',
           outputs: [],
           stateMutability: 'nonpayable',
           type: 'function',
         },
       ],
-      functionName: 'closeProposal',
+      functionName: 'closeInvoice',
       args: [BigInt(invoiceId)],
     });
   }, [invoiceId]);

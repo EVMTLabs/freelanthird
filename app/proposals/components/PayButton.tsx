@@ -1,10 +1,10 @@
 'use client';
 
 import { useModal } from 'connectkit';
+import { useAccount } from 'wagmi';
 
+import { useMounted } from '@/hooks/common/useMounted';
 import { useCreateInvoice } from '@/hooks/proposals/useCreateInvoice';
-import { usePayTokenStore } from '@/stores/usePayTokenStore';
-import { useSessionStore } from '@/stores/useSessionStore';
 
 interface PayButtonProps {
   freelancerAddress: string;
@@ -21,18 +21,23 @@ export const PayButton = ({
       proposalId,
     });
 
-  const { isLoading: isLoadingPayToken } = usePayTokenStore();
-
-  const { session, isLoading } = useSessionStore();
   const { setOpen } = useModal();
+  const { isConnected } = useAccount();
 
-  if (!isLoading && (!session || !session.isLoggedIn)) {
+  const mounted = useMounted();
+
+  const handleConnect = () => {
+    setOpen(true);
+  };
+
+  if (!isConnected || !mounted) {
     return (
       <button
-        onClick={() => setOpen(true)}
+        onClick={handleConnect}
         className="btn btn-primary w-full font-extrabold text-xl"
+        disabled={!mounted}
       >
-        Sign in to pay
+        Connect & Pay
       </button>
     );
   }
@@ -50,7 +55,7 @@ export const PayButton = ({
     <button
       onClick={handlePayment}
       className="btn btn-primary w-full font-extrabold text-xl"
-      disabled={isLoading || isLoadingPayToken || isPaymentConfirmed}
+      disabled={isPaymentConfirmed}
     >
       Pay now
     </button>

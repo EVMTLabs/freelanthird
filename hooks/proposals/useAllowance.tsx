@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { parseUnits } from 'viem';
 import {
   useAccount,
@@ -9,21 +9,13 @@ import {
   useWriteContract,
 } from 'wagmi';
 
-import type { Token } from '@/contracts';
-import {
-  freelanthirdContractAddress,
-  TOKEN_DECIMALS,
-  tokenAddresses,
-} from '@/contracts';
+import { freelanthirdContractAddress } from '@/contracts';
+import { usePayTokenStore } from '@/stores/usePayTokenStore';
 
-export const useAllowance = ({
-  token,
-  tokenAmount,
-}: {
-  token: Token;
-  tokenAmount: number;
-}) => {
+export const useAllowance = () => {
   const { address } = useAccount();
+  const { token, tokenAmount } = usePayTokenStore();
+
   const { data: allowance, refetch: refetchAllowance } = useReadContract({
     abi: [
       {
@@ -37,7 +29,7 @@ export const useAllowance = ({
         type: 'function',
       },
     ],
-    address: tokenAddresses[token],
+    address: token.address as `0x${string}`,
     functionName: 'allowance',
     args: [address as `0x${string}`, freelanthirdContractAddress],
   });
@@ -52,11 +44,12 @@ export const useAllowance = ({
     isPending,
     writeContract,
     isError: isWriteError,
+    error: writeError,
   } = useWriteContract();
 
-  const increaseAllowance = () => {
+  const increaseAllowance = useCallback(() => {
     return writeContract({
-      address: tokenAddresses[token],
+      address: token.address as `0x${string}`,
       abi: [
         {
           inputs: [
@@ -72,10 +65,10 @@ export const useAllowance = ({
       functionName: 'approve',
       args: [
         freelanthirdContractAddress,
-        parseUnits(tokenAmount.toString(), TOKEN_DECIMALS[token]),
+        parseUnits(tokenAmount.toString(), token.decimals),
       ],
     });
-  };
+  }, [token.decimals, tokenAmount]);
 
   const {
     isLoading: isConfirming,
@@ -104,5 +97,6 @@ export const useAllowance = ({
     isAllowanceConfirmed: isConfirmed,
     refetchAllowance,
     isAllowanceError: isWriteError || isConfirmationError,
+    allowanceError: writeError,
   };
 };

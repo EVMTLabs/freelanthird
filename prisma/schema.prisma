@@ -180,24 +180,29 @@ model PaymentToken {
   id        String    @id @default(uuid())
   address   String
   symbol    String
+  decimals  Int
   chainId   Int
+  fee       Int       @default(0)
+  price     String    @default("1.00")
+  available Boolean
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
   Invoice   Invoice[]
 
+  @@unique(fields: [address, chainId], name: "addressByChain")
   @@map("payment_tokens")
 }
 
 model Invoice {
-  id                Int          @id @default(autoincrement())
+  id                Int          @id
   usdAmount         Int
-  usdFltFactor      String       @default("1.00")
+  tokenPrice        String       @default("1.00")
   tokenAmount       String
   token             PaymentToken @relation(fields: [tokenId], references: [id])
   freelancerAddress String
   clientAddress     String
-  blockNumber       BigInt       @unique
-  transactionId     Int          @unique
+  blockNumber       BigInt
+  transactionId     Int
   transactionHash   String       @unique
   proposal          Proposal     @relation(fields: [proposalId], references: [id])
   createdAt         DateTime     @default(now())
@@ -213,7 +218,7 @@ model Proposal {
   title             String
   description       String
   freelancerAddress String
-  clientAddress     String
+  clientAddress     String?
   amount            Int
   job               Job?           @relation(fields: [jobId], references: [id])
   user              User?          @relation(fields: [userId], references: [id])
@@ -223,6 +228,33 @@ model Proposal {
   Invoice           Invoice[]
   jobId             String?
   userId            String?
+  dispute           Dispute?
 
   @@map("proposals")
+}
+
+model Contract {
+  id             String   @id @unique
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+  address        String   @db.VarChar(255)
+  chainName      String   @db.VarChar(32)
+  chainId        Int
+  minedBlock     Int
+  lastBlockEvent Int
+
+  @@unique(fields: [address, chainId], name: "addressByChain")
+  @@map("contracts")
+}
+
+model Dispute {
+  id          String   @id @default(uuid())
+  shortId     String   @unique
+  description String?
+  proposal    Proposal @relation(fields: [proposalId], references: [id])
+  proposalId  String   @unique
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("disputes")
 }

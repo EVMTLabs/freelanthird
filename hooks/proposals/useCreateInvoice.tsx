@@ -1,17 +1,12 @@
 'use client';
 
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { useRouter } from 'next/navigation';
 import { parseUnits } from 'viem';
 import { useWaitForTransactionReceipt, useWriteContract } from 'wagmi';
 
-import {
-  freelanthirdContractAddress,
-  TOKEN_DECIMALS,
-  tokenAddresses,
-} from '@/contracts';
-import { freelanthirdAbi } from '@/contracts/freelanthird/abi';
+import { freelanthirdContractAddress } from '@/contracts';
 import { usePayTokenStore } from '@/stores/usePayTokenStore';
 
 import { useAllowance } from './useAllowance';
@@ -38,10 +33,8 @@ export const useCreateInvoice = ({
     increaseAllowance,
     isWaitingAllowanceTransaction,
     isAllowanceError,
-  } = useAllowance({
-    token,
-    tokenAmount,
-  });
+    allowanceError,
+  } = useAllowance();
 
   const {
     data: paymentHash,
@@ -58,10 +51,6 @@ export const useCreateInvoice = ({
     }
   }, [allowance]);
 
-  const tokenAddress = useMemo(() => {
-    return tokenAddresses[token];
-  }, [token]);
-
   const handlePayment = useCallback(() => {
     if (
       isPendingPayment ||
@@ -77,16 +66,45 @@ export const useCreateInvoice = ({
 
     writeContract({
       address: freelanthirdContractAddress,
-      abi: freelanthirdAbi,
+      abi: [
+        {
+          type: 'function',
+          name: 'createInvoice',
+          inputs: [
+            {
+              name: '_freelance',
+              type: 'address',
+              internalType: 'address',
+            },
+            {
+              name: '_tokenAddress',
+              type: 'address',
+              internalType: 'address',
+            },
+            {
+              name: 'amount',
+              type: 'uint256',
+              internalType: 'uint256',
+            },
+            {
+              name: '_uuid',
+              type: 'string',
+              internalType: 'string',
+            },
+          ],
+          outputs: [],
+          stateMutability: 'nonpayable',
+        },
+      ],
       functionName: 'createInvoice',
       args: [
         freelancerAddress,
-        tokenAddress,
-        parseUnits(tokenAmount.toString(), TOKEN_DECIMALS[token]),
+        token.address,
+        parseUnits(tokenAmount.toString(), token.decimals),
         proposalId,
       ],
     });
-  }, [hasAllowance, isPaying]);
+  }, [hasAllowance, isPaying, token.decimals, tokenAmount]);
 
   const {
     isLoading: isConfirmingPayment,
@@ -99,7 +117,6 @@ export const useCreateInvoice = ({
 
   useEffect(() => {
     if (isPaymentConfirmed) {
-      router.refresh();
       router.replace(`/proposals/${proposalId}`);
     } else if (
       isPaymentError ||
@@ -108,7 +125,10 @@ export const useCreateInvoice = ({
     ) {
       setIsPaying(false);
       console.error(paymentError);
-      if (!paymentError?.message.includes('User rejected the request')) {
+      if (allowanceError) {
+        console.error(allowanceError);
+        toast.error('Failed to increase allowance');
+      } else if (!paymentError?.message.includes('User rejected the request')) {
         toast.error('Failed to create invoice');
       }
     }

@@ -86,6 +86,7 @@ export const findJobById = async (id: string) => {
   return prisma.job.findFirst({
     where: {
       id,
+      visible: true,
     },
     include: {
       skills: {
@@ -112,6 +113,9 @@ export const findJobById = async (id: string) => {
 
 export const findJobsMetadata = async () => {
   return prisma.job.findMany({
+    where: {
+      visible: true,
+    },
     orderBy: {
       createdAt: 'desc',
     },

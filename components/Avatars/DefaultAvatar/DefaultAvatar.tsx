@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import clsx from 'clsx';
 import { User } from 'lucide-react';
 import Image from 'next/image';
@@ -35,6 +36,8 @@ export const DefaultAvatar = ({
     },
   };
 
+  const [avatarUrl, setAvatarUrl] = useState<string | null>(avatar);
+
   return (
     <div className={clsx('flex avatar', !avatar && 'placeholder')}>
       <div
@@ -45,16 +48,17 @@ export const DefaultAvatar = ({
           showRing && 'ring ring-primary ring-offset-base-100 ring-offset-2',
         )}
       >
-        {avatar ? (
+        {avatarUrl ? (
           <Image
             alt={username ?? 'user avatar'}
-            src={avatar}
+            src={avatarUrl}
+            onError={() => setAvatarUrl(null)}
             width={sizeProps[size].width}
             height={sizeProps[size].height}
             className="rounded-full"
           />
         ) : shortName ? (
-          <span className="uppercase">{shortName}</span>
+          <span className="uppercase font-semibold">{shortName}</span>
         ) : (
           <User />
         )}

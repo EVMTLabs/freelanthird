@@ -79,7 +79,7 @@ export const NewUserFormProvider = ({
         ...newUserValues,
       });
       setSession(newSession);
-      router.replace('/');
+      router.replace(newUserValues.isFreelancer ? '/profile' : '/');
     } catch (error) {
       console.error('Error creating job', error);
     } finally {

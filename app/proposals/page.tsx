@@ -1,27 +1,24 @@
-import { ProposalStatus } from '@prisma/client';
-import { ChevronRight, Inbox, SendHorizonal } from 'lucide-react';
+import { Inbox, SendHorizonal } from 'lucide-react';
 import Link from 'next/link';
 
-import { findReceivedProposals } from '@/actions/proposals';
-import { DefaultAvatar } from '@/components/Avatars/DefaultAvatar/DefaultAvatar';
-import { getServerSession } from '@/session/getServerSession';
-import { truncateEthAddress } from '@/utils/truncateEthAddress';
+import {
+  findReceivedProposals,
+  totalReceivedProposals,
+} from '@/actions/proposals';
+import { CreateProposal } from '@/components/CreateProposal/CreateProposal';
 
 import { ProposalContainer } from './components/ProposalContainer';
-import { Status } from './components/Status';
-import { TableDate } from './components/TableDate';
+import { ProposalsTable } from './components/ProposalsTable';
 
 export const revalidate = 0;
 
 export default async function MyProposalsPage() {
-  const { address } = await getServerSession();
-
-  const proposals = await findReceivedProposals(address);
+  const proposals = await findReceivedProposals();
+  const proposalCount = await totalReceivedProposals();
 
   return (
     <ProposalContainer>
-      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center w-full lg:my-10">
-        <h1 className="text-4xl font-medium mb-8 lg:mb-0">My Proposals</h1>
+      <div className="flex flex-col lg:flex-row lg:justify-between lg:items-center w-full lg:my-5">
         <div className="flex items-center mb-4">
           <Link
             href="/proposals"
@@ -33,69 +30,16 @@ export default async function MyProposalsPage() {
             <SendHorizonal /> Sent
           </Link>
         </div>
+        <CreateProposal btnClass="btn btn-outline" showIcon />
       </div>
       <div className="flex flex-col gap-5 p-10 border rounded-lg">
         {proposals.length === 0 ? (
           <div className="text-center text-gray-500">No proposals found</div>
         ) : (
-          <div className="overflow-x-auto">
-            <table className="table">
-              <thead>
-                <tr>
-                  <th className="text-lg font-normal text-gray-400">Sender</th>
-                  <th className="text-lg font-normal text-gray-400">Date</th>
-                  <th className="text-lg font-normal text-gray-400">Status</th>
-                  <th className="text-lg font-normal text-gray-400">Amount</th>
-                  <th className="text-lg font-normal text-gray-400"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {proposals.map((proposal) => (
-                  <tr key={proposal.id}>
-                    <td>
-                      <div className="flex items-center gap-4">
-                        <DefaultAvatar
-                          avatar={proposal.user?.avatar || ''}
-                          username={proposal.user?.username || ''}
-                        />
-                        <div>
-                          {proposal.user?.username ? (
-                            <Link
-                              href={`/users/${proposal.user.username}`}
-                              className="text-lg font-medium"
-                            >
-                              {proposal.user.username}
-                            </Link>
-                          ) : (
-                            <p className="text-lg font-medium">
-                              {truncateEthAddress(
-                                proposal.freelancerAddress as `0x${string}`,
-                              )}
-                            </p>
-                          )}
-                        </div>
-                      </div>
-                    </td>
-                    <td className="text-lg font-medium">
-                      <TableDate date={proposal.createdAt} />
-                    </td>
-                    <td>
-                      <Status status={proposal.status} />
-                    </td>
-                    <td className="text-lg font-medium">${proposal.amount}</td>
-                    <td>
-                      <Link
-                        href={`/proposals/${proposal.id}${proposal.status === ProposalStatus.PENDING ? '/payment' : ''}`}
-                        className="btn btn-link text-neutral whitespace-nowrap flex-nowrap"
-                      >
-                        View Proposal <ChevronRight />
-                      </Link>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <ProposalsTable
+            initialProposals={proposals}
+            proposalCount={proposalCount}
+          />
         )}
       </div>
     </ProposalContainer>

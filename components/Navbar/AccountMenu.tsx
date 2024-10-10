@@ -4,17 +4,19 @@ import { useEffect } from 'react';
 import { ConnectKitButton, useSIWE } from 'connectkit';
 import { Bell, HelpCircle, LogOut, Settings, User } from 'lucide-react';
 import Link from 'next/link';
+import { usePathname } from 'next/navigation';
 import { useAccount, useDisconnect } from 'wagmi';
 
 import { WalletAvatar } from '@/components/Avatars/WalletAvatar/WalletAvatar';
 import { useSessionStore } from '@/stores/useSessionStore';
 
 export const AccountMenu = () => {
+  const pathname = usePathname();
   const { isConnected } = useAccount();
   const { disconnect } = useDisconnect();
   const { isSignedIn, signOut } = useSIWE();
 
-  const { isLoading } = useSessionStore();
+  const { isLoading, session } = useSessionStore();
 
   const handleDisconnect = () => {
     disconnect();
@@ -26,10 +28,33 @@ export const AccountMenu = () => {
     }
   }, []);
 
+  const isPaymentPage = pathname.includes('/payment');
+
+  if (isPaymentPage && !session?.isLoggedIn) {
+    return (
+      <ConnectKitButton.Custom>
+        {({ isConnected, show }) => {
+          if (isConnected) {
+            return <ConnectKitButton />;
+          }
+
+          return (
+            <button
+              onClick={show}
+              className="btn btn-neutral text-base-100 w-32"
+            >
+              Connect
+            </button>
+          );
+        }}
+      </ConnectKitButton.Custom>
+    );
+  }
+
   return (
     <ConnectKitButton.Custom>
       {({ isConnected, show }) => {
-        if (isConnected && isSignedIn) {
+        if (isConnected && session?.isLoggedIn) {
           return (
             <>
               <div className="flex items-center">
